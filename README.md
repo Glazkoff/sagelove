@@ -3,9 +3,11 @@
 ## Как запустить проект
 
 1. `npm install`
-2. `pipenv install`
-3. `python .\backend\manage.py runserver` - dev-сервер бэкенда
-4. `npm run serve` - dev-сервер фронтенда
+2. `python -m venv venv`
+3. `.\venv\Scripts\activate`
+4. `pipenv install`
+5. `python .\backend\manage.py runserver` - dev-сервер бэкенда
+6. `npm run serve` - dev-сервер фронтенда
 
 ## Как начать работу над проектом
 
