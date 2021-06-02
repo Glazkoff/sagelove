@@ -12,12 +12,14 @@
             prepend-icon="mdi-email"
             label="Email"
             type="email"
+            autocomplete="email"
           ></v-text-field>
           <v-text-field
             light="light"
             prepend-icon="mdi-lock"
             label="Пароль"
             type="password"
+            autocomplete="current-password"
           ></v-text-field>
           <v-checkbox
             light="light"
