@@ -1,7 +1,8 @@
 <template>
   <v-flex class="auth-form text-center">
     <div class="display-1 mb-3">
-      <v-icon class="mr-2" large="large">mdi-cards-heart</v-icon> Амурчики
+      <v-icon class="mr-2" color="pink" large="large">mdi-cards-heart</v-icon>
+      Амурчики
     </div>
     <v-card light="light">
       <v-card-text>
@@ -25,7 +26,7 @@
           ></v-checkbox>
           <v-btn
             class="mt-2"
-            color="purple"
+            color="pink"
             dark
             @click.prevent
             block="block"
