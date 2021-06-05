@@ -41,16 +41,21 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    # 'django.contrib.sites',
     'django.contrib.staticfiles'
 ]
 
 THIRD_PARTY_APPS = [
+    'allauth',
     'rest_framework',
+    'rest_framework.authtoken',
+    # 'allauth.account',
     'django_extensions',
+    'rest_auth',
+    # 'rest_auth.registration'
 ]
 
 LOCAL_APPS = [
-    'authorization',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

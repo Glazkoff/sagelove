@@ -5,5 +5,7 @@ django-extensions
 django-filter
 djangorestframework
 djangorestframework-jwt
+django-rest-auth
+django-rest-auth[with_social]
 psycopg2-binary
 markdown
