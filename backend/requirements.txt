@@ -4,8 +4,7 @@ django-environ
 django-extensions
 django-filter
 djangorestframework
-djangorestframework-jwt
-django-rest-auth
-django-rest-auth[with_social]
+dj-rest-auth[with_social]
+djangorestframework-simplejwt
 psycopg2-binary
 markdown
