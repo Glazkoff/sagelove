@@ -6,26 +6,26 @@
         <v-form>
           <v-text-field
             light="light"
-            prepend-icon="mdi-email"
             label="Email"
             type="email"
+            color="colorOfSea"
             autocomplete="email"
+            v-model="email"
           ></v-text-field>
           <v-text-field
             light="light"
-            prepend-icon="mdi-lock"
             label="Пароль"
-            type="password"
+            :type="passShow ? 'text' : 'password'"
+            color="colorOfSea"
+            :append-icon="passShow ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="passShow = !passShow"
             autocomplete="current-password"
+            v-model="password"
           ></v-text-field>
-          <v-checkbox
-            light="light"
-            label="Запомните меня"
-            hide-details="hide-details"
-          ></v-checkbox>
+
           <v-btn
             class="mt-2"
-            color="pink"
+            color="colorOfSea"
             dark
             @click.prevent
             block="block"
@@ -35,16 +35,25 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <div>
+    <div class="darkBlue--text">
       Ещё нет аккаунта?
-      <v-btn light="light" to="/auth/signup" plain>Зарегистрируйтесь!</v-btn>
+      <v-btn class="darkBlueGreen--text" text to="/auth/signup"
+        >Зарегистрируйтесь!</v-btn
+      >
     </div>
   </v-flex>
 </template>
 
 <script>
 export default {
-  name: "LogIn"
+  name: "LogIn",
+  data() {
+    return {
+      passShow: false,
+      email: "",
+      password: ""
+    };
+  }
 };
 </script>
 

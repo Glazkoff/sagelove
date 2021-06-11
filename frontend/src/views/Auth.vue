@@ -2,14 +2,14 @@
   <v-app>
     <v-app-bar app color="#E2F9FC">
       <v-container class="py-0 fill-height">
-        <h2>Логотип</h2>
+        <h2 class="darkBlueGreen--text">Логотип</h2>
         <div id="nav">
           <v-btn text :exact="true" to="/">Home</v-btn>
           <v-btn text :exact="true" to="/auth">Auth - LogIn</v-btn>
           <v-btn text :exact="true" to="/auth/signup">Auth - Signup</v-btn>
         </div>
         <v-spacer></v-spacer>
-        <v-btn color="success" large>Войти</v-btn>
+        <v-btn color="colorOfSea" dark large>Войти</v-btn>
       </v-container>
     </v-app-bar>
     <v-main>
