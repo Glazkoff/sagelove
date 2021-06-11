@@ -10,7 +10,11 @@
             type="email"
             color="colorOfSea"
             autocomplete="email"
-            v-model="email"
+            required
+            :error-messages="emailErrors"
+            v-model.trim="$v.form.email.$model"
+            @input="$v.form.email.$touch()"
+            @blur="$v.form.email.$touch()"
           ></v-text-field>
           <v-text-field
             light="light"
@@ -20,16 +24,20 @@
             :append-icon="passShow ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="passShow = !passShow"
             autocomplete="current-password"
-            v-model="password"
+            required
+            :error-messages="passwordErrors"
+            v-model.trim="$v.form.password.$model"
+            @input="$v.form.password.$touch()"
+            @blur="$v.form.password.$touch()"
           ></v-text-field>
-
           <v-btn
             class="mt-2"
             color="colorOfSea"
-            dark
+            :dark="!$v.form.$invalid"
             @click.prevent
             block="block"
             type="submit"
+            :disabled="$v.form.$invalid"
             >Войти</v-btn
           >
         </v-form>
@@ -45,14 +53,43 @@
 </template>
 
 <script>
+import { required, email } from "vuelidate/lib/validators";
 export default {
   name: "LogIn",
   data() {
     return {
       passShow: false,
-      email: "",
-      password: ""
+      form: {
+        email: "",
+        password: ""
+      }
     };
+  },
+  validations: {
+    form: {
+      email: {
+        required,
+        email
+      },
+      password: {
+        required
+      }
+    }
+  },
+  computed: {
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.form.email.$dirty) return errors;
+      !this.$v.form.email.email && errors.push("Введите корректный e-mail");
+      !this.$v.form.email.required && errors.push("Укажите ваш e-mail");
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.form.password.$dirty) return errors;
+      !this.$v.form.password.required && errors.push("Укажите пароль!");
+      return errors;
+    }
   }
 };
 </script>

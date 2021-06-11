@@ -6,15 +6,16 @@ import store from "./store";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import vuetify from "./plugins/vuetify";
-import VueTelInputVuetify from "vue-tel-input-vuetify/lib";
+import { VueMaskDirective } from "v-mask";
+import Vuelidate from "vuelidate";
+
+Vue.directive("mask", VueMaskDirective);
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuex);
 Vue.use(VueAxios, axios);
-Vue.use(VueTelInputVuetify, {
-  vuetify
-});
+Vue.use(Vuelidate);
 
 new Vue({
   router,

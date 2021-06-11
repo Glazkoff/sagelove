@@ -15,9 +15,18 @@
         persistent-hint
         prepend-icon="mdi-calendar"
         v-bind="attrs"
-        @blur="date = parseDate(dateFormatted)"
+        :autocomplete="autocomplete"
+        @blur="
+          date = parseDate(dateFormatted);
+          $v.dateFormatted.$touch();
+        "
         v-on="on"
         color="colorOfSea"
+        v-mask="'##.##.####'"
+        required
+        :error-messages="dateErrors"
+        v-model.trim="$v.dateFormatted.$model"
+        @input="$v.dateFormatted.$touch()"
       ></v-text-field>
     </template>
     <v-date-picker
@@ -30,9 +39,15 @@
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
 export default {
   name: "DatePicker",
-  props: ["label", "value"],
+  props: ["label", "value", "autocomplete"],
+  validations: {
+    dateFormatted: {
+      required
+    }
+  },
   data() {
     return {
       date: null,
@@ -43,6 +58,12 @@ export default {
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
+    },
+    dateErrors() {
+      const errors = [];
+      if (!this.$v.dateFormatted.$dirty) return errors;
+      !this.$v.dateFormatted.required && errors.push("Укажите дату!");
+      return errors;
     }
   },
   watch: {
