@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       date: null,
-      dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
+      dateFormatted: null,
       menu: false
     };
   },

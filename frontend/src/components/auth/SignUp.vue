@@ -17,6 +17,7 @@
               { text: 'Мужской', val: 'м' },
               { text: 'Женский', val: 'ж' }
             ]"
+            autocomplete="sex"
             item-text="text"
             item-value="val"
             label="Пол"
@@ -52,6 +53,13 @@
             label="Дата рождения"
             @update="birthday = $event"
           ></DatePicker>
+          <vue-tel-input-vuetify
+            v-model="phone"
+            :onlyCountries="['RU', 'BY', 'UA']"
+            label="Номер телефона"
+            placeholder="Введите номер телефона"
+            defaultCountry="RU"
+          ></vue-tel-input-vuetify>
           <v-text-field
             light="light"
             label="Email"
@@ -70,7 +78,12 @@
             autocomplete="current-password"
             v-model="password"
           ></v-text-field>
-
+          <v-file-input
+            truncate-length="15"
+            label="Ваша фотография"
+            color="colorOfSea"
+          ></v-file-input>
+          <v-textarea label="О себе" color="colorOfSea"></v-textarea>
           <v-btn
             class="mt-2"
             color="colorOfSea"
@@ -104,7 +117,8 @@ export default {
       email: "",
       password: "",
       name: "",
-      birthday: ""
+      birthday: "",
+      phone: ""
     };
   }
 };

@@ -57,5 +57,6 @@ module.exports = {
           return "[contenthash].[ext]";
         }
       });
-  }
+  },
+  transpileDependencies: ["vuetify", "vue-tel-input-vuetify"]
 };
