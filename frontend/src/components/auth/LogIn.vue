@@ -1,7 +1,7 @@
 <template>
   <v-flex class="auth-form text-center">
     <h1 class="display-1 mb-3">Авторизация</h1>
-    <v-card light="light">
+    <v-card flat light="light">
       <v-card-text>
         <v-form>
           <v-text-field

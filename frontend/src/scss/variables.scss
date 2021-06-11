@@ -1,5 +1,2 @@
-$body-font-family: "Times New Roman";
+$body-font-family: "Times New Roman", serif;
 $heading-font-family: $body-font-family;
-
-// Required for modifying core defaults
-@import "~vuetify/src/styles/styles.sass";
