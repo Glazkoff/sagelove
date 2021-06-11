@@ -1,9 +1,6 @@
 <template>
   <v-flex class="auth-form text-center">
-    <div class="display-1 mb-3">
-      <v-icon class="mr-2" color="pink" large="large">mdi-cards-heart</v-icon>
-      Амурчики
-    </div>
+    <h1 class="display-1 mb-3">Авторизация</h1>
     <v-card light="light">
       <v-card-text>
         <v-form>
