@@ -78,6 +78,7 @@ export default new Vuex.Store({
             data
           })
             .then(resp => {
+              store.mutate("", resp.data);
               resolve(resp.data);
             })
             .catch(err => {
