@@ -1,6 +1,6 @@
 <template>
   <v-flex class="auth-form text-center">
-    <h1 class="display-1 mb-3">Авторизация</h1>
+    <h1 class="mb-3">Авторизация</h1>
     <v-progress-circular
       :size="80"
       color="colorOfSea"

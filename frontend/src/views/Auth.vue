@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="#E2F9FC">
       <v-container class="py-0 fill-height">
-        <h2 class="darkBlueGreen--text">Логотип</h2>
+        <h2 class="darkBlueGreen--text title">Логотип</h2>
         <div id="nav">
           <v-btn text :exact="true" to="/">Home</v-btn>
           <v-btn text :exact="true" to="/auth">Auth - LogIn</v-btn>
