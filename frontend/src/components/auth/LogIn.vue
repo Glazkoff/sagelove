@@ -1,17 +1,11 @@
 <template>
   <v-flex class="auth-form text-center">
     <h1 class="display-1 mb-3">Авторизация</h1>
-    <v-progress-circular
-      :size="80"
-      color="colorOfSea"
-      class="mt-5"
-      indeterminate
-      v-if="formLoading"
-    ></v-progress-circular>
-    <v-card flat light="light" v-else>
+    <v-card flat light="light">
       <v-card-text>
         <v-form>
           <v-text-field
+            :disabled="formLoading"
             light="light"
             label="Email"
             type="email"
@@ -20,10 +14,17 @@
             required
             :error-messages="emailErrors"
             v-model.trim="$v.form.email.$model"
-            @input="$v.form.email.$touch()"
-            @blur="$v.form.email.$touch()"
+            @input="
+              $v.form.email.$touch();
+              requestErrors = [];
+            "
+            @blur="
+              $v.form.email.$touch();
+              requestErrors = [];
+            "
           ></v-text-field>
           <v-text-field
+            :disabled="formLoading"
             light="light"
             label="Пароль"
             :type="passShow ? 'text' : 'password'"
@@ -34,25 +35,37 @@
             required
             :error-messages="passwordErrors"
             v-model.trim="$v.form.password.$model"
-            @input="$v.form.password.$touch()"
-            @blur="$v.form.password.$touch()"
+            @input="
+              $v.form.password.$touch();
+              requestErrors = [];
+            "
+            @blur="
+              $v.form.password.$touch();
+              requestErrors = [];
+            "
           ></v-text-field>
           <v-btn
             class="mt-2"
             color="colorOfSea"
-            :dark="!$v.form.$invalid"
+            :dark="!$v.form.$invalid && !formLoading"
             @click.prevent="logIn"
             block="block"
             type="submit"
-            :disabled="$v.form.$invalid"
-            >Войти</v-btn
+            :disabled="$v.form.$invalid || formLoading"
+            :loading="formLoading"
           >
+            Войти
+          </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
-    <div class="darkBlue--text" v-if="!formLoading">
+    <div class="darkBlue--text">
       Ещё нет аккаунта?
-      <v-btn class="darkBlueGreen--text" text to="/auth/signup"
+      <v-btn
+        class="darkBlueGreen--text"
+        text
+        to="/auth/signup"
+        :disabled="formLoading"
         >Зарегистрируйтесь!</v-btn
       >
     </div>
@@ -70,7 +83,8 @@ export default {
       form: {
         email: "",
         password: ""
-      }
+      },
+      requestErrors: []
     };
   },
   validations: {
@@ -90,12 +104,20 @@ export default {
       if (!this.$v.form.email.$dirty) return errors;
       !this.$v.form.email.email && errors.push("Введите корректный e-mail");
       !this.$v.form.email.required && errors.push("Укажите ваш e-mail");
+      this.requestErrors.length > 0 &&
+        this.requestErrors.forEach(element => {
+          errors.push(element);
+        });
       return errors;
     },
     passwordErrors() {
       const errors = [];
       if (!this.$v.form.password.$dirty) return errors;
       !this.$v.form.password.required && errors.push("Укажите пароль!");
+      this.requestErrors.length > 0 &&
+        this.requestErrors.forEach(element => {
+          errors.push(element);
+        });
       return errors;
     }
   },
@@ -104,16 +126,22 @@ export default {
       let sendObj = { ...this.form };
       this.formLoading = true;
       this.$store.dispatch("LOG_IN", sendObj).then(
-        resp => {
-          console.log("RESP: ", resp);
+        () => {
           this.formLoading = false;
         },
-        error => {
+        errors => {
           this.formLoading = false;
-          console.log(error);
+          if (errors.non_field_errors) {
+            for (
+              let index = 0;
+              index < errors.non_field_errors.length;
+              index++
+            ) {
+              this.requestErrors.push(errors.non_field_errors[index]);
+            }
+          }
         }
       );
-      console.log(sendObj);
     }
   }
 };

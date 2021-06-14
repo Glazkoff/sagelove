@@ -75,6 +75,7 @@
             v-model.trim="$v.form.password.$model"
             @input="$v.form.password.$touch()"
             @blur="$v.form.password.$touch()"
+            counter
           ></v-text-field>
           <v-file-input
             truncate-length="15"
@@ -96,7 +97,7 @@
             class="mt-2"
             color="colorOfSea"
             :dark="!$v.form.$invalid"
-            @click.prevent
+            @click.prevent="signUp"
             block="block"
             type="submit"
             :disabled="$v.form.$invalid"
@@ -143,7 +144,8 @@ export default {
         email
       },
       password: {
-        required
+        required,
+        minLength: minLength(8)
       },
       birthday: {
         required
@@ -161,6 +163,7 @@ export default {
     return {
       passShow: false,
       dateMenu: false,
+      formLoading: false,
       form: {
         email: null,
         sex: null,
@@ -204,6 +207,8 @@ export default {
       const errors = [];
       if (!this.$v.form.password.$dirty) return errors;
       !this.$v.form.password.required && errors.push("Укажите пароль!");
+      !this.$v.form.password.minLength &&
+        errors.push("Пароль должен содержать минимум 8 символов!");
       return errors;
     },
     aboutMeErrors() {
@@ -213,6 +218,9 @@ export default {
         errors.push("Укажите информацию о себе!");
       return errors;
     }
+  },
+  methods: {
+    signUp() {}
   }
 };
 </script>

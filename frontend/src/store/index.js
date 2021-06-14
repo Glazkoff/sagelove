@@ -71,17 +71,21 @@ export default new Vuex.Store({
     },
     LOG_IN(store, data) {
       return new Promise((resolve, reject) => {
-        axios({
-          url: "/api/auth/login/",
-          method: "POST",
-          data
-        })
-          .then(resp => {
-            resolve(resp.data);
+        try {
+          axios({
+            url: "/api/auth/login/",
+            method: "POST",
+            data
           })
-          .catch(err => {
-            reject(err);
-          });
+            .then(resp => {
+              resolve(resp.data);
+            })
+            .catch(err => {
+              reject(err.response.data);
+            });
+        } catch (error) {
+          reject(error);
+        }
       });
     }
   },
