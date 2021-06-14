@@ -96,8 +96,8 @@ $title-font: "YesevaOne";
   }
 }
 
-button.v-btn,
-a.v-btn {
+button.v-btn.my-button,
+a.v-btn.my-button {
   text-transform: none !important;
   border-radius: 5px;
   height: 36px !important;

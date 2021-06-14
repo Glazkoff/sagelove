@@ -45,7 +45,7 @@
             "
           ></v-text-field>
           <v-btn
-            class="mt-8"
+            class="mt-8 my-button"
             color="colorOfSea"
             :dark="!$v.form.$invalid && !formLoading"
             @click.prevent="logIn"
@@ -61,7 +61,9 @@
     </v-card>
     <div class="darkBlue--text">
       Ещё нет аккаунта?
-      <router-link class="link" to="/auth/signup" :disabled="formLoading">Зарегистрируйтесь!</router-link>
+      <router-link class="link" to="/auth/signup" :disabled="formLoading"
+        >Зарегистрируйтесь!</router-link
+      >
     </div>
   </v-flex>
 </template>
