@@ -15,6 +15,7 @@
             :error-messages="nameErrors"
             @input="$v.form.name.$touch()"
             @blur="$v.form.name.$touch()"
+            :disabled="formLoading"
           ></v-text-field>
           <v-select
             :items="[
@@ -31,11 +32,13 @@
             v-model.trim="$v.form.sex.$model"
             @input="$v.form.sex.$touch()"
             @blur="$v.form.sex.$touch()"
+            :disabled="formLoading"
           ></v-select>
           <DatePicker
             label="Дата рождения"
             autocomplete="birthday"
             @update="form.birthday = $event"
+            :disabled="formLoading"
           ></DatePicker>
           <v-text-field
             light="light"
@@ -49,6 +52,7 @@
             v-model.trim="$v.form.phone.$model"
             @input="$v.form.phone.$touch()"
             @blur="$v.form.phone.$touch()"
+            :disabled="formLoading"
           ></v-text-field>
           <v-text-field
             light="light"
@@ -59,8 +63,15 @@
             required
             :error-messages="emailErrors"
             v-model.trim="$v.form.email.$model"
-            @input="$v.form.email.$touch()"
-            @blur="$v.form.email.$touch()"
+            @input="
+              $v.form.email.$touch();
+              formEmailErrors = [];
+            "
+            @blur="
+              $v.form.email.$touch();
+              formEmailErrors = [];
+            "
+            :disabled="formLoading"
           ></v-text-field>
           <v-text-field
             light="light"
@@ -73,16 +84,25 @@
             required
             :error-messages="passwordErrors"
             v-model.trim="$v.form.password.$model"
-            @input="$v.form.password.$touch()"
-            @blur="$v.form.password.$touch()"
+            @input="
+              $v.form.password.$touch();
+              formPasswordErrors = [];
+            "
+            @blur="
+              $v.form.password.$touch();
+              formPasswordErrors = [];
+            "
             counter
+            :disabled="formLoading"
           ></v-text-field>
           <v-file-input
+            :disabled="formLoading"
             truncate-length="15"
             label="Ваша фотография"
             color="colorOfSea"
           ></v-file-input>
           <v-textarea
+            :disabled="formLoading"
             label="О себе"
             color="colorOfSea"
             counter
@@ -96,11 +116,12 @@
           <v-btn
             class="mt-2"
             color="colorOfSea"
-            :dark="!$v.form.$invalid"
+            :dark="!$v.form.$invalid && !formLoading"
             @click.prevent="signUp"
             block="block"
             type="submit"
-            :disabled="$v.form.$invalid"
+            :disabled="$v.form.$invalid || formLoading"
+            :loading="formLoading"
             >Зарегистрироваться</v-btn
           >
         </v-form>
@@ -164,6 +185,8 @@ export default {
       passShow: false,
       dateMenu: false,
       formLoading: false,
+      formEmailErrors: [],
+      formPasswordErrors: [],
       form: {
         email: null,
         sex: null,
@@ -201,6 +224,10 @@ export default {
       if (!this.$v.form.email.$dirty) return errors;
       !this.$v.form.email.email && errors.push("Введите корректный e-mail");
       !this.$v.form.email.required && errors.push("Укажите ваш e-mail");
+      this.formEmailErrors.length > 0 &&
+        this.formEmailErrors.forEach(element => {
+          errors.push(element);
+        });
       return errors;
     },
     passwordErrors() {
@@ -209,6 +236,10 @@ export default {
       !this.$v.form.password.required && errors.push("Укажите пароль!");
       !this.$v.form.password.minLength &&
         errors.push("Пароль должен содержать минимум 8 символов!");
+      this.formPasswordErrors.length > 0 &&
+        this.formPasswordErrors.forEach(element => {
+          errors.push(element);
+        });
       return errors;
     },
     aboutMeErrors() {
@@ -220,7 +251,31 @@ export default {
     }
   },
   methods: {
-    signUp() {}
+    signUp() {
+      let sendObj = { ...this.form };
+      sendObj.password1 = this.form.password;
+      sendObj.password2 = this.form.password;
+      this.formLoading = true;
+      this.$store.dispatch("SIGN_UP", sendObj).then(
+        () => {
+          this.formLoading = false;
+          this.$router.push("/");
+        },
+        errors => {
+          this.formLoading = false;
+          if (errors.email != null && errors.email.length != 0) {
+            for (let index = 0; index < errors.email.length; index++) {
+              this.formEmailErrors.push(errors.email[index]);
+            }
+          }
+          if (errors.password1 != null && errors.password1.length != 0) {
+            for (let index = 0; index < errors.password1.length; index++) {
+              this.formPasswordErrors.push(errors.password1[index]);
+            }
+          }
+        }
+      );
+    }
   }
 };
 </script>

@@ -128,6 +128,7 @@ export default {
       this.$store.dispatch("LOG_IN", sendObj).then(
         () => {
           this.formLoading = false;
+          this.$router.push("/");
         },
         errors => {
           this.formLoading = false;

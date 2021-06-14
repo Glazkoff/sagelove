@@ -11,6 +11,15 @@ export default new Vuex.Store({
     endpoints: {
       obtainJWT: "/api/auth/obtain_token",
       refreshJWT: "/api/auth/refresh_token"
+    },
+    access_token: null,
+    refresh_token: null,
+    user: {
+      email: null,
+      first_name: null,
+      last_name: null,
+      pk: null,
+      username: null
     }
   },
   mutations: {
@@ -21,6 +30,15 @@ export default new Vuex.Store({
     removeToken(state) {
       localStorage.removeItem("t");
       state.jwt = null;
+    },
+    SET_USER(state, user) {
+      state.access_token = user.access_token;
+      state.refresh_token = user.refresh_token;
+      state.user.email = user.user.email;
+      state.user.first_name = user.user.first_name;
+      state.user.last_name = user.user.last_name;
+      state.user.pk = user.user.pk;
+      state.user.username = user.user.username;
     }
   },
   actions: {
@@ -78,7 +96,27 @@ export default new Vuex.Store({
             data
           })
             .then(resp => {
-              store.mutate("", resp.data);
+              store.commit("SET_USER", resp.data);
+              resolve(resp.data);
+            })
+            .catch(err => {
+              reject(err.response.data);
+            });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    SIGN_UP(store, data) {
+      return new Promise((resolve, reject) => {
+        try {
+          axios({
+            url: "/api/auth/registration/",
+            method: "POST",
+            data
+          })
+            .then(resp => {
+              store.commit("SET_USER", resp.data);
               resolve(resp.data);
             })
             .catch(err => {
