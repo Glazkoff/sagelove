@@ -1,6 +1,6 @@
 <template>
   <v-flex class="auth-form text-center">
-    <h1 class="mb-3">Регистрация</h1>
+    <h1 class=" mb-3">Регистрация</h1>
     <v-card flat light="light">
       <v-card-text>
         <v-form>

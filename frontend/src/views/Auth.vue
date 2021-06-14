@@ -1,15 +1,15 @@
 <template>
   <v-app>
-    <v-app-bar app color="#E2F9FC">
+    <v-app-bar app color="#C8F5FA">
       <v-container class="py-0 fill-height">
-        <h2 class="darkBlueGreen--text title">Логотип</h2>
-        <div id="nav">
+        <h2 class="darkBlueGreen--text title logo">Логотип</h2>
+        <!-- <div id="nav">
           <v-btn text :exact="true" to="/">Home</v-btn>
           <v-btn text :exact="true" to="/auth">Auth - LogIn</v-btn>
           <v-btn text :exact="true" to="/auth/signup">Auth - Signup</v-btn>
-        </div>
+        </div> -->
         <v-spacer></v-spacer>
-        <v-btn color="colorOfSea" dark large>Войти</v-btn>
+        <v-btn color="colorOfSea my-button" dark >Войти</v-btn>
       </v-container>
     </v-app-bar>
     <v-main>
@@ -32,4 +32,12 @@ export default {
 .auth-form {
   max-width: 500px;
 }
+
+h2.logo {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px !important;
+  line-height: 36px;
+}
+
 </style>

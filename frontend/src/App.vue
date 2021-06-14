@@ -96,7 +96,19 @@ $title-font: "YesevaOne";
   }
 }
 
-h1 {
+button.v-btn {
+  text-transform: none !important;
+  border-radius: 5px;
+  height: 36px !important;
+  padding: 0 37px !important;
+  font-size: 14px !important;
+}
+
+h1.title,.v-application h1.title {
   color: var(--v-darkBlue-base);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 48px !important;
+  line-height: 55px !important;
 }
 </style>

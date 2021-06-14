@@ -1,6 +1,6 @@
 <template>
   <v-flex class="auth-form text-center">
-    <h1 class="mb-3">Авторизация</h1>
+    <h1 class="title mb-12">Авторизация</h1>
     <v-progress-circular
       :size="80"
       color="colorOfSea"
@@ -13,7 +13,7 @@
         <v-form>
           <v-text-field
             light="light"
-            label="Email"
+            label="E-mail"
             type="email"
             color="colorOfSea"
             autocomplete="email"
