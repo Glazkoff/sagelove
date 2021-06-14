@@ -96,7 +96,8 @@ $title-font: "YesevaOne";
   }
 }
 
-button.v-btn {
+button.v-btn,
+a.v-btn {
   text-transform: none !important;
   border-radius: 5px;
   height: 36px !important;
@@ -104,11 +105,24 @@ button.v-btn {
   font-size: 14px !important;
 }
 
-h1.title,.v-application h1.title {
+h1.title,
+.v-application h1.title {
   color: var(--v-darkBlue-base);
   font-style: normal !important;
   font-weight: normal !important;
   font-size: 48px !important;
   line-height: 55px !important;
+}
+
+button.theme--light.v-btn.v-btn--disabled.v-btn--has-bg,
+a.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
+  background-color: #c8f5fa !important;
+  color: #fff !important;
+}
+
+a.link{
+  text-decoration: none;
+  color: #FF618C !important;
+  font-weight: 700;
 }
 </style>
