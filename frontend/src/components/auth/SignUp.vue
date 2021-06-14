@@ -1,6 +1,6 @@
 <template>
   <v-flex class="auth-form text-center">
-    <h1 class=" mb-3">Регистрация</h1>
+    <h1 class="mt-13 title mb-12">Регистрация</h1>
     <v-card flat light="light">
       <v-card-text>
         <v-form>
@@ -114,7 +114,7 @@
             @blur="$v.form.aboutMe.$touch()"
           ></v-textarea>
           <v-btn
-            class="mt-2"
+            class="mt-8 my-button"
             color="colorOfSea"
             :dark="!$v.form.$invalid && !formLoading"
             @click.prevent="signUp"
@@ -127,11 +127,9 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <div class="darkBlue--text">
-      Уже есть аккаунт?
-      <v-btn class="darkBlueGreen--text" text :exact="true" to="/auth"
-        >Войдите!</v-btn
-      >
+    <div class="darkBlue--text mb-16  ">
+     Уже есть аккаунт?
+      <router-link class="link " :exact="true" to="/auth" >Войдите!</router-link>
     </div>
   </v-flex>
 </template>

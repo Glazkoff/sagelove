@@ -21,3 +21,6 @@ $ docker-compose up -d
 - [JWT Authentication in Vue.js and Django Rest Framework — Part 1](https://hackernoon.com/jwt-authentication-in-vue-js-and-django-rest-framework-part-1-c40c5c0d4f6e)
 - [JWT Authentication in Vue.js and Django Rest Framework — Part 2](https://medium.com/hackernoon/jwt-authentication-in-vue-js-and-django-rest-framework-part-2-788f0ad53ad5)
 -
+
+#### Особенности стилей
+- Для кнопок в стандартном их понимании используем класс my-button
