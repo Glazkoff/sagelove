@@ -8,3 +8,4 @@ dj-rest-auth[with_social]
 djangorestframework-simplejwt
 psycopg2-binary
 markdown
+allauth
