@@ -1,7 +1,14 @@
 <template>
   <v-flex class="auth-form text-center">
     <h1 class="display-1 mb-3">Авторизация</h1>
-    <v-card flat light="light">
+    <v-progress-circular
+      :size="80"
+      color="colorOfSea"
+      class="mt-5"
+      indeterminate
+      v-if="formLoading"
+    ></v-progress-circular>
+    <v-card flat light="light" v-else>
       <v-card-text>
         <v-form>
           <v-text-field
@@ -34,7 +41,7 @@
             class="mt-2"
             color="colorOfSea"
             :dark="!$v.form.$invalid"
-            @click.prevent
+            @click.prevent="logIn"
             block="block"
             type="submit"
             :disabled="$v.form.$invalid"
@@ -43,7 +50,7 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <div class="darkBlue--text">
+    <div class="darkBlue--text" v-if="!formLoading">
       Ещё нет аккаунта?
       <v-btn class="darkBlueGreen--text" text to="/auth/signup"
         >Зарегистрируйтесь!</v-btn
@@ -59,6 +66,7 @@ export default {
   data() {
     return {
       passShow: false,
+      formLoading: false,
       form: {
         email: "",
         password: ""
@@ -89,6 +97,23 @@ export default {
       if (!this.$v.form.password.$dirty) return errors;
       !this.$v.form.password.required && errors.push("Укажите пароль!");
       return errors;
+    }
+  },
+  methods: {
+    logIn() {
+      let sendObj = { ...this.form };
+      this.formLoading = true;
+      this.$store.dispatch("LOG_IN", sendObj).then(
+        resp => {
+          console.log("RESP: ", resp);
+          this.formLoading = false;
+        },
+        error => {
+          this.formLoading = false;
+          console.log(error);
+        }
+      );
+      console.log(sendObj);
     }
   }
 };

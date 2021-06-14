@@ -10,8 +10,8 @@ export default new Vuex.Store({
     jwt: localStorage.getItem("t"),
     endpoints: {
       obtainJWT: "/api/auth/obtain_token",
-      refreshJWT: "/api/auth/refresh_token",
-    },
+      refreshJWT: "/api/auth/refresh_token"
+    }
   },
   mutations: {
     updateToken(state, newToken) {
@@ -21,33 +21,33 @@ export default new Vuex.Store({
     removeToken(state) {
       localStorage.removeItem("t");
       state.jwt = null;
-    },
+    }
   },
   actions: {
     obtainToken(username, password) {
       const payload = {
         username: username,
-        password: password,
+        password: password
       };
       axios
         .post(this.state.endpoints.obtainJWT, payload)
-        .then((response) => {
+        .then(response => {
           this.commit("updateToken", response.data.token);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
     refreshToken() {
       const payload = {
-        token: this.state.jwt,
+        token: this.state.jwt
       };
       axios
         .post(this.state.endpoints.refreshJWT, payload)
-        .then((response) => {
+        .then(response => {
           this.commit("updateToken", response.data.token);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -69,6 +69,21 @@ export default new Vuex.Store({
         }
       }
     },
+    LOG_IN(store, data) {
+      return new Promise((resolve, reject) => {
+        axios({
+          url: "/api/auth/login/",
+          method: "POST",
+          data
+        })
+          .then(resp => {
+            resolve(resp.data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    }
   },
-  modules: {},
+  modules: {}
 });
