@@ -11,8 +11,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Пользователь должен иметь номер телефона!')
         if not email:
             raise ValueError('Пользователь должен иметь email!')
-        if not date_of_birth:
-            raise ValueError('Пользователь должен иметь date_of_birth!')
+        # if not date_of_birth:
+        #     raise ValueError('Пользователь должен иметь date_of_birth!')
         if not about_me:
             raise ValueError('Пользователь должен иметь about_me!')
         if not gender:
@@ -22,7 +22,7 @@ class CustomUserManager(BaseUserManager):
             phone_number=phone_number,
             username=username,
             email=email,
-            date_of_birth=date_of_birth,
+            # date_of_birth=date_of_birth,
             about_me=about_me,
             gender=gender
         )
@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(
             username=username,
             email=email,
-            date_of_birth="2000-10-31",
+            date_of_birth="31.10.2000",
             phone_number="+7 999 999 99 99",
             about_me="-",
             gender="NS"
@@ -59,7 +59,8 @@ GENDER_SELECTION = [
 class CustomUser(AbstractUser):
     gender = models.CharField(
         verbose_name="Пол", max_length=20, choices=GENDER_SELECTION)
-    date_of_birth = models.DateField(verbose_name="Дата рождения")
+    date_of_birth = models.DateField(
+        verbose_name="Дата рождения", null=True, blank=True)
     phone_number = models.CharField("Номер телефона", max_length=30)
     about_me = models.TextField("О себе")
     photoURL = models.URLField("Фото", null=True, blank=True)

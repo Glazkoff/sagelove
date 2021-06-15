@@ -5,30 +5,50 @@ import Auth from "../views/Auth.vue";
 import LogIn from "../components/auth/LogIn.vue";
 import SignUp from "../components/auth/SignUp.vue";
 
+import store from "../store/index.js";
+
 Vue.use(VueRouter);
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    next();
+    return;
+  }
+  next("/auth");
+};
+
+const ifNotAuthenticated = (to, from, next) => {
+  if (!store.getters.isAuthenticated) {
+    next();
+    return;
+  }
+  next("/");
+};
 
 const routes = [
   {
     path: "/",
     name: "Home",
     component: Home,
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/auth",
     component: Auth,
+    beforeEnter: ifNotAuthenticated,
     children: [
       {
         path: "",
         name: "LogIn",
-        component: LogIn,
+        component: LogIn
       },
       {
         path: "signup",
         name: "SignUp",
-        component: SignUp,
-      },
-    ],
-  },
+        component: SignUp
+      }
+    ]
+  }
   // {
   //   path: "/about",
   //   name: "About",
@@ -43,7 +63,7 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes,
+  routes
 });
 
 export default router;

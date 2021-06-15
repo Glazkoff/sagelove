@@ -64,7 +64,14 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 SITE_ID = 1
 
+
+DATE_FORMAT = '%d.%m.%Y'
+DATE_INPUT_FORMATS = ['%d.%m.%Y']
 REST_FRAMEWORK = {
+    'DATE_FORMAT': "%d.%m.%Y",
+    'DATE_INPUT_FORMATS': ["%d.%m.%Y", 'iso-8601'],
+    'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S",
+    'DATETIME_INPUT_FORMATS': ["%d.%m.%Y %H:%M:%S", 'iso-8601'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     )
@@ -173,6 +180,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+TIME_ZONE = 'Europe/Moscow'
 
 # STATIC FILE CONFIGURATION
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))

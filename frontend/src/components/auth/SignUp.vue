@@ -19,25 +19,25 @@
           ></v-text-field>
           <v-select
             :items="[
-              { text: 'Мужской', val: 'м' },
-              { text: 'Женский', val: 'ж' }
+              { text: 'Мужской', val: 'M' },
+              { text: 'Женский', val: 'F' }
             ]"
-            autocomplete="sex"
+            autocomplete="gender"
             item-text="text"
             item-value="val"
             label="Пол"
             color="colorOfSea"
             required
-            :error-messages="sexErrors"
-            v-model.trim="$v.form.sex.$model"
-            @input="$v.form.sex.$touch()"
-            @blur="$v.form.sex.$touch()"
+            :error-messages="genderErrors"
+            v-model.trim="$v.form.gender.$model"
+            @input="$v.form.gender.$touch()"
+            @blur="$v.form.gender.$touch()"
             :disabled="formLoading"
           ></v-select>
           <DatePicker
             label="Дата рождения"
-            autocomplete="birthday"
-            @update="form.birthday = $event"
+            autocomplete="date_of_birth"
+            @update="form.date_of_birth = $event"
             :disabled="formLoading"
           ></DatePicker>
           <v-text-field
@@ -108,10 +108,10 @@
             counter
             maxlength="200"
             required
-            :error-messages="aboutMeErrors"
-            v-model.trim="$v.form.aboutMe.$model"
-            @input="$v.form.aboutMe.$touch()"
-            @blur="$v.form.aboutMe.$touch()"
+            :error-messages="about_meErrors"
+            v-model.trim="$v.form.about_me.$model"
+            @input="$v.form.about_me.$touch()"
+            @blur="$v.form.about_me.$touch()"
           ></v-textarea>
           <v-btn
             class="mt-8 my-button"
@@ -127,9 +127,9 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <div class="darkBlue--text mb-16  ">
-     Уже есть аккаунт?
-      <router-link class="link " :exact="true" to="/auth" >Войдите!</router-link>
+    <div class="darkBlue--text mb-16">
+      Уже есть аккаунт?
+      <router-link class="link" :exact="true" to="/auth">Войдите!</router-link>
     </div>
   </v-flex>
 </template>
@@ -150,7 +150,7 @@ export default {
       name: {
         required
       },
-      sex: {
+      gender: {
         required
       },
       phone: {
@@ -166,11 +166,11 @@ export default {
         required,
         minLength: minLength(8)
       },
-      birthday: {
+      date_of_birth: {
         required
       },
 
-      aboutMe: {
+      about_me: {
         required
       }
     }
@@ -187,12 +187,12 @@ export default {
       formPasswordErrors: [],
       form: {
         email: null,
-        sex: null,
+        gender: null,
         password: null,
         name: null,
-        birthday: null,
+        date_of_birth: null,
         phone: null,
-        aboutMe: null
+        about_me: null
       }
     };
   },
@@ -203,10 +203,10 @@ export default {
       !this.$v.form.name.required && errors.push("Укажите имя!");
       return errors;
     },
-    sexErrors() {
+    genderErrors() {
       const errors = [];
-      if (!this.$v.form.sex.$dirty) return errors;
-      !this.$v.form.sex.required && errors.push("Укажите пол!");
+      if (!this.$v.form.gender.$dirty) return errors;
+      !this.$v.form.gender.required && errors.push("Укажите пол!");
       return errors;
     },
     phoneErrors() {
@@ -240,10 +240,10 @@ export default {
         });
       return errors;
     },
-    aboutMeErrors() {
+    about_meErrors() {
       const errors = [];
-      if (!this.$v.form.aboutMe.$dirty) return errors;
-      !this.$v.form.aboutMe.required &&
+      if (!this.$v.form.about_me.$dirty) return errors;
+      !this.$v.form.about_me.required &&
         errors.push("Укажите информацию о себе!");
       return errors;
     }
@@ -253,6 +253,10 @@ export default {
       let sendObj = { ...this.form };
       sendObj.password1 = this.form.password;
       sendObj.password2 = this.form.password;
+      sendObj.first_name = this.form.name;
+      sendObj.name = undefined;
+      sendObj.phone_number = this.form.phone;
+      sendObj.phone = undefined;
       this.formLoading = true;
       this.$store.dispatch("SIGN_UP", sendObj).then(
         () => {

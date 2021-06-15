@@ -4,6 +4,24 @@
   </div>
 </template>
 
+<script>
+export default {
+  async mounted() {
+    let refreshToken = localStorage.getItem("t");
+    if (refreshToken !== null) {
+      this.$store.dispatch("REFRESH_TOKEN").then(
+        () => {
+          this.$router.push("/");
+        },
+        errors => {
+          console.log("ERROR: ", errors);
+        }
+      );
+    }
+  }
+};
+</script>
+
 <style lang="scss">
 @import "~vuetify/src/styles/styles.sass";
 
@@ -120,9 +138,9 @@ a.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
   color: #fff !important;
 }
 
-a.link{
+a.link {
   text-decoration: none;
-  color: #FF618C !important;
+  color: #ff618c !important;
   font-weight: 700;
 }
 </style>

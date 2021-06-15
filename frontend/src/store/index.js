@@ -7,19 +7,24 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    jwt: localStorage.getItem("t"),
-    endpoints: {
-      obtainJWT: "/api/auth/obtain_token",
-      refreshJWT: "/api/auth/refresh_token"
-    },
+    // jwt: localStorage.getItem("t"),
+    // endpoints: {
+    //   obtainJWT: "/api/auth/obtain_token",
+    //   refreshJWT: "/api/auth/refresh_token"
+    // },
     access_token: null,
-    refresh_token: null,
+    refresh_token: localStorage.getItem("t") || null,
     user: {
       email: null,
       first_name: null,
       last_name: null,
       pk: null,
       username: null
+    }
+  },
+  getters: {
+    isAuthenticated: state => {
+      return state.access_token !== null && state.refresh_token !== null;
     }
   },
   mutations: {
@@ -34,11 +39,15 @@ export default new Vuex.Store({
     SET_USER(state, user) {
       state.access_token = user.access_token;
       state.refresh_token = user.refresh_token;
+      localStorage.setItem("t", user.refresh_token);
       state.user.email = user.user.email;
       state.user.first_name = user.user.first_name;
       state.user.last_name = user.user.last_name;
       state.user.pk = user.user.pk;
       state.user.username = user.user.username;
+    },
+    SET_ACCESS_TOKEN(state, token) {
+      state.access_token = token;
     }
   },
   actions: {
@@ -109,6 +118,7 @@ export default new Vuex.Store({
     },
     SIGN_UP(store, data) {
       return new Promise((resolve, reject) => {
+        console.log("DATA: ", data);
         try {
           axios({
             url: "/api/auth/registration/",
@@ -120,6 +130,61 @@ export default new Vuex.Store({
               resolve(resp.data);
             })
             .catch(err => {
+              reject(err.response.data);
+            });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    REFRESH_TOKEN(store) {
+      return new Promise((resolve, reject) => {
+        try {
+          axios({
+            url: "/api/auth/token/refresh/",
+            method: "POST",
+            data: {
+              token: store.refresh_token
+            }
+          })
+            .then(resp => {
+              store.commit("SET_ACCESS_TOKEN", resp.data.access);
+              resolve(resp.data);
+            })
+            .catch(err => {
+              localStorage.clear("t");
+              reject(err.response.data);
+            });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    LOG_OUT(store) {
+      return new Promise((resolve, reject) => {
+        try {
+          axios({
+            url: "/api/auth/logout/",
+            method: "POST",
+            data: {}
+          })
+            .then(resp => {
+              store.commit("SET_USER", {
+                access_token: null,
+                refresh_token: null,
+                user: {
+                  email: null,
+                  first_name: null,
+                  last_name: null,
+                  pk: null,
+                  username: null
+                }
+              });
+              localStorage.clear("t");
+              resolve(resp.data);
+            })
+            .catch(err => {
+              localStorage.clear("t");
               reject(err.response.data);
             });
         } catch (error) {
