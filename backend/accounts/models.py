@@ -1,5 +1,5 @@
-from backend.questions.models import QuestionWithOption, QuestionWithScale
-from django.contrib.auth.models import User
+from questions.models import QuestionWithOption, QuestionWithScale
+from users.models import CustomUser
 from django.db import models
 
 # Create your models here.
@@ -11,9 +11,9 @@ class AnswersCounting(models.Model):
     answers_count3 = models.PositiveIntegerField("Количество ответов '3'")
     answers_count4 = models.PositiveIntegerField("Количество ответов '4'")
     answers_count5 = models.PositiveIntegerField("Количество ответов '5'")
-    date_time_counting = models.DateTimeField(auto_now=True, verbose_name="Дата и время подсчёта")
+    date_time_counting = models.DateTimeField( verbose_name="Дата и время подсчёта")
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Пользователь")
+        CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    
@@ -27,13 +27,13 @@ class AnswersCounting(models.Model):
 class UserAnswer(models.Model):
     """Ответ пользователя на вопрос"""
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Пользователь")
+        CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
     question_with_scale = models.ForeignKey(
         QuestionWithScale, on_delete=models.CASCADE, verbose_name="Вопросы со шкалой")
     question_with_option = models.ForeignKey(
         QuestionWithOption, on_delete=models.CASCADE, verbose_name="Вопросы с вариантами ответов")
     answer = models.PositiveIntegerField("Значение ответа")
-    date_time_answer = models.DateTimeField(auto_now=True, verbose_name="Дата и время ответа")
+    date_time_answer = models.DateTimeField( verbose_name="Дата и время ответа")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    
