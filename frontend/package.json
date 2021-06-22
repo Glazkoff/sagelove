@@ -53,11 +53,12 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "trailingComma": false,
+      "trailingComma": 0,
       "prettier/prettier": [
         "error",
         {
-          "endOfLine": "auto"
+          "endOfLine": "auto",
+          "trailingComma": "none"
         }
       ]
     }
