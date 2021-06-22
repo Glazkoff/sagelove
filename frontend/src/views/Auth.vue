@@ -33,11 +33,10 @@ export default {
   max-width: 500px;
 }
 
-h2.logo {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 28px !important;
-  line-height: 36px;
-}
-
+// h2.logo {
+//   font-style: normal;
+//   font-weight: 400;
+//   font-size: 28px !important;
+//   line-height: 36px;
+// }
 </style>
