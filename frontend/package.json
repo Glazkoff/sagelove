@@ -58,7 +58,8 @@
         "error",
         {
           "endOfLine": "auto",
-          "trailingComma": "none"
+          "trailingComma": "none",
+          "arrowParens": "avoid"
         }
       ]
     }

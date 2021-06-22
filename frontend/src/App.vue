@@ -1,22 +1,39 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <v-app>
+    <AppLoader v-if="appLoading"></AppLoader>
+    <div id="app" v-else>
+      <router-view />
+    </div>
+  </v-app>
 </template>
 
 <script>
+import AppLoader from "@/components/global/AppLoader.vue";
+
 export default {
   async mounted() {
+    this.$store.commit("START_APP_LOADING");
+    this.$store.state.loading = true;
     let refreshToken = localStorage.getItem("t");
     if (refreshToken !== null) {
       this.$store.dispatch("REFRESH_TOKEN").then(
         () => {
+          this.$store.commit("STOP_APP_LOADING");
           this.$router.push("/");
         },
         errors => {
+          this.$store.commit("STOP_APP_LOADING");
           console.log("ERROR: ", errors);
         }
       );
+    }
+  },
+  components: {
+    AppLoader
+  },
+  computed: {
+    appLoading() {
+      return this.$store.state.loading;
     }
   }
 };
@@ -143,5 +160,4 @@ a.link {
   color: #ff618c !important;
   font-weight: 700;
 }
-
 </style>

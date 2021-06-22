@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="#C8F5FA">
+    <v-app-bar app color="lightBlue">
       <v-container class="py-0 fill-height">
         <h2 class="darkBlueGreen--text title logo">Логотип</h2>
         <v-spacer></v-spacer>
@@ -30,7 +30,6 @@
 
 export default {
   name: "Home",
-  components: {},
   methods: {
     logOut() {
       this.$store.dispatch("LOG_OUT").then(

@@ -20,7 +20,8 @@ export default new Vuex.Store({
       last_name: null,
       pk: null,
       username: null
-    }
+    },
+    loading: false
   },
   getters: {
     isAuthenticated: state => {
@@ -48,6 +49,12 @@ export default new Vuex.Store({
     },
     SET_ACCESS_TOKEN(state, token) {
       state.access_token = token;
+    },
+    START_APP_LOADING(state) {
+      state.loading = true;
+    },
+    STOP_APP_LOADING(state) {
+      state.loading = false;
     }
   },
   actions: {
@@ -117,8 +124,8 @@ export default new Vuex.Store({
       });
     },
     SIGN_UP(store, data) {
+      store.loading = true;
       return new Promise((resolve, reject) => {
-        console.log("DATA: ", data);
         try {
           axios({
             url: "/api/auth/registration/",
@@ -127,12 +134,15 @@ export default new Vuex.Store({
           })
             .then(resp => {
               store.commit("SET_USER", resp.data);
+              store.loading = false;
               resolve(resp.data);
             })
             .catch(err => {
+              store.loading = false;
               reject(err.response.data);
             });
         } catch (error) {
+          store.loading = false;
           reject(error);
         }
       });
