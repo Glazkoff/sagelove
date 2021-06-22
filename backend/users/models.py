@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(
             username=username,
             email=email,
-            date_of_birth="31.10.2000",
+            date_of_birth="2000-10-31",
             phone_number="+7 999 999 99 99",
             about_me="-",
             gender="NS"
