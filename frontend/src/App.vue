@@ -12,10 +12,9 @@ import AppLoader from "@/components/global/AppLoader.vue";
 
 export default {
   async mounted() {
-    this.$store.commit("START_APP_LOADING");
-    this.$store.state.loading = true;
     let refreshToken = localStorage.getItem("t");
     if (refreshToken !== null) {
+      this.$store.commit("START_APP_LOADING");
       this.$store.dispatch("REFRESH_TOKEN").then(
         () => {
           this.$store.commit("STOP_APP_LOADING");
