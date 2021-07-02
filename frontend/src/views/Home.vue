@@ -3,12 +3,16 @@
     <v-app-bar app color="lightBlue">
       <v-container class="py-0 fill-height">
         <h2 class="darkBlueGreen--text title logo">Логотип</h2>
+        <div id="nav">
+          <v-btn text :exact="true" to="/test">Test</v-btn>
+        </div>
         <v-spacer></v-spacer>
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container fill-height="fill-height">
-        <v-layout align-center="align-center" justify-center="justify-center">
+      <v-container>
+        <router-view></router-view>
+        <!-- <v-layout align-center="align-center" justify-center="justify-center">
           <v-flex class="text-center">
             <h1>Вы авторизованы!</h1>
             <v-btn
@@ -19,7 +23,7 @@
               >Выйти
             </v-btn>
           </v-flex>
-        </v-layout>
+        </v-layout> -->
       </v-container>
     </v-main>
   </v-app>
@@ -34,8 +38,7 @@ export default {
     logOut() {
       this.$store.dispatch("LOG_OUT").then(
         () => {
-          this.$router.push("/auth");
-          console.log("!!!");
+          this.$router.push("/login");
         },
         err => {
           console.log(err);

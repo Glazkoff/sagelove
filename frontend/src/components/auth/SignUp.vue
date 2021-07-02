@@ -129,7 +129,7 @@
     </v-card>
     <div class="darkBlue--text mb-16">
       Уже есть аккаунт?
-      <router-link class="link" :exact="true" to="/auth">Войдите!</router-link>
+      <router-link class="link" :exact="true" to="/login">Войдите!</router-link>
     </div>
   </v-flex>
 </template>

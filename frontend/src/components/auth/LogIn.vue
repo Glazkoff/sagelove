@@ -61,7 +61,7 @@
     </v-card>
     <div class="darkBlue--text">
       Ещё нет аккаунта?
-      <router-link class="link" to="/auth/signup" :disabled="formLoading"
+      <router-link class="link" to="/signup" :disabled="formLoading"
         >Зарегистрируйтесь!</router-link
       >
     </div>
