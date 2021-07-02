@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'graphene_django'
 ]
 
 LOCAL_APPS = [
@@ -204,3 +205,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # MEDIA CONFIGURATION
 MEDIA_ROOT = str(ROOT_DIR('media'))
 MEDIA_URL = '/media/'
+
+GRAPHENE = {
+    "SCHEMA": "backend.schema.schema"
+}
