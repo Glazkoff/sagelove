@@ -46,7 +46,6 @@ const ifNotAuthenticated = (to, from, next) => {
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: Home,
     beforeEnter: ifAuthenticated,
     children: [
