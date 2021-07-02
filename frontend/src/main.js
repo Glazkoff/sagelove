@@ -8,7 +8,6 @@ import VueAxios from "vue-axios";
 import vuetify from "./plugins/vuetify";
 import { VueMaskDirective } from "v-mask";
 import Vuelidate from "vuelidate";
-import { createProvider } from "./vue-apollo";
 
 Vue.directive("mask", VueMaskDirective);
 
@@ -22,6 +21,5 @@ new Vue({
   router,
   store,
   vuetify,
-  apolloProvider: createProvider(),
   render: h => h(App)
 }).$mount("#app");
