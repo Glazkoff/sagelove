@@ -21,7 +21,8 @@ export default new Vuex.Store({
       pk: null,
       username: null
     },
-    loading: false
+    loading: false,
+    firstPath: null
   },
   getters: {
     isAuthenticated: state => {
@@ -55,6 +56,9 @@ export default new Vuex.Store({
     },
     STOP_APP_LOADING(state) {
       state.loading = false;
+    },
+    SET_FIRST_PATH(state, firstPath) {
+      state.firstPath = firstPath;
     }
   },
   actions: {

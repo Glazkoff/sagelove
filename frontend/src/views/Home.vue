@@ -4,7 +4,7 @@
       <v-container class="py-0 fill-height">
         <h2 class="darkBlueGreen--text title logo">Логотип</h2>
         <div id="nav">
-          <v-btn text :exact="true" to="/test">Test</v-btn> {{ hello }}
+          <v-btn text :exact="true" to="/test">Test</v-btn>
         </div>
         <v-spacer></v-spacer>
       </v-container>

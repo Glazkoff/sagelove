@@ -18,7 +18,7 @@ export default {
       this.$store.dispatch("REFRESH_TOKEN").then(
         () => {
           this.$store.commit("STOP_APP_LOADING");
-          this.$router.push("/");
+          this.$router.push({ path: this.$store.state.firstPath || "/" });
         },
         errors => {
           this.$store.commit("STOP_APP_LOADING");

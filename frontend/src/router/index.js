@@ -27,7 +27,10 @@ import store from "../store/index.js";
 Vue.use(VueRouter);
 
 const ifAuthenticated = (to, from, next) => {
-  console.log(to);
+  if (store.state.firstPath == null) {
+    store.commit("SET_FIRST_PATH", to.path);
+  }
+
   if (store.getters.isAuthenticated) {
     next();
     return;
@@ -46,7 +49,6 @@ const ifNotAuthenticated = (to, from, next) => {
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: Home,
     beforeEnter: ifAuthenticated,
     children: [
@@ -60,14 +62,17 @@ const routes = [
         children: [
           {
             path: "",
+            name: "TestStatus",
             component: TestStatus
           },
           {
             path: "/question/:id",
+            name: "TestQuestion",
             component: TestQuestion
           },
           {
             path: "/result",
+            name: "TestResult",
             component: TestResult
           }
         ]
