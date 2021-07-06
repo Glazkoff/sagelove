@@ -57,8 +57,14 @@
 
     <v-dialog v-model="dialog" width="500">
       <v-card>
-        <v-card-title class="lightBlue pa-4">
+        <v-card-title class="lightBlue pa-4 pr-12 custom-relative">
           <h4>Заблокировать пользователя</h4>
+          <v-icon
+            @click="dialog = false"
+            color="#013351"
+            class="custom-absolute d-flex justify-end cross"
+            >mdi-close</v-icon
+          >
         </v-card-title>
 
         <v-card-text class="pa-4">
@@ -110,6 +116,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.v-card__title {
+  width: 100%;
+}
+
 .custom-relative {
   position: relative;
 }
@@ -117,7 +127,11 @@ export default {
 .custom-absolute {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: absolute !important;
+  &.cross {
+    width: auto;
+    right: 16px;
+  }
 }
 
 .custom-img {
@@ -132,11 +146,5 @@ export default {
   min-height: 10rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
-}
-
-@media (max-width: 600px) {
-  .custom-absolute {
-    width: 100%;
-  }
 }
 </style>
