@@ -57,6 +57,12 @@ GENDER_SELECTION = [
     ('NS', 'Не указан'),
 ]
 
+TEST_STATUS_SELECTION = [
+    ('start', 'Тестирование не начато'),
+    ('inprogress', 'Тестирование в процессе'),
+    ('finish', 'Тестирование завершено'),
+]
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """Данные пользователей"""
@@ -83,6 +89,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name="Пользователь активирован",  default=True)
     is_admin = models.BooleanField(
         verbose_name="Пользователь является администратором", default=False)
+    test_status = models.CharField(
+        "Статус прохождения теста", choices=TEST_STATUS_SELECTION, default="start", max_length=10)
 
     objects = CustomUserManager()
 

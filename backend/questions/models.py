@@ -2,12 +2,13 @@ from django.db import models
 
 # Create your models here.
 
+
 class GroupQuestion(models.Model):
     """Группа вопросов"""
     name_group_question = models.CharField("Название группы", max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-   
+
     def __str__(self):
         return f"{self.name_group_question}"
 
@@ -24,13 +25,14 @@ class QuestionWithScale(models.Model):
     question_number = models.PositiveIntegerField("Номер вопроса")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-   
+
     def __str__(self):
         return f"Вопрос №{self.question_number} группы '{self.question_group.name_group_question}'"
 
     class Meta:
         verbose_name = "Вопрос со шкалой"
         verbose_name_plural = "Вопросы со шкалой"
+
 
 class AnswerScale(models.Model):
     """Ответы на вопросы со шкалой"""
@@ -41,7 +43,7 @@ class AnswerScale(models.Model):
         QuestionWithScale, on_delete=models.CASCADE, verbose_name="Вопрос")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-   
+
     def __str__(self):
         return f"Строка №{self.order_number} ответов на вопрос {self.question.id} "
 
@@ -58,13 +60,14 @@ class QuestionWithOption(models.Model):
     question_number = models.PositiveIntegerField("Номер вопроса")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-   
+
     def __str__(self):
         return f"Вопрос №{self.question_number} группы '{self.question_group.name_group_question}'"
 
     class Meta:
         verbose_name = "Вопрос с вариантами"
         verbose_name_plural = "Вопросы с вариантами"
+
 
 class AnswerOption(models.Model):
     """Ответы на вопросы с вариантами"""
@@ -74,7 +77,7 @@ class AnswerOption(models.Model):
         QuestionWithOption, on_delete=models.CASCADE, verbose_name="Вопрос")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-   
+
     def __str__(self):
         return f"Вариант ответа ({self.id}) на вопрос {self.question.id} "
 

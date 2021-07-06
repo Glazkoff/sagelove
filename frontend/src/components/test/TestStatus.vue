@@ -12,9 +12,9 @@
       </p>
       <br />
       <div class="text-center">
-        <v-btn dark color="colorOfSea" @click="onTestStart"
-          >Начать тестирование</v-btn
-        >
+        <v-btn dark color="colorOfSea" class="my-button" @click="onTestStart">
+          Начать тестирование
+        </v-btn>
       </div>
     </div>
     <div v-else-if="isInProgress">
@@ -28,10 +28,18 @@
       </p>
       <br />
       <div class="text-center">
-        <v-btn dark class="mt-2" color="colorOfSea" @click="onTestContinue"
+        <v-btn
+          dark
+          class="mt-2 my-button"
+          color="colorOfSea"
+          @click="onTestContinue"
           >Продолжить</v-btn
         >
-        <v-btn dark class="ml-5 mt-2" color="colorOfSea" @click="onTestReset"
+        <v-btn
+          dark
+          class="ml-5 mt-2 my-button"
+          color="colorOfSea"
+          @click="onTestReset"
           >Пройти заново</v-btn
         >
       </div>
@@ -40,17 +48,43 @@
 </template>
 
 <script>
-const START_STATUS = "start";
-const IN_PROGRESS_STATUS = "in_progress";
+import {
+  USER_TEST_STATUS,
+  UPDATE_USER_TEST_STATUS
+} from "@/graphql/user_queries";
+
+const START_STATUS = "START";
+const IN_PROGRESS_STATUS = "INPROGRESS";
 
 export default {
   name: "TestStatus",
+  apollo: {
+    user: {
+      query: USER_TEST_STATUS,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
+      }
+    }
+  },
   data() {
     return {
       status: START_STATUS,
       last_question: 1,
       full_question_count: 64
     };
+  },
+  watch: {
+    user: function () {
+      switch (this.user.testStatus) {
+        case "INPROGRESS":
+          this.status = IN_PROGRESS_STATUS;
+          break;
+        case "START":
+        default:
+          this.status = START_STATUS;
+          break;
+      }
+    }
   },
   computed: {
     isStart() {
@@ -62,13 +96,43 @@ export default {
   },
   methods: {
     onTestStart() {
-      console.log("onTestStart");
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_USER_TEST_STATUS,
+          variables: {
+            testStatus: "inprogress",
+            userId: this.$store.getters.decoded.user_id
+          }
+        })
+        .then(() => {
+          // TODO: find last question group
+          let last = `/question/${1}`;
+          this.$router.push(last);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     onTestContinue() {
-      console.log("onTestContinue");
+      // TODO: найти последний вопрос
+      this.$router.push(`/question/${1}`);
     },
     onTestReset() {
-      console.log("onTestReset");
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_USER_TEST_STATUS,
+          variables: {
+            testStatus: "start",
+            userId: this.$store.getters.decoded.user_id
+          }
+        })
+        .then(() => {
+          this.$apollo.queries.user.refetch();
+          this.$apollo.queries.user.refresh();
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

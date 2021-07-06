@@ -12,9 +12,14 @@
         </v-col>
         <v-col>
           <div class="text-right">
-            <v-btn dark color="colorOfSea" class="my-button"
-              >Продолжу позже</v-btn
+            <v-btn
+              dark
+              color="colorOfSea"
+              class="my-button"
+              @click="onContinueLater"
             >
+              Продолжу позже
+            </v-btn>
           </div>
         </v-col>
       </v-row>
@@ -78,12 +83,12 @@
       <v-row>
         <v-col>
           <div class="text-left">
-            <v-btn dark color="colorOfSea">Назад</v-btn>
+            <v-btn dark color="colorOfSea" class="my-button">Назад</v-btn>
           </div>
         </v-col>
         <v-col>
           <div class="text-right">
-            <v-btn dark color="colorOfSea">Далее</v-btn>
+            <v-btn dark color="colorOfSea" class="my-button">Далее</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -109,17 +114,6 @@ export default {
       ]
     };
   },
-  computed: {
-    media() {
-      return {
-        "is-phone": this.$screen.sm,
-        "is-tablet": this.$screen.md,
-        "is-desktop": this.$screen.lg,
-        "can-touch": this.$screen.touch,
-        breakpoint: this.$screen.breakpoint
-      };
-    }
-  },
   created() {
     window.addEventListener("resize", this.resizeHandler);
     this.clientWidth = document.body.clientWidth;
@@ -131,6 +125,10 @@ export default {
     resizeHandler() {
       let width = document.body.clientWidth + 16;
       this.clientWidth = width;
+    },
+    onContinueLater() {
+      // TODO: синхронизация результатов
+      this.$router.push("/test");
     }
   },
   watch: {
