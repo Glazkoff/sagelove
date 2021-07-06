@@ -1,27 +1,36 @@
 <template>
   <div>
     <v-carousel height="600" class="rounded-lg my-4" show-arrows-on-hover>
-      <template v-slot:prev="{ on, attrs }">
-        <img
-          src="../../assets/img/arrow.svg"
-          alt="arrow-left"
-          v-bind="attrs"
-          v-on="on"
-          width="35"
-          class="rotate-arrow"
-        />
-      </template>
-      <template v-slot:next="{ on, attrs }">
-        <img
-          src="../../assets/img/arrow.svg"
-          alt="arrow-right"
-          v-bind="attrs"
-          v-on="on"
-          width="35"
-        />
-      </template>
-      <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <div class="float-right">
+      <v-carousel-item
+        v-for="(slide, i) in slides"
+        :key="i"
+        class="my-carousel"
+      >
+        <template v-slot:prev="{ on, attrs }">
+          <img
+            src="../../assets/img/arrow.svg"
+            alt="arrow-left"
+            v-bind="attrs"
+            v-on="on"
+            width="35"
+            class="rotate-arrow"
+          />
+        </template>
+        <template v-slot:next="{ on, attrs }">
+          <router-link to="/aims" v-if="slide[i] === 4"
+            ><img src="../../assets/img/arrow.svg" alt="arrow-right" width="35"
+          /></router-link>
+          <img
+            v-else
+            src="../../assets/img/arrow.svg"
+            alt="arrow-right"
+            v-bind="attrs"
+            v-on="on"
+            width="35"
+          />
+        </template>
+
+        <div class="position-cross mr-3">
           <router-link to="/aims"
             ><img
               src="../../assets/img/cross.svg"
@@ -72,8 +81,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-responsive__content {
-  position: relative;
+.position-cross {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3rem;
 }
 .rotate-arrow {
   transform: rotate(180deg);
