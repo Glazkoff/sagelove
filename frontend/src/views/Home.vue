@@ -5,12 +5,13 @@
         <h2 class="darkBlueGreen--text title logo">Логотип</h2>
         <div id="nav">
           <v-btn text :exact="true" to="/test">Test</v-btn>
+          <v-btn text :exact="true" to="/datings">Знакомства</v-btn>
         </div>
         <v-spacer></v-spacer>
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container class="pb-10">
         <router-view></router-view>
         <!-- <v-layout align-center="align-center" justify-center="justify-center">
           <v-flex class="text-center">

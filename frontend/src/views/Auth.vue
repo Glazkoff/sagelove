@@ -9,7 +9,9 @@
           <v-btn text :exact="true" to="/auth/signup">Auth - Signup</v-btn>
         </div> -->
         <v-spacer></v-spacer>
-        <v-btn color="colorOfSea my-button" dark large to="/login">Войти</v-btn>
+        <v-btn color="colorOfSea my-button wide-padding" dark large to="/login"
+          >Войти</v-btn
+        >
       </v-container>
     </v-app-bar>
     <v-main>

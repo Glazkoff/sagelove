@@ -1,6 +1,5 @@
 <template>
   <div>
-    Datings
     <router-view></router-view>
   </div>
 </template>
