@@ -159,4 +159,18 @@ a.link {
   color: #ff618c !important;
   font-weight: 700;
 }
+div.v-application .primary--text {
+  color: #00acc2 !important;
+  caret-color: #00acc2 !important;
+}
+div.v-input--selection-controls__input:hover {
+  color: #00acc2;
+}
+div.v-input--selection-controls {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+div.v-input__slot{
+  margin-bottom: 0px;
+}
 </style>
