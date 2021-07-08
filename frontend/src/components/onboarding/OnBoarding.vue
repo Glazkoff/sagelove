@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-carousel height="600" class="rounded-lg my-4" show-arrows-on-hover>
+    <v-carousel height="37.5rem" class="rounded-lg my-4" show-arrows-on-hover>
       <v-carousel-item
         v-for="(slide, i) in slides"
         :key="i"
@@ -17,7 +17,7 @@
           />
         </template>
         <template v-slot:next="{ on, attrs }">
-          <router-link to="/aims" v-if="slide[i] === 4"
+          <router-link to="/aims" v-if="slides.indexOf(slide[i]) == 4"
             ><img src="../../assets/img/arrow.svg" alt="arrow-right" width="35"
           /></router-link>
           <img
@@ -123,5 +123,13 @@ h1 {
 }
 .v-btn__content {
   color: #00acc2 !important;
+}
+@media (max-width: 670px) {
+  p {
+    padding: 2rem;
+  }
+  .position-cross img {
+    width: 3rem;
+  }
 }
 </style>
