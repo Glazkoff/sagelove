@@ -1,6 +1,6 @@
 <template>
   <v-flex>
-    <h1 class="title mb-12 text-center">Цели</h1>
+    <h1 class="title mb-12 text-center mb-5 mt-5 mb-sm-10 mt-sm-10">Цели</h1>
     <div class="d-flex justify-center">
       <div class="background-aimsaccount rounded-lg pa-8">
         <v-row>

@@ -1,6 +1,8 @@
 <template>
   <v-flex>
-    <h1 class="title mb-12 text-center">Выберите цель</h1>
+    <h1 class="title mb-12 text-center mb-5 mt-5 mb-sm-10 mt-sm-10">
+      Выберите цель
+    </h1>
     <div class="d-flex justify-center">
       <div>
         <v-radio-group v-model="radios" class="dark-blue-text">
