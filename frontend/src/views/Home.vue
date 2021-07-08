@@ -6,6 +6,7 @@
         <div id="nav">
           <v-btn text :exact="true" to="/test">Test</v-btn>
           <v-btn text :exact="true" to="/datings">Знакомства</v-btn>
+          <v-btn text :exact="true" to="/account">Личный кабинет</v-btn>
         </div>
         <v-spacer></v-spacer>
       </v-container>

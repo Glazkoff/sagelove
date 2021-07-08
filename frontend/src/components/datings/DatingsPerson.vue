@@ -45,7 +45,10 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn color="colorOfSea my-button wide-padding" dark large
+                <v-btn
+                  color="colorOfSea"
+                  class="my-button wide-padding white--text"
+                  large
                   >Написать</v-btn
                 >
               </v-col>
@@ -76,8 +79,8 @@
 
         <v-card-actions class="pb-4">
           <v-btn
-            color="colorOfSea my-button wide-padding"
-            dark
+            color="colorOfSea"
+            class="my-button wide-padding white--text"
             large
             @click="dialog = false"
             :to="{ name: 'DatingsStatus' }"
