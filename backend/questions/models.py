@@ -22,6 +22,7 @@ class QuestionWithScale(models.Model):
     question_group = models.ForeignKey(
         GroupQuestion, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Группа вопросов")
     question_number = models.PositiveIntegerField("Номер вопроса")
+    published_or_not = models.BooleanField(default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    
@@ -56,6 +57,7 @@ class QuestionWithOption(models.Model):
     question_group = models.ForeignKey(
         GroupQuestion, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Группа вопросов")
     question_number = models.PositiveIntegerField("Номер вопроса")
+    published_or_not = models.BooleanField(default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    

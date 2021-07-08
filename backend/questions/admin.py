@@ -26,12 +26,11 @@ class GroupQuestionAdmin(admin.ModelAdmin):
         }),
     )
 
-
 class QuestionWithScaleAdmin(admin.ModelAdmin):
     """Вопросы со шкалой"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
-    list_filter = ('question_group',)
+    list_display=('__str__','question_text',"published_or_not",)
+    list_filter = ('question_group',"published_or_not",)
     search_fields = ('question_group', 'question_text',)
     fieldsets = (
         (None, {
@@ -39,6 +38,33 @@ class QuestionWithScaleAdmin(admin.ModelAdmin):
         }),
     )
     inlines=[AnswerScaleInline]
+    list_editable= ("published_or_not",)
+    actions = ["published", "unpublished"]
+
+    def unpublished(self, request,queryset):
+        """Снять с публикации"""
+        row_update = queryset.update(published_or_not=False)
+        if row_update =='1':
+            message_bit = "1 запись была обновлена"
+        else:
+            message_bit = f"{row_update} записей были обновлены"
+        self.message_user(request,f"{row_update}")
+
+    def published(self, request,queryset):
+        """Опубликовать"""
+        row_update = queryset.update(published_or_not=True)
+        if row_update =='1':
+            message_bit = "1 запись была обновлена"
+        else:
+            message_bit = f"{row_update} записей были обновлены"
+        self.message_user(request,f"{row_update}")
+
+    published.short_description = "Опубликовать"
+    published.allowed_permissions = ('change',)
+
+    unpublished.short_description = "Снять с публикации"
+    unpublished.allowed_permissions = ('change',)
+
     # formfield_overrides = {
     #     models.CharField: {'widget': TextInput(attrs={'size':'20'})},
     #     models.TextField: {'widget': Textarea(attrs={'rows':4, 'cols':40})},
@@ -66,8 +92,8 @@ class AnswerScaleAdmin(admin.ModelAdmin):
 class QuestionWithOptionAdmin(admin.ModelAdmin):
     """Вопросы с вариантами"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
-    list_filter = ('question_group',)
+    list_display=('__str__','question_text',"published_or_not",)
+    list_filter = ('question_group',"published_or_not",)
     search_fields = ('question_group', 'question_text',)
     fieldsets = (
         (None, {
@@ -75,6 +101,32 @@ class QuestionWithOptionAdmin(admin.ModelAdmin):
         }),
     )
     inlines=[AnswerOptionInline]
+    list_editable= ("published_or_not",)
+    actions = ["published", "unpublished"]
+
+    def unpublished(self, request,queryset):
+        """Снять с публикации"""
+        row_update = queryset.update(published_or_not=False)
+        if row_update =='1':
+            message_bit = "1 запись была обновлена"
+        else:
+            message_bit = f"{row_update} записей были обновлены"
+        self.message_user(request,f"{row_update}")
+
+    def published(self, request,queryset):
+        """Опубликовать"""
+        row_update = queryset.update(published_or_not=True)
+        if row_update =='1':
+            message_bit = "1 запись была обновлена"
+        else:
+            message_bit = f"{row_update} записей были обновлены"
+        self.message_user(request,f"{row_update}")
+
+    published.short_description = "Опубликовать"
+    published.allowed_permissions = ('change',)
+
+    unpublished.short_description = "Снять с публикации"
+    unpublished.allowed_permissions = ('change',)
     # formfield_overrides = {
     #     models.CharField: {'widget': TextInput(attrs={'size':'20'})},
     #     models.TextField: {'widget': Textarea(attrs={'rows':4, 'cols':40})},
