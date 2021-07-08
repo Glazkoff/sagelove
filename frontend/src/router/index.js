@@ -6,6 +6,8 @@ import LogIn from "../components/auth/LogIn.vue";
 import SignUp from "../components/auth/SignUp.vue";
 
 import Aims from "../components/aims/Aims.vue";
+import AimsAccount from "../components/aims/AimsAccount.vue";
+import AimsAccountEdit from "../components/aims/AimsAccountEdit.vue";
 
 import Account from "../components/account/Account.vue";
 
@@ -75,6 +77,28 @@ const routes = [
       {
         path: "/aims",
         component: Aims
+        // children: [
+        //   {
+        //     path: "/:id",
+        //     component: AimsAccount,
+        //     name: AimsAccount,
+        //     children: [
+        //       {
+        //         path: "/edit",
+        //         component: AimsAccountEdit,
+        //         name: AimsAccountEdit
+        //       }
+        //     ]
+        //   }
+        // ]
+      },
+      {
+        path: "/aimsaccount",
+        component: AimsAccount
+      },
+      {
+        path: "/aimsaccountedit",
+        component: AimsAccountEdit
       },
       {
         path: "/account",

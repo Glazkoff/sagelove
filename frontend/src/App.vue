@@ -170,7 +170,7 @@ div.v-input--selection-controls {
   margin-top: 0px;
   padding-top: 0px;
 }
-div.v-input__slot{
+div.v-input__slot {
   margin-bottom: 0px;
 }
 </style>
