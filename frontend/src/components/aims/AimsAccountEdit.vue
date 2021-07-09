@@ -3,7 +3,7 @@
     <h1 class="title mb-12 text-center mb-5 mt-5 mb-sm-10 mt-sm-10">Цели</h1>
     <div class="d-flex justify-center">
       <div class="background-aimsaccount rounded-lg pa-8">
-        <v-row>
+        <v-row class="direction-block">
           <v-col><p class="dark-blue-text">Я ищу партнера:</p></v-col>
           <v-col>
             <v-radio-group v-model="radios" class="dark-blue-text">
@@ -27,7 +27,7 @@
             </v-radio-group></v-col
           >
         </v-row>
-        <v-row>
+        <v-row class="direction-block">
           <v-col><p class="dark-blue-text">Я хочу встретить:</p></v-col>
           <v-col
             ><v-radio-group v-model="radios" class="dark-blue-text">
@@ -51,7 +51,7 @@
             </v-radio-group></v-col
           >
         </v-row>
-        <v-row>
+        <v-row class="direction-block">
           <v-col><p class="dark-blue-text">Моя история по ощущениям:</p></v-col>
           <v-col
             ><v-row>
@@ -128,5 +128,10 @@ export default {
 }
 .col .col-history {
   padding: 0.5rem !important;
+}
+@media (max-width: 600px) {
+  .direction-block {
+    flex-direction: column !important;
+  }
 }
 </style>

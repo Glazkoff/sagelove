@@ -145,7 +145,6 @@ h1.title,
   font-style: normal !important;
   font-weight: normal !important;
   font-size: 48px !important;
-  line-height: 55px !important;
 }
 
 button.theme--light.v-btn.v-btn--disabled.v-btn--has-bg,
@@ -172,5 +171,11 @@ div.v-input--selection-controls {
 }
 div.v-input__slot {
   margin-bottom: 0px;
+}
+@media (max-width: 600px) {
+  h1.title,
+  .v-application h1.title {
+    font-size: 32px !important;
+  }
 }
 </style>
