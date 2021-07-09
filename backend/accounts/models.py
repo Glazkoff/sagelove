@@ -43,3 +43,27 @@ class UserAnswer(models.Model):
     class Meta:
         verbose_name = "Ответ пользователя"
         verbose_name_plural = "Ответы пользователя"
+
+ALGORITHM_SELECTION = [
+    ('A1', 'Алгоритм 1'),
+    ('A2', 'Алгоритм 2'),
+    ('A3', 'Алгоритм 3'),
+    ('HBF', 'История по ощущениям'),
+]
+class Datings(models.Model):
+    """Совпадения пользователей"""
+    user_1 = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE,related_name='datingsfirstuser', verbose_name="Пользователь 1")
+    user_2 = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE,related_name='datingsseconduser',verbose_name="Пользователь 2")
+    algorithm = models.CharField(
+        verbose_name="Алгоритм", max_length=120, choices=ALGORITHM_SELECTION,null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+   
+    def __str__(self):
+        return f"Совпадения пользователя {self.user_1.first_name}(#{self.user_1.id}) и пользователя {self.user_2.first_name}(#{self.user_2.id}) по алгоритму {self.algorithm}"
+
+    class Meta:
+        verbose_name = "Совпадения пользователя"
+        verbose_name_plural = "Совпадения пользователей"

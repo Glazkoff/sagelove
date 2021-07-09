@@ -56,7 +56,16 @@ GENDER_SELECTION = [
     ('F', 'Женский'),
     ('NS', 'Не указан'),
 ]
-
+PARTHNER_SELECTION = [
+    ('GM', 'Для гостевого брака'),
+    ('FAM', 'Для создания семьи'),
+    ('JFF', 'Для просто поболтать и вместе потусить'),
+]
+EXPECTATION_SELECTION = [
+    ('SAME', 'Такого, как я'),
+    ('ANTI', 'Мою противоположность'),
+    ('MATH', 'Выбор путем математического алгоритма'),
+]
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """Данные пользователей"""
@@ -83,6 +92,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name="Пользователь активирован",  default=True)
     is_admin = models.BooleanField(
         verbose_name="Пользователь является администратором", default=False)
+    partner_type = models.CharField(
+        verbose_name="Ищу партнера", max_length=120, choices=PARTHNER_SELECTION,null=True, blank=True)
+    purpose_meet = models.CharField(
+        verbose_name="Хочу встретить", max_length=120, choices=EXPECTATION_SELECTION, null=True, blank=True)
+    number_foto_history_by_felling = models.PositiveIntegerField(verbose_name="Номер фото истории по ощущениям", null=True, blank=True)
 
     objects = CustomUserManager()
 
