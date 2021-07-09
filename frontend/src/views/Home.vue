@@ -7,6 +7,8 @@
           <v-btn text :exact="true" to="/test">Test</v-btn>
           <v-btn text :exact="true" to="/datings">Знакомства</v-btn>
           <v-btn text :exact="true" to="/account">Личный кабинет</v-btn>
+          <v-btn text :exact="true" to="/aims">Цели (регистрация)</v-btn>
+          <v-btn text :exact="true" to="/aims_account">Цели</v-btn>
         </div>
         <v-spacer></v-spacer>
       </v-container>
