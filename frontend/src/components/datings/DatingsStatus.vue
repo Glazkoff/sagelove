@@ -91,6 +91,7 @@
           "
         >
           <img
+            :to="{ name: 'DatingsPerson', params: { id: person.id } }"
             class="custom-img"
             src="https://picsum.photos/200"
             alt="Ававтар"
