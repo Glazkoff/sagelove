@@ -193,13 +193,57 @@ div.v-input--selection-controls {
   margin-top: 0px;
   padding-top: 0px;
 }
+
 div.v-input__slot {
   margin-bottom: 0px;
+}
+div.v-carousel div.v-carousel__controls {
+  background: rgba(0, 0, 0, 0) !important;
+}
+button.v-carousel__controls__item {
+  color: white !important;
+}
+button.v-carousel__controls__item .v-icon {
+  opacity: 1 !important;
+}
+button.v-carousel__controls__item span.v-btn__content i.v-icon:active {
+  color: #00acc2 !important;
+}
+
+.theme--dark.v-btn--active:before,
+.theme--dark.v-btn--active:hover:before {
+  opacity: 0 !important;
+}
+.theme--dark.v-btn--active,
+.theme--dark.v-btn--active {
+  color: #00acc2 !important;
+}
+div.v-window__container div.v-window__next,
+div.v-window__container div.v-window__prev {
+  background: rgba(0, 0, 0, 0);
+}
+div.v-responsive__content.my-carousel {
+  position: relative !important;
 }
 @media (max-width: 600px) {
   h1.title,
   .v-application h1.title {
     font-size: 32px !important;
+  }
+}
+@media (max-width: 465px) {
+  div.container div.v-carousel {
+    height: 53.75rem !important;
+  }
+  div.container div.v-carousel div.v-window__container {
+    height: 53.75rem !important;
+  }
+  div.container
+    div.v-carousel
+    div.v-window__container
+    div.v-window-item
+    div.v-responsive {
+    height: 53.75rem !important;
   }
 }
 </style>
