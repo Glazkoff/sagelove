@@ -118,7 +118,7 @@ export default {
   data() {
     return {
       isPaid: false,
-      wasFound: true,
+      wasFound: false,
       persons: [
         { id: 1, user_name: "Иван", user_birthday: "1987-06-15", url_foto: "" },
         {

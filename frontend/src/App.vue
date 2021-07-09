@@ -147,6 +147,7 @@ h1.title,
   font-style: normal !important;
   font-weight: normal !important;
   font-size: 48px !important;
+  line-height: 48px !important;
 }
 
 button.theme--light.v-btn.v-btn--disabled.v-btn--has-bg,

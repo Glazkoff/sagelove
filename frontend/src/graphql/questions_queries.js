@@ -23,7 +23,6 @@ export const QUESTION_GROUP = gql`
         answeroptionSet {
           id
           answerText
-          answerValue
         }
       }
     }
