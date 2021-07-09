@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="lightBlue">
       <v-container class="py-0 fill-height">
-        <img src="../assets/img/logo.svg" alt="Logo" width="15%" class="py-0" />
+        <img src="../assets/img/logo.svg" alt="Logo" class="py-0 width-logo" />
         <div id="nav">
           <v-btn text :exact="true" to="/test">Test</v-btn>
         </div>
@@ -48,3 +48,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.width-logo {
+  width: 10rem;
+}
+</style>

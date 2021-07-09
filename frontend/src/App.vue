@@ -194,17 +194,17 @@ div.v-responsive__content.my-carousel {
 }
 @media (max-width: 465px) {
   div.container div.v-carousel {
-    height: 100% !important;
+    height: 53.75rem !important;
   }
   div.container div.v-carousel div.v-window__container {
-    height: 100% !important;
+    height: 53.75rem !important;
   }
   div.container
     div.v-carousel
     div.v-window__container
     div.v-window-item
     div.v-responsive {
-    height: 100% !important;
+    height: 53.75rem !important;
   }
 }
 </style>
