@@ -71,7 +71,6 @@ class QuestionWithOption(models.Model):
 class AnswerOption(models.Model):
     """Ответы на вопросы с вариантами"""
     answer_text = models.TextField("Текст варианта ответа")
-    answer_value = models.TextField("Значение варианта ответа")
     question = models.ForeignKey(
         QuestionWithOption, on_delete=models.CASCADE, verbose_name="Вопрос")
     created_at = models.DateTimeField(auto_now_add=True)
