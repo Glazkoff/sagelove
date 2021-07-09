@@ -4,7 +4,6 @@
       <h1 class="title text-center mt-5 mb-5">
         Опросник о ваших предпочтениях
       </h1>
-      {{ questionGroup }}
       <v-row>
         <v-col>
           <div>
@@ -34,7 +33,6 @@
         Тема № {{ orderNumber }}.
         {{ nameGroupQuestion }}
       </h2>
-      {{ questionsSet }}
       <div
         v-for="(questionElem, question_index) in questionsSet"
         :key="question_index"
@@ -69,7 +67,7 @@
                 lg="8"
               >
                 <v-slider
-                  v-model="value"
+                  v-model="userAnswers[question_index]"
                   color="colorOfSea"
                   track-color="colorOfSea"
                   thumb-color="colorOfSea"
@@ -102,7 +100,7 @@
             {{ question_index + 1 }}. {{ questionElem.question.questionText }}
           </p>
           <!-- <v-radio-group v-model="radioGroup"> -->
-          <v-radio-group>
+          <v-radio-group v-model="userAnswers[question_index]">
             <v-radio
               v-for="answer in questionElem.question.answeroptionSet"
               :key="answer.id"
@@ -116,12 +114,26 @@
       <v-row>
         <v-col>
           <div class="text-left">
-            <v-btn dark color="colorOfSea" class="my-button">Назад</v-btn>
+            <v-btn
+              dark
+              color="colorOfSea"
+              class="my-button"
+              v-if="prevGroupId !== null"
+              @click="goToPrevGroup"
+              >Назад</v-btn
+            >
           </div>
         </v-col>
         <v-col>
           <div class="text-right">
-            <v-btn dark color="colorOfSea" class="my-button">Далее</v-btn>
+            <v-btn
+              v-if="nextGroupId !== null"
+              dark
+              color="colorOfSea"
+              class="my-button"
+              @click="goToNextGroup"
+              >Далее</v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -163,7 +175,8 @@ export default {
         "Ни один из ответов",
         "Скорее да, чем нет",
         "Да"
-      ]
+      ],
+      userAnswers: []
     };
   },
   created() {
@@ -181,6 +194,14 @@ export default {
     onContinueLater() {
       // TODO: синхронизация результатов
       this.$router.push("/test");
+    },
+    goToNextGroup() {
+      this.userAnswers = [];
+      this.$router.push(`/question/${this.nextGroupId}`);
+    },
+    goToPrevGroup() {
+      this.userAnswers = [];
+      this.$router.push(`/question/${this.prevGroupId}`);
     }
   },
   watch: {
@@ -194,6 +215,9 @@ export default {
       ) {
         console.log(null);
       }
+    },
+    userAnswers(val) {
+      console.log(val);
     }
   },
   computed: {
@@ -235,6 +259,20 @@ export default {
         });
       }
       return questionsSet;
+    },
+    nextGroupId() {
+      if (this.questionGroup !== null && this.questionGroup !== undefined) {
+        return this.questionGroup.nextGroupId;
+      } else {
+        return null;
+      }
+    },
+    prevGroupId() {
+      if (this.questionGroup !== null && this.questionGroup !== undefined) {
+        return this.questionGroup.prevGroupId;
+      } else {
+        return null;
+      }
     }
   }
 };

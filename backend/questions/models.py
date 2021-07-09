@@ -27,7 +27,7 @@ class QuestionWithScale(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Вопрос №{self.question_number} группы '{self.question_group.name_group_question}'"
+        return f"'{self.question_text}' (группа '{self.question_group.name_group_question}')"
 
     class Meta:
         verbose_name = "Вопрос со шкалой"
@@ -79,7 +79,7 @@ class AnswerOption(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Вариант ответа ({self.id}) на вопрос {self.question.id} "
+        return f"{self.answer_text} (вопрос {self.question.id}) "
 
     class Meta:
         verbose_name = "Ответ на вопросы с вариантами"

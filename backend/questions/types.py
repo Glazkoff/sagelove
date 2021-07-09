@@ -5,6 +5,8 @@ from .models import GroupQuestion, QuestionWithScale, AnswerScale, QuestionWithO
 
 class GroupQuestionType(DjangoObjectType):
     order_number = graphene.Int()
+    next_group_id = graphene.ID()
+    prev_group_id = graphene.ID()
 
     class Meta:
         model = GroupQuestion
@@ -18,6 +20,32 @@ class GroupQuestionType(DjangoObjectType):
             if group.id == self.id:
                 break
         return count
+
+    def resolve_next_group_id(self, info):
+        groups = GroupQuestion.objects.all().order_by('pk')
+        next_group_id = None
+        is_found = False
+        for group in groups:
+            if group.id == self.id:
+                is_found = True
+                continue
+            if is_found:
+                next_group_id = group.id
+        return next_group_id
+
+    def resolve_prev_group_id(self, info):
+        groups = GroupQuestion.objects.all().order_by('pk')
+        is_first = True
+        prev_group_id = None
+        prev_buffer = 0
+        for group in groups:
+            if not is_first and self.id == group.id:
+                prev_group_id = prev_buffer
+                break
+            if prev_buffer == 0:
+                is_first = False
+            prev_buffer = group.id
+        return prev_group_id
 
 
 class QuestionWithScaleType(DjangoObjectType):

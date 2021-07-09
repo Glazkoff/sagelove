@@ -5,6 +5,8 @@ export const QUESTION_GROUP = gql`
     questionGroup(questionGroupId: $questionGroupId) {
       id
       orderNumber
+      prevGroupId
+      nextGroupId
       nameGroupQuestion
       questionwithscaleSet {
         id
