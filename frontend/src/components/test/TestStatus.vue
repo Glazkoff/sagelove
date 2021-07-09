@@ -106,7 +106,7 @@ export default {
         })
         .then(() => {
           // TODO: find last question group
-          let last = `/question/${1}`;
+          let last = `/question/${2}`;
           this.$router.push(last);
         })
         .catch(err => {
@@ -115,7 +115,7 @@ export default {
     },
     onTestContinue() {
       // TODO: найти последний вопрос
-      this.$router.push(`/question/${1}`);
+      this.$router.push(`/question/${2}`);
     },
     onTestReset() {
       this.$apollo

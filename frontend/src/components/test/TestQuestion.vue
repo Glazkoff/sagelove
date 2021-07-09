@@ -4,10 +4,11 @@
       <h1 class="title text-center mt-5 mb-5">
         Опросник о ваших предпочтениях
       </h1>
+      {{ questionGroup }}
       <v-row>
         <v-col>
           <div>
-            <h3 class="colorOfSea--text">41%</h3>
+            <h3 class="colorOfSea--text">{{ progress }}%</h3>
           </div>
         </v-col>
         <v-col>
@@ -24,61 +25,93 @@
         </v-col>
       </v-row>
       <v-progress-linear
-        value="41"
+        :value="progress"
         class="mt-2 mb-4"
         color="colorOfSea"
         height="8"
       ></v-progress-linear>
-      <h2 class="title colorOfSea--text">Тема № 1. Запахи</h2>
-      <p>2. Какие запахи духов Вы обчно выбираете для себя?</p>
-      <div v-for="i in 2" :key="i">
-        <v-row>
-          <v-col
-            class="align-center d-flex align-items-center"
-            cols="12"
-            xs="12"
-            sm="2"
-            md="2"
-            lg="2"
-          >
-            <p class="text-right question-side">Лилия, фрезия, роза</p>
-          </v-col>
-          <v-col
-            class="align-center d-flex align-items-center question-slider"
-            cols="12"
-            xs="12"
-            sm="8"
-            md="8"
-            lg="8"
-          >
-            <v-slider
-              v-model="value"
+      <h2 class="title colorOfSea--text">
+        Тема № {{ orderNumber }}.
+        {{ nameGroupQuestion }}
+      </h2>
+      {{ questionsSet }}
+      <div
+        v-for="(questionElem, question_index) in questionsSet"
+        :key="question_index"
+      >
+        <div v-if="questionElem.type == WITH_SCALE_TYPE">
+          <p>
+            {{ question_index + 1 }}. {{ questionElem.question.questionText }}
+          </p>
+          <div>
+            <v-row
+              v-for="answer in questionElem.question.answerscaleSet"
+              :key="answer.id"
+            >
+              <v-col
+                class="align-center d-flex align-items-center"
+                cols="12"
+                xs="12"
+                sm="2"
+                md="2"
+                lg="2"
+              >
+                <p class="text-right question-side">
+                  {{ answer.leftAnswerText }}
+                </p>
+              </v-col>
+              <v-col
+                class="align-center d-flex align-items-center question-slider"
+                cols="12"
+                xs="12"
+                sm="8"
+                md="8"
+                lg="8"
+              >
+                <v-slider
+                  v-model="value"
+                  color="colorOfSea"
+                  track-color="colorOfSea"
+                  thumb-color="colorOfSea"
+                  :tick-labels="ticksLabels"
+                  ticks="always"
+                  tick-size="4"
+                  :max="4"
+                  step="1"
+                  :vertical="isLessThen600px"
+                ></v-slider>
+              </v-col>
+              <v-col
+                class="align-center d-flex align-items-center"
+                cols="12"
+                xs="12"
+                sm="2"
+                md="2"
+                lg="2"
+              >
+                <p class="text-left question-side">
+                  {{ answer.rightAnswerText }}
+                </p>
+              </v-col>
+            </v-row>
+            <v-divider class="mt-4 mb-4 mobile-divider"></v-divider>
+          </div>
+        </div>
+        <div v-else-if="questionElem.type == WITH_OPTIONS_TYPE">
+          <p>
+            {{ question_index + 1 }}. {{ questionElem.question.questionText }}
+          </p>
+          <!-- <v-radio-group v-model="radioGroup"> -->
+          <v-radio-group>
+            <v-radio
+              v-for="answer in questionElem.question.answeroptionSet"
+              :key="answer.id"
+              :label="answer.answerText"
+              :value="answer.id"
               color="colorOfSea"
-              track-color="colorOfSea"
-              thumb-color="colorOfSea"
-              :tick-labels="ticksLabels"
-              ticks="always"
-              tick-size="4"
-              :max="4"
-              step="1"
-              :vertical="isLessThen600px"
-            ></v-slider>
-          </v-col>
-          <v-col
-            class="align-center d-flex align-items-center"
-            cols="12"
-            xs="12"
-            sm="2"
-            md="2"
-            lg="2"
-          >
-            <p class="text-left question-side">
-              Цветочные ароматы и интересные цветочные композиции без привязки к
-              запаху какого-то цветка
-            </p>
-          </v-col>
-        </v-row>
-        <v-divider class="mt-4 mb-4 mobile-divider"></v-divider>
+            ></v-radio>
+          </v-radio-group>
+        </div>
       </div>
       <v-row>
         <v-col>
@@ -97,11 +130,30 @@
 </template>
 
 <script>
-// TODO: добавить проверку экрана на ширину для вертикального слайдера
+import {
+  QUESTION_GROUP,
+  QUESTION_GROUP_COUNT
+} from "@/graphql/questions_queries";
+
 export default {
   name: "TestQuestion",
+  apollo: {
+    questionGroup: {
+      query: QUESTION_GROUP,
+      variables() {
+        return {
+          questionGroupId: this.groupId
+        };
+      }
+    },
+    questionGroupsCount: {
+      query: QUESTION_GROUP_COUNT
+    }
+  },
   data() {
     return {
+      WITH_SCALE_TYPE: "with_scale",
+      WITH_OPTIONS_TYPE: "with_options",
       value: 2,
       clientWidth: null,
       isLessThen600px: false,
@@ -134,6 +186,55 @@ export default {
   watch: {
     clientWidth() {
       this.isLessThen600px = this.clientWidth < 600;
+    },
+    questionGroup() {
+      if (
+        !this.$apollo.queries.questionGroup.loading &&
+        this.questionGroup == null
+      ) {
+        console.log(null);
+      }
+    }
+  },
+  computed: {
+    groupId() {
+      return this.$route.params.id;
+    },
+    progress() {
+      if (this.questionGroup !== null && this.questionGroup !== undefined) {
+        return Math.ceil(
+          ((this.questionGroup.orderNumber - 1) / this.questionGroupsCount) *
+            100
+        );
+      } else {
+        return 0;
+      }
+    },
+    orderNumber() {
+      return this.questionGroup != null ? this.questionGroup.orderNumber : "-";
+    },
+    nameGroupQuestion() {
+      return this.questionGroup != null
+        ? this.questionGroup.nameGroupQuestion
+        : "-";
+    },
+    questionsSet() {
+      let questionsSet = [];
+      if (this.questionGroup !== null && this.questionGroup !== undefined) {
+        this.questionGroup.questionwithscaleSet.forEach(question => {
+          questionsSet.push({
+            type: this.WITH_SCALE_TYPE,
+            question
+          });
+        });
+        this.questionGroup.questionwithoptionSet.forEach(question => {
+          questionsSet.push({
+            type: this.WITH_OPTIONS_TYPE,
+            question
+          });
+        });
+      }
+      return questionsSet;
     }
   }
 };

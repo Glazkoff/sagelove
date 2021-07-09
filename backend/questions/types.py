@@ -4,9 +4,20 @@ from .models import GroupQuestion, QuestionWithScale, AnswerScale, QuestionWithO
 
 
 class GroupQuestionType(DjangoObjectType):
+    order_number = graphene.Int()
+
     class Meta:
         model = GroupQuestion
         fields = "__all__"
+
+    def resolve_order_number(self, info):
+        groups = GroupQuestion.objects.all().order_by('pk')
+        count = 0
+        for group in groups:
+            count += 1
+            if group.id == self.id:
+                break
+        return count
 
 
 class QuestionWithScaleType(DjangoObjectType):
