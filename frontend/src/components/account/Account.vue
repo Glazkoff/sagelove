@@ -14,19 +14,20 @@
 
           <v-btn
             v-if="editFlag"
+            @click="onFileInputClick()"
             class="my-button custom-full-width mt-4 white--text"
             color="colorOfSea"
-            colorOfSea
             large
           >
-            <!-- <v-file-input
-              hide-input
-              truncate-length="50"
-               label="File input"
-              class="white--text mt-0 pt-0 "
-            ></v-file-input> -->
-            Изменить фото
+            {{ buttonText }}
           </v-btn>
+          <input
+            ref="finput"
+            class="d-none"
+            type="file"
+            accept="image/*"
+            @change="onFileChanged"
+          />
         </v-col>
         <v-col class="col-12 col-sm-9">
           <div class="custom-card pa-4 pa-sm-8">
@@ -78,28 +79,55 @@
                 ></v-textarea>
               </v-col>
               <v-col v-if="editFlag" class="col-4">
-                <p class="mb-0">Пароль:</p>
+                <p class="mb-0">Старый пароль:</p>
               </v-col>
               <v-col class="col-8">
                 <v-text-field
                   class="pt-0 mt-0"
                   v-if="editFlag"
                   light="light"
-                  :type="passShow ? 'text' : 'password'"
+                  :type="passOldShow ? 'text' : 'password'"
                   color="colorOfSea"
-                  :append-icon="passShow ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="passShow = !passShow"
+                  :append-icon="passOldShow ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="passOldShow = !passOldShow"
                   autocomplete="current-password"
                   required
-                  :error-messages="passwordErrors"
-                  v-model.trim="$v.form.password.$model"
+                  :error-messages="passwordOldErrors"
+                  v-model.trim="$v.form.passwordOld.$model"
                   @input="
-                    $v.form.password.$touch();
-                    formPasswordErrors = [];
+                    $v.form.passwordOld.$touch();
+                    formPasswordOldErrors = [];
                   "
                   @blur="
-                    $v.form.password.$touch();
-                    formPasswordErrors = [];
+                    $v.form.passwordOld.$touch();
+                    formPasswordOldErrors = [];
+                  "
+                  counter
+                ></v-text-field>
+              </v-col>
+              <v-col v-if="editFlag" class="col-4">
+                <p class="mb-0">Новый пароль:</p>
+              </v-col>
+              <v-col class="col-8">
+                <v-text-field
+                  class="pt-0 mt-0"
+                  v-if="editFlag"
+                  light="light"
+                  :type="passNewShow ? 'text' : 'password'"
+                  color="colorOfSea"
+                  :append-icon="passNewShow ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="passNewShow = !passNewShow"
+                  autocomplete="current-password"
+                  required
+                  :error-messages="passwordNewErrors"
+                  v-model.trim="$v.form.passwordNew.$model"
+                  @input="
+                    $v.form.passwordNew.$touch();
+                    formPasswordNewErrors = [];
+                  "
+                  @blur="
+                    $v.form.passwordNew.$touch();
+                    formPasswordNewErrors = [];
                   "
                   counter
                 ></v-text-field>
@@ -149,7 +177,11 @@ export default {
   name: "Account",
   validations: {
     form: {
-      password: {
+      passwordNew: {
+        required,
+        minLength: minLength(8)
+      },
+      passwordOld: {
         required,
         minLength: minLength(8)
       },
@@ -161,10 +193,16 @@ export default {
   data() {
     return {
       editFlag: false,
-      passShow: false,
-      formPasswordErrors: [],
+      passNewShow: false,
+      passOldShow: false,
+      defaultButtonText: "Изменить фото",
+      selectedFile: null,
+      isSelecting: false,
+      formPasswordNewErrors: [],
+      formPasswordOldErrors: [],
       form: {
-        password: null,
+        passwordNew: null,
+        passwordOld: null,
         about_me: null
       },
       person: {
@@ -173,7 +211,6 @@ export default {
         gender: "Мужской",
         user_birthday: "1987-06-15",
         phone_number: "9271112233",
-        password: "123456",
         url_foto: "",
         personal_information:
           "Текст о себе, текст о себе. Текст о себе, текст о себе.Текст о себе, текст о себе."
@@ -181,14 +218,26 @@ export default {
     };
   },
   computed: {
-    passwordErrors() {
+    passwordNewErrors() {
       const errors = [];
-      if (!this.$v.form.password.$dirty) return errors;
-      !this.$v.form.password.required && errors.push("Укажите пароль!");
-      !this.$v.form.password.minLength &&
+      if (!this.$v.form.passwordNew.$dirty) return errors;
+      !this.$v.form.passwordNew.required && errors.push("Укажите пароль!");
+      !this.$v.form.passwordNew.minLength &&
         errors.push("Пароль должен содержать минимум 8 символов!");
-      this.formPasswordErrors.length > 0 &&
-        this.formPasswordErrors.forEach(element => {
+      this.formPasswordNewErrors.length > 0 &&
+        this.formPasswordNewErrors.forEach(element => {
+          errors.push(element);
+        });
+      return errors;
+    },
+    passwordOldErrors() {
+      const errors = [];
+      if (!this.$v.form.passwordOld.$dirty) return errors;
+      !this.$v.form.passwordOld.required && errors.push("Укажите пароль!");
+      !this.$v.form.passwordOld.minLength &&
+        errors.push("Пароль должен содержать минимум 8 символов!");
+      this.formPasswordOldErrors.length > 0 &&
+        this.formPasswordOldErrors.forEach(element => {
           errors.push(element);
         });
       return errors;
@@ -199,6 +248,11 @@ export default {
       !this.$v.form.about_me.required &&
         errors.push("Укажите информацию о себе!");
       return errors;
+    },
+    buttonText() {
+      return this.selectedFile
+        ? this.selectedFile.name
+        : this.defaultButtonText;
     }
   },
   methods: {
@@ -213,14 +267,27 @@ export default {
     },
     onEdit() {
       if (!this.editFlag) {
-        this.form.password = this.person.password;
         this.form.about_me = this.person.personal_information;
         this.editFlag = true;
       } else {
         this.editFlag = false;
-        this.person.password = this.$v.form.password.$model;
         this.person.personal_information = this.$v.form.about_me.$model;
       }
+    },
+    onFileInputClick() {
+      this.isSelecting = true;
+      window.addEventListener(
+        "focus",
+        () => {
+          this.isSelecting = false;
+        },
+        { once: true }
+      );
+
+      this.$refs.finput.click();
+    },
+    onFileChanged(e) {
+      this.selectedFile = e.target.files[0];
     }
   }
 };
@@ -248,9 +315,9 @@ export default {
   width: 100%;
 }
 
-// .custom-choose-image {
-//   position: absolute;
-// }
+.custom-choose-image {
+  position: absolute;
+}
 
 @media (max-width: 599px) {
   .my-button.custom-mobile-full-width {
