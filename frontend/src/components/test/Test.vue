@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="must-delete">
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider>
       Test
       <v-btn text :exact="true" to="/test">Test</v-btn>
       <v-btn
@@ -13,7 +13,7 @@
         TestQuestion
       </v-btn>
       <v-btn text :exact="true" :to="{ name: 'TestResult' }">TestResult</v-btn>
-      <v-divider></v-divider>
+      <v-divider></v-divider> -->
     </div>
     <v-layout align-center="align-center" justify-center="justify-center">
       <router-view></router-view>
