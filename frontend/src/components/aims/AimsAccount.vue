@@ -18,7 +18,7 @@
           /></v-col>
         </v-row>
         <v-btn
-          class="mt-8 my-button"
+          class="mt-8 my-button white--text"
           color="colorOfSea"
           block="block"
           type="submit"
