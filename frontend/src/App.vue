@@ -135,8 +135,10 @@ a.v-btn.my-button {
   text-transform: none !important;
   border-radius: 5px;
   height: 36px !important;
-  padding: 0 37px !important;
   font-size: 14px !important;
+  &.wide-padding {
+    padding: 0 37px !important;
+  }
 }
 
 h1.title,
@@ -145,7 +147,6 @@ h1.title,
   font-style: normal !important;
   font-weight: normal !important;
   font-size: 48px !important;
-  line-height: 55px !important;
 }
 
 button.theme--light.v-btn.v-btn--disabled.v-btn--has-bg,
@@ -158,5 +159,33 @@ a.link {
   text-decoration: none;
   color: #ff618c !important;
   font-weight: 700;
+}
+
+p {
+  color: var(--v-darkBlue-base);
+  font-size: 16px !important;
+}
+
+h2.title,
+.v-application h2.title {
+  color: var(--v-darkBlue-base);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 28px !important;
+}
+
+h4,
+.v-application h4 {
+  color: var(--v-darkBlue-base);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 20px !important;
+}
+
+@media (max-width: 600px) {
+  h1.title,
+  .v-application h1.title {
+    font-size: 32px !important;
+  }
 }
 </style>

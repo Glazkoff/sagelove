@@ -45,9 +45,8 @@
             "
           ></v-text-field>
           <v-btn
-            class="mt-8 my-button"
+            class="mt-8 my-button wide-padding white--text"
             color="colorOfSea"
-            :dark="!$v.form.$invalid && !formLoading"
             @click.prevent="logIn"
             block="block"
             type="submit"

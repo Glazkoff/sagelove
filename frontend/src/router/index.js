@@ -27,7 +27,6 @@ import store from "../store/index.js";
 Vue.use(VueRouter);
 
 const ifAuthenticated = (to, from, next) => {
-  console.log(to);
   if (store.getters.isAuthenticated) {
     next();
     return;
@@ -89,10 +88,12 @@ const routes = [
         component: Datings,
         children: [
           {
+            name: "DatingsStatus",
             path: "",
             component: DatingsStatus
           },
           {
+            name: "DatingsPerson",
             path: "/person/:id",
             component: DatingsPerson
           }
