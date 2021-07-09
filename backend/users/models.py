@@ -100,10 +100,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(
         verbose_name="Пользователь является администратором", default=False)
     partner_type = models.CharField(
-        verbose_name="Ищу партнера", max_length=120, choices=PARTHNER_SELECTION,null=True, blank=True)
+        verbose_name="Ищу партнера", max_length=120, choices=PARTHNER_SELECTION, null=True, blank=True)
     purpose_meet = models.CharField(
         verbose_name="Хочу встретить", max_length=120, choices=EXPECTATION_SELECTION, null=True, blank=True)
-    number_foto_history_by_felling = models.PositiveIntegerField(verbose_name="Номер фото истории по ощущениям", null=True, blank=True)
+    number_foto_history_by_felling = models.PositiveIntegerField(
+        verbose_name="Номер фото истории по ощущениям", null=True, blank=True)
     test_status = models.CharField(
         "Статус прохождения теста", choices=TEST_STATUS_SELECTION, default="start", max_length=10)
 
@@ -113,7 +114,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['phone_number', 'username']
 
     def __str__(self):
-        return self.email
+        return f"{self.first_name} ({self.email})"
 
     # def has_perm(self, perm, obj=None):
     #     "Does the user have a specific permission?"
