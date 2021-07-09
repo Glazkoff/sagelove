@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AnswersCounting, UserAnswer
+from .models import AnswersCounting, UserAnswer,Datings
 # Register your models here.
 class AnswersCountingAdmin(admin.ModelAdmin):
     """Подсчет ответов"""
@@ -32,5 +32,17 @@ class UserAnswerAdmin(admin.ModelAdmin):
             'fields': ('answer','date_time_answer',)
         }),
     )
+class DatingsAdmin(admin.ModelAdmin):
+    """Совпадения пользователей"""
+    exclude = ('createdAt', 'updatedAt')
+    # list_display=('',)
+    # list_filter = ('')
+    search_fields=('user_1','user_2',)
+    fieldsets = (
+        (None, {
+            'fields': ('user_1','user_2','algorithm',)
+        }),
+    )
 admin.site.register(AnswersCounting, AnswersCountingAdmin)
 admin.site.register(UserAnswer, UserAnswerAdmin)
+admin.site.register(Datings, DatingsAdmin)
