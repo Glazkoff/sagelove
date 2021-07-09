@@ -4,7 +4,7 @@
       <v-container class="py-0 fill-height">
         <img src="../assets/img/logo.svg" alt="Logo" class="py-0 width-logo" />
         <div id="nav">
-          <v-btn text :exact="true" to="/test">Test</v-btn>
+          <v-btn text :exact="true" to="/test">Тест</v-btn>
           <v-btn text :exact="true" to="/datings">Знакомства</v-btn>
           <v-btn text :exact="true" to="/account">Личный кабинет</v-btn>
           <v-btn text :exact="true" to="/aims">Цели (регистрация)</v-btn>

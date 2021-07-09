@@ -67,6 +67,13 @@ EXPECTATION_SELECTION = [
     ('MATH', 'Выбор путем математического алгоритма'),
 ]
 
+TEST_STATUS_SELECTION = [
+    ('start', 'Тестирование не начато'),
+    ('inprogress', 'Тестирование в процессе'),
+    ('finish', 'Тестирование завершено'),
+]
+
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """Данные пользователей"""
     email = models.EmailField(
@@ -97,6 +104,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     purpose_meet = models.CharField(
         verbose_name="Хочу встретить", max_length=120, choices=EXPECTATION_SELECTION, null=True, blank=True)
     number_foto_history_by_felling = models.PositiveIntegerField(verbose_name="Номер фото истории по ощущениям", null=True, blank=True)
+    test_status = models.CharField(
+        "Статус прохождения теста", choices=TEST_STATUS_SELECTION, default="start", max_length=10)
 
     objects = CustomUserManager()
 

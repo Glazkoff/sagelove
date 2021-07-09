@@ -1,4 +1,5 @@
 module.exports = {
+  pluginOptions: { apollo: { lintGQL: true } },
   devServer: {
     hot: true,
     hotOnly: true,

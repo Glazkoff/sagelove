@@ -1,8 +1,15 @@
 import graphene
+import questions.schema
+import users.schema
+import accounts.schema
 
 
-class Query(graphene.ObjectType):
+class Query(questions.schema.Query, users.schema.Query, graphene.ObjectType):
     hello = graphene.String(default_value="Hi!")
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(users.schema.Mutation, accounts.schema.Mutation, graphene.ObjectType):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
