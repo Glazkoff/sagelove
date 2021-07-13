@@ -91,7 +91,8 @@
           "
         >
           <img
-            class="custom-img"
+            @click="onRouteToPerson(person.id)"
+            class="custom-img pointer"
             src="https://picsum.photos/200"
             alt="Ававтар"
           />
@@ -170,6 +171,9 @@ export default {
     };
   },
   methods: {
+    onRouteToPerson(id) {
+      this.$router.push({ name: "DatingsPerson", params: { id: id } });
+    },
     countAge(dateString) {
       var today = new Date();
       var birthDate = new Date(dateString);
@@ -204,6 +208,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pointer {
+  cursor: pointer;
+}
+
 .width-window {
   max-width: 600px;
 }

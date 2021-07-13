@@ -90,7 +90,6 @@
                   color="colorOfSea"
                   :append-icon="passOldShow ? 'mdi-eye' : 'mdi-eye-off'"
                   @click:append="passOldShow = !passOldShow"
-                  autocomplete="current-password"
                   required
                   :error-messages="passwordOldErrors"
                   v-model.trim="$v.form.passwordOld.$model"
@@ -117,7 +116,6 @@
                   color="colorOfSea"
                   :append-icon="passNewShow ? 'mdi-eye' : 'mdi-eye-off'"
                   @click:append="passNewShow = !passNewShow"
-                  autocomplete="current-password"
                   required
                   :error-messages="passwordNewErrors"
                   v-model.trim="$v.form.passwordNew.$model"

@@ -114,9 +114,8 @@
             @blur="$v.form.about_me.$touch()"
           ></v-textarea>
           <v-btn
-            class="mt-8 my-button wide-padding"
+            class="mt-8 my-button wide-padding white--text"
             color="colorOfSea"
-            :dark="!$v.form.$invalid && !formLoading"
             @click.prevent="signUp"
             block="block"
             type="submit"

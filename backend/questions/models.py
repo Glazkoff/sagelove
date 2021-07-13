@@ -23,7 +23,8 @@ class QuestionWithScale(models.Model):
     question_group = models.ForeignKey(
         GroupQuestion, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Группа вопросов")
     question_number = models.PositiveIntegerField("Номер вопроса")
-    published_or_not = models.BooleanField(default=False, verbose_name="Публикация")
+    published_or_not = models.BooleanField(
+        default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,7 +38,6 @@ class QuestionWithScale(models.Model):
 
 class AnswerScale(models.Model):
     """Ответы на вопросы со шкалой"""
-    order_number = models.PositiveIntegerField("Номер строки с ответами")
     left_answer_text = models.TextField("Ответ с левой стороны шкалы")
     right_answer_text = models.TextField("Ответ с правой стороны шкалы")
     question = models.ForeignKey(
@@ -59,7 +59,8 @@ class QuestionWithOption(models.Model):
     question_group = models.ForeignKey(
         GroupQuestion, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Группа вопросов")
     question_number = models.PositiveIntegerField("Номер вопроса")
-    published_or_not = models.BooleanField(default=False, verbose_name="Публикация")
+    published_or_not = models.BooleanField(
+        default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

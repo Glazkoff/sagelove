@@ -12,9 +12,6 @@ class AnswersCounting(models.Model):
     answers_count3 = models.PositiveIntegerField("Количество ответов '3'")
     answers_count4 = models.PositiveIntegerField("Количество ответов '4'")
     answers_count5 = models.PositiveIntegerField("Количество ответов '5'")
-    # TODO: Зафиксировать в ERD
-    # date_time_counting = models.DateTimeField(
-    #     verbose_name="Дата и время подсчёта")
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,8 +33,6 @@ class UserScaleAnswer(models.Model):
     answer_scale_line = models.ForeignKey(
         AnswerScale, on_delete=models.CASCADE, verbose_name="Строка вопроса со шкалой")
     answer = models.PositiveIntegerField("Значение ответа")
-    # TODO: Зафиксировать в ERD
-    # date_time_answer = models.DateTimeField(verbose_name="Дата и время ответа")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
