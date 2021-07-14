@@ -5,19 +5,19 @@
     </h1>
     <div class="d-flex justify-center">
       <div>
-        <v-radio-group class="dark-blue-text">
+        <v-radio-group v-model="partner" class="dark-blue-text">
           <label class="pb-4">1. Я ищу партнёра:</label>
-          <v-radio value="guestMarriage">
+          <v-radio value="GM">
             <template v-slot:label>
               <div class="dark-blue-text">для гостевого брака</div>
             </template>
           </v-radio>
-          <v-radio value="family">
+          <v-radio value="FAM">
             <template v-slot:label>
               <div class="dark-blue-text">для создания семьи</div>
             </template>
           </v-radio>
-          <v-radio value="justForFun">
+          <v-radio value="JFF">
             <template v-slot:label>
               <div class="dark-blue-text">
                 для просто поболтать и вместе потусить
@@ -25,19 +25,19 @@
             </template>
           </v-radio>
         </v-radio-group>
-        <v-radio-group class="dark-blue-text">
+        <v-radio-group v-model="wish" class="dark-blue-text">
           <label class="pb-4">2. Я хочу встретить:</label>
-          <v-radio value="same">
+          <v-radio value="SAME">
             <template v-slot:label>
               <div class="dark-blue-text">такого, как я</div>
             </template>
           </v-radio>
-          <v-radio value="another">
+          <v-radio value="ANTI">
             <template v-slot:label>
               <div class="dark-blue-text">мою противоположность</div>
             </template>
           </v-radio>
-          <v-radio value="mathematic">
+          <v-radio value="MATH">
             <template v-slot:label>
               <div class="dark-blue-text">
                 выбор путем математического алгоритма
@@ -50,8 +50,7 @@
         <v-row>
           <v-col v-for="n in 9" :key="n" class="d-flex child-flex" cols="4">
             <v-img
-              :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-              :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+              :src="require('../../assets/img/history/' + n + '.jpg')"
               aspect-ratio="1"
               class="grey lighten-2"
               :class="{ blueborder: n == isBlueBorder }"
@@ -73,7 +72,7 @@
           color="colorOfSea"
           block="block"
           type="submit"
-          to="/test"
+          @click="onUpdateAims(isBlueBorder, wish, partner)"
         >
           Дальше
         </v-btn>
@@ -83,12 +82,34 @@
 </template>
 
 <script>
+import { UPDATE_USER_AIMS } from "@/graphql/user_queries";
 export default {
   name: "AimsSignUp",
   data() {
     return {
-      isBlueBorder: undefined
+      isBlueBorder: undefined,
+      partner: null,
+      wish: null
     };
+  },
+  methods: {
+    onUpdateAims(n, wish, partner) {
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_USER_AIMS,
+          variables: {
+            partnerType: partner,
+            purposeMeet: wish,
+            numberFotoHistoryByFelling: n,
+            userId: this.$store.getters.decoded.user_id
+          }
+        })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+        });
+      this.$router.push({ name: "Test" });
+    }
   }
 };
 </script>

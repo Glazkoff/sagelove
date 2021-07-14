@@ -41,8 +41,8 @@
         </div>
         <div class="position-text">
           <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10">{{ slide.header }}</h1>
-          <v-row class="my-3" align="top" justify="center">
-            <p>{{ slide.text }}</p>
+          <v-row class="my-3" justify="center">
+            <p class="mobile-padding-text">{{ slide.text }}</p>
           </v-row>
         </div>
         <div class="background-sliders"></div>
@@ -134,17 +134,11 @@ h1 {
 .v-btn__content {
   color: #00acc2 !important;
 }
-@media (max-width: 670px) {
+@media (max-width: 750px) {
   p {
-    padding: 2rem;
-  }
-  .position-cross img {
-    width: 3rem;
-  }
-}
-@media (max-width: 670px) {
-  p {
-    padding: 2rem;
+    padding-right: 4rem;
+    padding-left: 4rem;
+
   }
   .position-cross img {
     width: 3rem;

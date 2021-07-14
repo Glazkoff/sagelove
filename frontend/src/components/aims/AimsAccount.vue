@@ -1,22 +1,41 @@
 <template>
   <v-flex>
     <h1 class="title mb-12 text-center mb-5 mt-5 mb-sm-10 mt-sm-10">Цели</h1>
-    <div v-if="!isEdit" class="d-flex justify-center">
+    <div
+      v-if="!isEdit & !this.$apollo.queries.user.loading"
+      class="d-flex justify-center"
+    >
       <div class="background-aimsaccount rounded-lg pa-8">
         <v-row class="direction-block">
           <v-col class="mobile-padding"
             ><p class="dark-blue-text">Я ищу партнера:</p></v-col
           >
-          <v-col class="mobile-padding1"
-            ><p class="gray-text">для создания семьи</p></v-col
+          <v-col class="mobile-padding1">
+            <p v-if="user.partnerType == 'GM'" class="gray-text">
+              для гостевого брака
+            </p>
+            <p v-if="user.partnerType == 'FAM'" class="gray-text">
+              для создания семьи
+            </p>
+            <p v-if="user.partnerType == 'JFF'" class="gray-text">
+              для просто поболтать и вместе потусить
+            </p></v-col
           >
         </v-row>
         <v-row class="direction-block">
           <v-col class="mobile-padding"
             ><p class="dark-blue-text">Я хочу встретить:</p></v-col
           >
-          <v-col class="mobile-padding1"
-            ><p class="gray-text">такого, как я</p></v-col
+          <v-col class="mobile-padding1">
+            <p v-if="user.purposeMeet == 'SAME'" class="gray-text">
+              такого, как я
+            </p>
+            <p v-if="user.purposeMeet == 'ANTI'" class="gray-text">
+              мою противоположность
+            </p>
+            <p v-if="user.purposeMeet == 'MATH'" class="gray-text">
+              выбор путем математического алгоритма
+            </p></v-col
           >
         </v-row>
         <v-row class="direction-block">
@@ -25,7 +44,11 @@
           >
           <v-col class="mobile-padding1"
             ><img
-              src="../../assets/img/history/6.jpg"
+              :src="
+                require('../../assets/img/history/' +
+                  user.numberFotoHistoryByFelling +
+                  '.jpg')
+              "
               alt="history_6"
               class="width-img-history"
           /></v-col>
@@ -48,23 +71,25 @@
             ><p class="dark-blue-text">Я ищу партнера:</p></v-col
           >
           <v-col>
-            <v-radio-group v-model="radios" class="dark-blue-text">
-              <v-radio value="guestMarriage">
-                <template v-slot:label>
-                  <div class="dark-blue-text">для гостевого брака</div>
-                </template>
-              </v-radio>
-              <v-radio value="family">
-                <template v-slot:label>
-                  <div class="dark-blue-text">для создания семьи</div>
-                </template>
-              </v-radio>
-              <v-radio value="justForFun">
+            <v-radio-group v-model="partner" class="dark-blue-text">
+              <v-radio value="GM">
                 <template v-slot:label>
                   <div class="dark-blue-text">
+                    для гостевого брака
+                  </div></template
+                >
+              </v-radio>
+              <v-radio value="FAM">
+                <template v-slot:label>
+                  <div class="dark-blue-text">для создания семьи</div></template
+                >
+              </v-radio>
+              <v-radio value="JFF">
+                <template v-slot:label
+                  ><div class="dark-blue-text">
                     для просто поболтать и вместе потусить
-                  </div>
-                </template>
+                  </div></template
+                >
               </v-radio>
             </v-radio-group></v-col
           >
@@ -74,23 +99,25 @@
             ><p class="dark-blue-text">Я хочу встретить:</p></v-col
           >
           <v-col
-            ><v-radio-group v-model="radios" class="dark-blue-text">
-              <v-radio value="same">
+            ><v-radio-group v-model="wish" class="dark-blue-text">
+              <v-radio value="SAME">
                 <template v-slot:label>
-                  <div class="dark-blue-text">такого, как я</div>
-                </template>
+                  <div class="dark-blue-text">такого, как я</div></template
+                >
               </v-radio>
-              <v-radio value="another">
+              <v-radio value="ANTI">
                 <template v-slot:label>
-                  <div class="dark-blue-text">мою противоположность</div>
-                </template>
+                  <div class="dark-blue-text">
+                    мою противоположность
+                  </div></template
+                >
               </v-radio>
-              <v-radio value="mathematic">
+              <v-radio value="MATH">
                 <template v-slot:label>
                   <div class="dark-blue-text">
                     выбор путем математического алгоритма
-                  </div>
-                </template>
+                  </div></template
+                >
               </v-radio>
             </v-radio-group></v-col
           >
@@ -108,8 +135,7 @@
                 cols="4"
               >
                 <v-img
-                  :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                  :src="require('../../assets/img/history/' + n + '.jpg')"
                   aspect-ratio="1"
                   class="grey lighten-2"
                   :class="{ blueborder: n == isBlueBorder }"
@@ -136,7 +162,7 @@
           color="colorOfSea"
           block="block"
           type="submit"
-          @click="onEdit()"
+          @click="onUpdateAims(isBlueBorder, wish, partner)"
         >
           Сохранить
         </v-btn>
@@ -146,21 +172,74 @@
 </template>
 
 <script>
+import { USER_AIMS, UPDATE_USER_AIMS } from "@/graphql/user_queries";
 export default {
   name: "AimsAccount",
+  apollo: {
+    user: {
+      query: USER_AIMS,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
+      }
+    }
+  },
   data() {
     return {
       isEdit: false,
-      isBlueBorder: undefined
+      isBlueBorder: undefined,
+      partner: null,
+      wish: null
     };
   },
   methods: {
     onEdit() {
       if (!this.isEdit) {
         this.isEdit = true;
+        this.isBlueBorder = this.user.numberFotoHistoryByFelling;
+        this.partner = this.user.partnerType;
+        this.wish = this.user.purposeMeet;
       } else {
         this.isEdit = false;
       }
+    },
+    onUpdateAims(n, wish, partner) {
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_USER_AIMS,
+          variables: {
+            partnerType: partner,
+            purposeMeet: wish,
+            numberFotoHistoryByFelling: n,
+            userId: this.$store.getters.decoded.user_id
+          },
+          update: (cache, { data: { updateAimsForUser } }) => {
+            console.log("updateAimsForUser ", updateAimsForUser);
+            let data = cache.readQuery({
+              query: USER_AIMS,
+              variables: {
+                userId: this.$store.getters.decoded.user_id
+              }
+            });
+            data.user.partnerType = this.partner;
+            data.user.purposeMeet = this.wish;
+            data.user.numberFotoHistoryByFelling = this.isBlueBorder;
+            cache.writeQuery({ query: USER_AIMS, data });
+          },
+          optimisticResponse: {
+            __typename: "Mutation",
+            updateAimsForUser: {
+              __typename: "UpdateAimsForUserMutation",
+              partnerType: this.partner,
+              purposeMeet: this.wish,
+              numberFotoHistoryByFelling: this.isBlueBorder
+            }
+          }
+        })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+        });
+      this.isEdit = false;
     }
   }
 };

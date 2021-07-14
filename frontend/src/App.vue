@@ -232,7 +232,7 @@ div.v-responsive__content.my-carousel {
     font-size: 32px !important;
   }
 }
-@media (max-width: 465px) {
+@media (max-width: 500px) {
   div.container div.v-carousel {
     height: 53.75rem !important;
   }
@@ -245,6 +245,36 @@ div.v-responsive__content.my-carousel {
     div.v-window-item
     div.v-responsive {
     height: 53.75rem !important;
+  }
+}
+@media (max-width: 400px) {
+  div.container div.v-carousel {
+    height: 60rem !important;
+  }
+  div.container div.v-carousel div.v-window__container {
+    height: 60rem !important;
+  }
+  div.container
+    div.v-carousel
+    div.v-window__container
+    div.v-window-item
+    div.v-responsive {
+    height: 60rem !important;
+  }
+}
+@media (max-width: 350px) {
+  div.container div.v-carousel {
+    height: 75rem !important;
+  }
+  div.container div.v-carousel div.v-window__container {
+    height: 75rem !important;
+  }
+  div.container
+    div.v-carousel
+    div.v-window__container
+    div.v-window-item
+    div.v-responsive {
+    height: 75rem !important;
   }
 }
 </style>
