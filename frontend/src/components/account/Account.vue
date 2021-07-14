@@ -1,5 +1,7 @@
 <template>
   <v-layout>
+    <!-- v-if="this.$apollo.queries.post.loading" -->
+    <AppLoader v-if="1 != 1"></AppLoader>
     <v-flex>
       <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10 text-center">
         Личный кабинет
@@ -62,11 +64,11 @@
                 <p class="mb-0">О себе:</p>
               </v-col>
               <v-col class="col-8">
-                <p v-if="!editFlag" class="mb-0">
+                <p v-if="!editAboutMeFlag" class="mb-0">
                   {{ person.personal_information }}
                 </p>
                 <v-textarea
-                  v-if="editFlag"
+                  v-if="editAboutMeFlag"
                   color="colorOfSea"
                   counter
                   class="pt-0 mt-0"
@@ -78,63 +80,27 @@
                   @blur="$v.form.about_me.$touch()"
                 ></v-textarea>
               </v-col>
-              <v-col v-if="editFlag" class="col-4">
-                <p class="mb-0">Старый пароль:</p>
-              </v-col>
-              <v-col class="col-8">
-                <v-text-field
-                  class="pt-0 mt-0"
-                  v-if="editFlag"
-                  light="light"
-                  :type="passOldShow ? 'text' : 'password'"
-                  color="colorOfSea"
-                  :append-icon="passOldShow ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="passOldShow = !passOldShow"
-                  required
-                  :error-messages="passwordOldErrors"
-                  v-model.trim="$v.form.passwordOld.$model"
-                  @input="
-                    $v.form.passwordOld.$touch();
-                    formPasswordOldErrors = [];
+            </v-row>
+            <v-row v-if="editAboutMeFlag && !editPasswordFlag">
+              <v-col class="col-12 pointer">
+                <p
+                  class="
+                    mb-0
+                    font-weight-bold
+                    colorOfSea--text
+                    custom-icon-margin-top
                   "
-                  @blur="
-                    $v.form.passwordOld.$touch();
-                    formPasswordOldErrors = [];
-                  "
-                  counter
-                ></v-text-field>
-              </v-col>
-              <v-col v-if="editFlag" class="col-4">
-                <p class="mb-0">Новый пароль:</p>
-              </v-col>
-              <v-col class="col-8">
-                <v-text-field
-                  class="pt-0 mt-0"
-                  v-if="editFlag"
-                  light="light"
-                  :type="passNewShow ? 'text' : 'password'"
-                  color="colorOfSea"
-                  :append-icon="passNewShow ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="passNewShow = !passNewShow"
-                  required
-                  :error-messages="passwordNewErrors"
-                  v-model.trim="$v.form.passwordNew.$model"
-                  @input="
-                    $v.form.passwordNew.$touch();
-                    formPasswordNewErrors = [];
-                  "
-                  @blur="
-                    $v.form.passwordNew.$touch();
-                    formPasswordNewErrors = [];
-                  "
-                  counter
-                ></v-text-field>
+                  @click="editPasswordFlag = true"
+                >
+                  <v-icon color="colorOfSea">mdi-pencil</v-icon>
+                  Изменить пароль
+                </p>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
                 <v-btn
-                  v-if="!editFlag"
+                  v-if="!editAboutMeFlag"
                   color="colorOfSea"
                   class="
                     custom-mobile-full-width
@@ -147,7 +113,7 @@
                   >Изменить</v-btn
                 >
                 <v-btn
-                  v-if="editFlag"
+                  v-if="editAboutMeFlag"
                   large
                   color="colorOfSea"
                   class="
@@ -162,6 +128,75 @@
                 >
               </v-col>
             </v-row>
+            <v-row v-if="editPasswordFlag">
+              <v-col class="col-4">
+                <p class="mb-0">Старый пароль:</p>
+              </v-col>
+              <v-col class="col-8">
+                <v-text-field
+                  class="pt-0 mt-0"
+                  light="light"
+                  :type="passOldShow ? 'text' : 'password'"
+                  color="colorOfSea"
+                  :append-icon="passOldShow ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="passOldShow = !passOldShow"
+                  required
+                  :error-messages="passwordOldErrors"
+                  v-model.trim="$v.formPassword.passwordOld.$model"
+                  @input="
+                    $v.formPassword.passwordOld.$touch();
+                    formPasswordOldErrors = [];
+                  "
+                  @blur="
+                    $v.formPassword.passwordOld.$touch();
+                    formPasswordOldErrors = [];
+                  "
+                  counter
+                ></v-text-field>
+              </v-col>
+              <v-col class="col-4">
+                <p class="mb-0">Новый пароль:</p>
+              </v-col>
+              <v-col class="col-8">
+                <v-text-field
+                  class="pt-0 mt-0"
+                  light="light"
+                  :type="passNewShow ? 'text' : 'password'"
+                  color="colorOfSea"
+                  :append-icon="passNewShow ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="passNewShow = !passNewShow"
+                  required
+                  :error-messages="passwordNewErrors"
+                  v-model.trim="$v.formPassword.passwordNew.$model"
+                  @input="
+                    $v.formPassword.passwordNew.$touch();
+                    formPasswordNewErrors = [];
+                  "
+                  @blur="
+                    $v.formPassword.passwordNew.$touch();
+                    formPasswordNewErrors = [];
+                  "
+                  counter
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row v-if="editPasswordFlag">
+              <v-col>
+                <v-btn
+                  color="colorOfSea"
+                  class="
+                    custom-mobile-full-width
+                    my-button
+                    wide-padding
+                    white--text
+                  "
+                  large
+                  :disabled="$v.formPassword.$invalid"
+                  @click="onEditPassword()"
+                  >Сохранить новый пароль</v-btn
+                >
+              </v-col>
+            </v-row>
           </div>
         </v-col>
       </v-row>
@@ -170,11 +205,20 @@
 </template>
 
 <script>
+import AppLoader from "@/components/global/AppLoader.vue";
 import { required, minLength } from "vuelidate/lib/validators";
 export default {
   name: "Account",
+  components: {
+    AppLoader
+  },
   validations: {
     form: {
+      about_me: {
+        required
+      }
+    },
+    formPassword: {
       passwordNew: {
         required,
         minLength: minLength(8)
@@ -182,15 +226,13 @@ export default {
       passwordOld: {
         required,
         minLength: minLength(8)
-      },
-      about_me: {
-        required
       }
     }
   },
   data() {
     return {
-      editFlag: false,
+      editAboutMeFlag: false,
+      editPasswordFlag: false,
       passNewShow: false,
       passOldShow: false,
       defaultButtonText: "Изменить фото",
@@ -199,9 +241,11 @@ export default {
       formPasswordNewErrors: [],
       formPasswordOldErrors: [],
       form: {
-        passwordNew: null,
-        passwordOld: null,
         about_me: null
+      },
+      formPassword: {
+        passwordNew: null,
+        passwordOld: null
       },
       person: {
         id: 1,
@@ -215,12 +259,17 @@ export default {
       }
     };
   },
+
   computed: {
+    editFlag() {
+      return this.editAboutMeFlag || this.editPasswordFlag;
+    },
     passwordNewErrors() {
       const errors = [];
-      if (!this.$v.form.passwordNew.$dirty) return errors;
-      !this.$v.form.passwordNew.required && errors.push("Укажите пароль!");
-      !this.$v.form.passwordNew.minLength &&
+      if (!this.$v.formPassword.passwordNew.$dirty) return errors;
+      !this.$v.formPassword.passwordNew.required &&
+        errors.push("Укажите пароль!");
+      !this.$v.formPassword.passwordNew.minLength &&
         errors.push("Пароль должен содержать минимум 8 символов!");
       this.formPasswordNewErrors.length > 0 &&
         this.formPasswordNewErrors.forEach(element => {
@@ -230,9 +279,10 @@ export default {
     },
     passwordOldErrors() {
       const errors = [];
-      if (!this.$v.form.passwordOld.$dirty) return errors;
-      !this.$v.form.passwordOld.required && errors.push("Укажите пароль!");
-      !this.$v.form.passwordOld.minLength &&
+      if (!this.$v.formPassword.passwordOld.$dirty) return errors;
+      !this.$v.formPassword.passwordOld.required &&
+        errors.push("Укажите пароль!");
+      !this.$v.formPassword.passwordOld.minLength &&
         errors.push("Пароль должен содержать минимум 8 символов!");
       this.formPasswordOldErrors.length > 0 &&
         this.formPasswordOldErrors.forEach(element => {
@@ -264,12 +314,19 @@ export default {
       return `+7 (${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}-${phone[8]}${phone[9]}`;
     },
     onEdit() {
-      if (!this.editFlag) {
+      if (!this.editAboutMeFlag) {
         this.form.about_me = this.person.personal_information;
-        this.editFlag = true;
+        this.editAboutMeFlag = true;
       } else {
-        this.editFlag = false;
+        this.editAboutMeFlag = false;
         this.person.personal_information = this.$v.form.about_me.$model;
+      }
+    },
+    onEditPassword() {
+      if (!this.editPasswordFlag) {
+        this.editPasswordFlag = true;
+      } else {
+        this.editPasswordFlag = false;
       }
     },
     onFileInputClick() {
@@ -292,6 +349,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pointer {
+  cursor: pointer;
+}
+.custom-icon-margin-top {
+  margin-top: -2px;
+}
+
 .v-card__title {
   width: 100%;
 }
