@@ -25,7 +25,7 @@ class UpdateUserInformation(graphene.Mutation):
         user_id = graphene.ID(required=True)
         about_me = graphene.String(required=True)
 
-    user = graphene.Field(CustomUserType)
+    ok = graphene.Boolean()
 
     @classmethod
     def mutate(cls, root, info, user_id, about_me):
@@ -33,4 +33,4 @@ class UpdateUserInformation(graphene.Mutation):
         user.about_me = about_me
         user.save()
 
-        return UpdateUserInformation(user=user)
+        return cls(ok=True)

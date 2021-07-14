@@ -1,8 +1,7 @@
 <template>
   <v-layout>
-    <!-- v-if="this.$apollo.queries.post.loading" -->
-    <AppLoader v-if="1 != 1"></AppLoader>
-    <v-flex>
+    <AppLoader v-if="this.$apollo.queries.user.loading"></AppLoader>
+    <v-flex v-if="!this.$apollo.queries.user.loading">
       <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10 text-center">
         Личный кабинет
       </h1>
@@ -34,7 +33,7 @@
         <v-col class="col-12 col-sm-9">
           <div class="custom-card pa-4 pa-sm-8">
             <div>
-              <h2 class="title darkBlue--text mb-5">{{ person.username }}</h2>
+              <h2 class="title darkBlue--text mb-5">{{ user.firstName }}</h2>
             </div>
             <v-row>
               <v-col class="col-4">
@@ -42,14 +41,14 @@
               </v-col>
               <v-col class="col-8">
                 <p class="mb-0">
-                  {{ person.gender }}
+                  {{ formatGender(user.gender) }}
                 </p>
               </v-col>
               <v-col class="col-4">
                 <p class="mb-0">Дата рождения:</p>
               </v-col>
               <v-col class="col-8">
-                <p class="mb-0">{{ formatDate(person.date_of_birth) }}</p>
+                <p class="mb-0">{{ formatDate(user.dateOfBirth) }}</p>
               </v-col>
 
               <v-col class="col-4">
@@ -57,7 +56,7 @@
               </v-col>
               <v-col class="col-8">
                 <p class="mb-0">
-                  {{ formatPhone(person.phone_number) }}
+                  {{ user.phoneNumber }}
                 </p>
               </v-col>
               <v-col class="col-4">
@@ -65,7 +64,7 @@
               </v-col>
               <v-col class="col-8">
                 <p v-if="!editAboutMeFlag" class="mb-0">
-                  {{ person.about_me }}
+                  {{ user.aboutMe }}
                 </p>
                 <v-textarea
                   v-if="editAboutMeFlag"
@@ -74,10 +73,10 @@
                   class="pt-0 mt-0"
                   maxlength="200"
                   required
-                  :error-messages="about_meErrors"
-                  v-model.trim="$v.form.about_me.$model"
-                  @input="$v.form.about_me.$touch()"
-                  @blur="$v.form.about_me.$touch()"
+                  :error-messages="aboutMeErrors"
+                  v-model.trim="$v.form.aboutMe.$model"
+                  @input="$v.form.aboutMe.$touch()"
+                  @blur="$v.form.aboutMe.$touch()"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -201,20 +200,56 @@
         </v-col>
       </v-row>
     </v-flex>
+    <v-snackbar v-model="snackbarPassword" color="colorOfSea" timeout="4000">
+      Вы успешно изменили пароль!
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbarPassword = false"
+        >
+          Закрыть
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarAboutMe" color="colorOfSea" timeout="4000">
+      Вы успешно изменили информацию о себе!
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbarAboutMe = false"
+        >
+          Закрыть
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-layout>
 </template>
 
 <script>
 import AppLoader from "@/components/global/AppLoader.vue";
 import { required, minLength } from "vuelidate/lib/validators";
+import { USER_INFORMATION } from "@/graphql/user_queries";
+import { EDIT_ABOUT_ME } from "@/graphql/user_mutation";
 export default {
   name: "Account",
   components: {
     AppLoader
   },
+  apollo: {
+    user: {
+      query: USER_INFORMATION,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
+      }
+    }
+  },
   validations: {
     form: {
-      about_me: {
+      aboutMe: {
         required
       }
     },
@@ -231,6 +266,8 @@ export default {
   },
   data() {
     return {
+      snackbarPassword: false,
+      snackbarAboutMe: true,
       editAboutMeFlag: false,
       editPasswordFlag: false,
       passNewShow: false,
@@ -241,21 +278,11 @@ export default {
       formPasswordNewErrors: [],
       formPasswordOldErrors: [],
       form: {
-        about_me: null
+        aboutMe: null
       },
       formPassword: {
         passwordNew: null,
         passwordOld: null
-      },
-      person: {
-        id: 1,
-        username: "Иван",
-        gender: "Мужской",
-        date_of_birth: "1987-06-15",
-        phone_number: "9271112233",
-        photoURL: "",
-        about_me:
-          "Текст о себе, текст о себе. Текст о себе, текст о себе.Текст о себе, текст о себе."
       }
     };
   },
@@ -290,10 +317,10 @@ export default {
         });
       return errors;
     },
-    about_meErrors() {
+    aboutMeErrors() {
       const errors = [];
-      if (!this.$v.form.about_me.$dirty) return errors;
-      !this.$v.form.about_me.required &&
+      if (!this.$v.form.aboutMe.$dirty) return errors;
+      !this.$v.form.aboutMe.required &&
         errors.push("Укажите информацию о себе!");
       return errors;
     },
@@ -309,24 +336,103 @@ export default {
       const [year, month, day] = date.split("-");
       return `${day}.${month}.${year}`;
     },
-    formatPhone(phone) {
-      if (!phone) return null;
-      return `+7 (${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}-${phone[8]}${phone[9]}`;
+    formatGender(gender) {
+      if (gender == "F") return "Женский";
+      if (gender == "M") return "Мужской";
+      if (gender == "NS") return "Не указан";
+      return null;
     },
     onEdit() {
       if (!this.editAboutMeFlag) {
-        this.form.about_me = this.person.about_me;
+        this.form.aboutMe = this.user.aboutMe;
         this.editAboutMeFlag = true;
       } else {
-        this.editAboutMeFlag = false;
-        this.person.about_me = this.$v.form.about_me.$model;
+        if (this.user.aboutMe == this.$v.form.aboutMe.$model) {
+          this.editAboutMeFlag = false;
+        } else {
+          this.$apollo
+            .mutate({
+              mutation: EDIT_ABOUT_ME,
+              variables: {
+                userId: this.$store.getters.decoded.user_id,
+                aboutMe: this.$v.form.aboutMe.$model
+              },
+              update: cache => {
+                let data = cache.readQuery({
+                  query: USER_INFORMATION,
+                  variables: { userId: this.$store.getters.decoded.user_id }
+                });
+                data.user.aboutMe = this.$v.form.aboutMe.$model;
+                cache.writeQuery({
+                  query: USER_INFORMATION,
+                  variables: { userId: this.$store.getters.decoded.user_id },
+                  data
+                });
+              },
+              optimisticResponse: {
+                __typename: "Mutation",
+                updateUserInformation: {
+                  __typename: "CustomUserType",
+                  id: this.$store.getters.decoded.user_id,
+                  firstName: this.user.firstName,
+                  aboutMe: this.$v.form.aboutMe.$model,
+                  dateOfBirth: this.user.dateOfBirth,
+                  gender: this.user.gender,
+                  photoURL: this.user.photoURL,
+                  phoneNumber: this.user.phoneNumber
+                }
+              }
+            })
+            .then(() => {
+              this.editAboutMeFlag = false;
+              this.snackbarAboutMe = true;
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        }
       }
     },
     onEditPassword() {
       if (!this.editPasswordFlag) {
         this.editPasswordFlag = true;
       } else {
-        this.editPasswordFlag = false;
+        let sendObj = {
+          new_password1: this.formPassword.passwordNew,
+          new_password2: this.formPassword.passwordNew,
+          old_password: this.formPassword.passwordOld
+        };
+        this.$store.dispatch("CHANGE_PASSWORD", sendObj).then(
+          () => {
+            this.editPasswordFlag = false;
+            this.formPassword.passwordNew = "";
+            this.formPassword.passwordOld = "";
+            this.passNewShow = false;
+            this.passOldShow = false;
+          },
+          errors => {
+            if (
+              errors.new_password2 != null &&
+              errors.new_password2.length != 0
+            ) {
+              for (
+                let index = 0;
+                index < errors.new_password2.length;
+                index++
+              ) {
+                this.formPasswordNewErrors.push(errors.new_password2[index]);
+              }
+            }
+            if (
+              errors.old_password != null &&
+              errors.old_password.length != 0
+            ) {
+              for (let index = 0; index < errors.old_password.length; index++) {
+                this.formPasswordOldErrors.push(errors.old_password[index]);
+              }
+            }
+          }
+        );
       }
     },
     onFileInputClick() {

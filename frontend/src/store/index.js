@@ -183,6 +183,29 @@ export default new Vuex.Store({
         }
       });
     },
+    CHANGE_PASSWORD(store, data) {
+      store.loading = true;
+      return new Promise((resolve, reject) => {
+        try {
+          axios({
+            url: "/api/auth/password/change/",
+            method: "POST",
+            data
+          })
+            .then(() => {
+              store.loading = false;
+              resolve();
+            })
+            .catch(err => {
+              store.loading = false;
+              reject(err.response.data);
+            });
+        } catch (error) {
+          store.loading = false;
+          reject(error);
+        }
+      });
+    },
     LOG_OUT(store) {
       return new Promise((resolve, reject) => {
         try {

@@ -19,3 +19,18 @@ export const UPDATE_USER_TEST_STATUS = gql`
     }
   }
 `;
+
+// Запрос на получение информации о пользователе для личного кабинета
+export const USER_INFORMATION = gql`
+  query ($userId: ID!) {
+    user(userId: $userId) {
+      id
+      firstName
+      aboutMe
+      dateOfBirth
+      gender
+      photoURL
+      phoneNumber
+    }
+  }
+`;
