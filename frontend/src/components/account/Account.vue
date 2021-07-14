@@ -34,7 +34,7 @@
         <v-col class="col-12 col-sm-9">
           <div class="custom-card pa-4 pa-sm-8">
             <div>
-              <h2 class="title darkBlue--text mb-5">{{ person.user_name }}</h2>
+              <h2 class="title darkBlue--text mb-5">{{ person.username }}</h2>
             </div>
             <v-row>
               <v-col class="col-4">
@@ -49,7 +49,7 @@
                 <p class="mb-0">Дата рождения:</p>
               </v-col>
               <v-col class="col-8">
-                <p class="mb-0">{{ formatDate(person.user_birthday) }}</p>
+                <p class="mb-0">{{ formatDate(person.date_of_birth) }}</p>
               </v-col>
 
               <v-col class="col-4">
@@ -65,7 +65,7 @@
               </v-col>
               <v-col class="col-8">
                 <p v-if="!editAboutMeFlag" class="mb-0">
-                  {{ person.personal_information }}
+                  {{ person.about_me }}
                 </p>
                 <v-textarea
                   v-if="editAboutMeFlag"
@@ -249,12 +249,12 @@ export default {
       },
       person: {
         id: 1,
-        user_name: "Иван",
+        username: "Иван",
         gender: "Мужской",
-        user_birthday: "1987-06-15",
+        date_of_birth: "1987-06-15",
         phone_number: "9271112233",
-        url_foto: "",
-        personal_information:
+        photoURL: "",
+        about_me:
           "Текст о себе, текст о себе. Текст о себе, текст о себе.Текст о себе, текст о себе."
       }
     };
@@ -315,11 +315,11 @@ export default {
     },
     onEdit() {
       if (!this.editAboutMeFlag) {
-        this.form.about_me = this.person.personal_information;
+        this.form.about_me = this.person.about_me;
         this.editAboutMeFlag = true;
       } else {
         this.editAboutMeFlag = false;
-        this.person.personal_information = this.$v.form.about_me.$model;
+        this.person.about_me = this.$v.form.about_me.$model;
       }
     },
     onEditPassword() {
