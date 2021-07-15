@@ -20,7 +20,7 @@ class QuestionWithScale(models.Model):
     """Вопросы со шкалой"""
     question_text = models.TextField("Текст вопроса")
     question_group = models.ForeignKey(
-        GroupQuestion, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Группа вопросов")
+        GroupQuestion, on_delete=models.CASCADE, null=False, blank=False, verbose_name="Группа вопросов")
     question_number = models.PositiveIntegerField("Номер вопроса")
     published_or_not = models.BooleanField(default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -55,7 +55,7 @@ class QuestionWithOption(models.Model):
     """Вопросы с вариантами"""
     question_text = models.TextField("Текст вопроса")
     question_group = models.ForeignKey(
-        GroupQuestion, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Группа вопросов")
+        GroupQuestion, on_delete=models.CASCADE, null=False, blank=False, verbose_name="Группа вопросов")
     question_number = models.PositiveIntegerField("Номер вопроса")
     published_or_not = models.BooleanField(default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
