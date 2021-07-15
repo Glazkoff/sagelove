@@ -227,6 +227,8 @@ div.v-responsive__content.my-carousel {
   position: relative !important;
 }
 div.v-dialog__content--active div.v-dialog--active {
+  max-height: 35rem !important;
+  max-width: 35rem !important;
   width: auto !important;
 }
 @media (max-width: 600px) {

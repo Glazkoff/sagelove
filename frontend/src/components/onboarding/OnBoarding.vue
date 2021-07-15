@@ -138,7 +138,6 @@ h1 {
   p {
     padding-right: 4rem;
     padding-left: 4rem;
-
   }
   .position-cross img {
     width: 3rem;
