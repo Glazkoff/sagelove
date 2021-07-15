@@ -49,12 +49,17 @@
           </v-radio-group>
 
           <p class="dark-blue-text">3. Выберите свою историю по ощущениям:</p>
-          <v-row>
-            <v-col v-for="n in 9" :key="n" class="d-flex child-flex" cols="4">
+          <v-row class="history-felling">
+            <v-col
+              v-for="n in 9"
+              :key="n"
+              class="d-flex child-flex hover-eye"
+              cols="4"
+            >
               <v-img
                 :src="require('../../assets/img/history/' + n + '.jpg')"
                 aspect-ratio="1"
-                class="grey lighten-2"
+                class="grey lighten-2 hover-image"
                 :class="{ blueborder: n == isBlueBorder }"
                 @click="isBlueBorder = n"
               >
@@ -71,7 +76,27 @@
                   </v-row>
                 </template>
               </v-img>
+              <v-btn
+                color="colorOfSea"
+                class="btn-dialog"
+                @click="openDialog(n)"
+                fab
+                x-small
+                dark
+              >
+                <v-icon>mdi-eye</v-icon>
+              </v-btn>
             </v-col>
+            <v-dialog v-model="dialog">
+              <v-card>
+                <img
+                  :src="
+                    require('../../assets/img/history/' + isNumberFoto + '.jpg')
+                  "
+                  alt="history"
+                />
+              </v-card>
+            </v-dialog>
           </v-row>
           <v-btn
             class="mt-8 my-button white--text"
@@ -98,7 +123,9 @@ export default {
     return {
       isBlueBorder: undefined,
       partner: null,
-      wish: null
+      wish: null,
+      dialog: false,
+      isNumberFoto: 1
     };
   },
   methods: {
@@ -118,6 +145,10 @@ export default {
           console.log(err);
         });
       this.$router.push({ name: "Test" });
+    },
+    openDialog(n) {
+      this.dialog = true;
+      this.isNumberFoto = n;
     }
   }
 };
@@ -137,5 +168,24 @@ export default {
 }
 .col {
   padding: 0.5rem !important;
+  position: relative !important;
+}
+.btn-dialog {
+  margin: 0 auto;
+  opacity: 0 !important;
+  position: absolute !important;
+  transition: opacity 0.3s !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.hover-eye:hover .btn-dialog {
+  opacity: 1 !important;
+  transition: opacity 0.3s !important;
+}
+.hover-eye:hover .hover-image {
+  filter: blur(1px);
+  transition: filter 0.3s !important;
 }
 </style>

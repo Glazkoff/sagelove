@@ -226,6 +226,9 @@ div.v-window__container div.v-window__prev {
 div.v-responsive__content.my-carousel {
   position: relative !important;
 }
+div.v-dialog__content--active div.v-dialog--active {
+  width: auto !important;
+}
 @media (max-width: 600px) {
   h1.title,
   .v-application h1.title {

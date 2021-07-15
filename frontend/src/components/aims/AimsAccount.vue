@@ -48,7 +48,7 @@
                     user.numberFotoHistoryByFelling +
                     '.jpg')
                 "
-                alt="history_6"
+                alt="history"
                 class="width-img-history"
             /></v-col>
           </v-row>
