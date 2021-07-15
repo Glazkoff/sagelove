@@ -404,6 +404,7 @@ export default {
         };
         this.$store.dispatch("CHANGE_PASSWORD", sendObj).then(
           () => {
+            this.snackbarPassword = true;
             this.editPasswordFlag = false;
             this.formPassword.passwordNew = "";
             this.formPassword.passwordOld = "";
