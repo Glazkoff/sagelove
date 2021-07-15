@@ -7,12 +7,7 @@
       </h1>
       <div class="d-flex justify-center">
         <div>
-          <v-radio-group
-            v-model="partner"
-            class="dark-blue-text"
-            :error-messages="partnertypeErrors"
-            v-model.trim="$v.aims.partnertype.$model"
-          >
+          <v-radio-group v-model="partner" class="dark-blue-text">
             <label class="pb-4">1. Я ищу партнёра:</label>
             <v-radio value="GM">
               <template v-slot:label>
@@ -109,7 +104,9 @@
             color="colorOfSea"
             block="block"
             type="submit"
-            :disabled="$v.aims.$invalid"
+            :disabled="
+              isBlueBorder == undefined || partner == null || wish == null
+            "
             @click="onUpdateAims(isBlueBorder, wish, partner)"
           >
             Дальше
@@ -121,7 +118,6 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
 import AppLoader from "@/components/global/AppLoader.vue";
 import { UPDATE_USER_AIMS } from "@/graphql/user_queries";
 export default {
@@ -135,27 +131,6 @@ export default {
       dialog: false,
       isNumberFoto: 1
     };
-  },
-  validations: {
-    aims: {
-      partnertype: {
-        required
-      },
-      purposemeet: {
-        required
-      },
-      numberfoto: {
-        required
-      }
-    }
-  },
-  computed: {
-    partnertypeErrors() {
-      const errors = [];
-      if (!this.$v.aims.partnertype.$dirty) return errors;
-      !this.$v.aims.partnertype.required && errors.push("Нужна цель");
-      return errors;
-    }
   },
   methods: {
     onUpdateAims(n, wish, partner) {
