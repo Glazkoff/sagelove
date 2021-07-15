@@ -34,3 +34,13 @@ export const USER_INFORMATION = gql`
     }
   }
 `;
+
+// Запрос на получение имени  пользователя для шапки
+export const USER_NAME = gql`
+  query ($userId: ID!) {
+    user(userId: $userId) {
+      id
+      firstName
+    }
+  }
+`;

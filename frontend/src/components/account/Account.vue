@@ -2,9 +2,7 @@
   <v-layout>
     <AppLoader v-if="this.$apollo.queries.user.loading"></AppLoader>
     <v-flex v-if="!this.$apollo.queries.user.loading">
-      <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10 text-center">
-        Личный кабинет
-      </h1>
+      <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10 text-center">Профиль</h1>
       <v-row class="mt-sm-3">
         <v-col class="col-12 col-sm-3 d-flex flex-column align-center">
           <img
@@ -267,7 +265,7 @@ export default {
   data() {
     return {
       snackbarPassword: false,
-      snackbarAboutMe: true,
+      snackbarAboutMe: false,
       editAboutMeFlag: false,
       editPasswordFlag: false,
       passNewShow: false,
@@ -397,6 +395,10 @@ export default {
       if (!this.editPasswordFlag) {
         this.editPasswordFlag = true;
       } else {
+        if (this.formPassword.passwordNew == this.formPassword.passwordOld) {
+          this.formPasswordNewErrors.push("Пароли совпадают!");
+          this.formPasswordOldErrors.push("Пароли совпадают!");
+        }
         let sendObj = {
           new_password1: this.formPassword.passwordNew,
           new_password2: this.formPassword.passwordNew,
@@ -410,6 +412,8 @@ export default {
             this.formPassword.passwordOld = "";
             this.passNewShow = false;
             this.passOldShow = false;
+            this.formPasswordNewErrors = [];
+            this.formPasswordOldErrors = [];
           },
           errors => {
             if (
@@ -456,9 +460,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.pointer {
-  cursor: pointer;
-}
 .custom-icon-margin-top {
   margin-top: -2px;
 }

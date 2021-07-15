@@ -41,7 +41,7 @@
         </div>
         <div class="position-text">
           <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10">{{ slide.header }}</h1>
-          <v-row class="my-3" align="top" justify="center">
+          <v-row class="my-3" justify="center">
             <p>{{ slide.text }}</p>
           </v-row>
         </div>

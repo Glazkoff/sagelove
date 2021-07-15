@@ -208,10 +208,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.pointer {
-  cursor: pointer;
-}
-
 .width-window {
   max-width: 600px;
 }

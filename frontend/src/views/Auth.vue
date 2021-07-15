@@ -2,16 +2,25 @@
   <v-app>
     <v-app-bar app color="lightBlue">
       <v-container class="py-0 fill-height">
-        <img src="../assets/img/logo.svg" alt="Logo" width="15%" />
-        <!-- <div id="nav">
-          <v-btn text :exact="true" to="/">Home</v-btn>
-          <v-btn text :exact="true" to="/auth">Auth - LogIn</v-btn>
-          <v-btn text :exact="true" to="/auth/signup">Auth - Signup</v-btn>
-        </div> -->
+        <div class="d-flex justify-center justify-sm-start custom-flex-width">
+          <img
+            src="../assets/img/logo.svg"
+            alt="Logo"
+            class="py-0 width-logo"
+          />
+        </div>
+
         <v-spacer></v-spacer>
         <v-btn
           color="colorOfSea"
-          class="colorOfSea my-button wide-padding white--text"
+          class="
+            colorOfSea
+            my-button
+            wide-padding
+            white--text
+            custom-full-width
+            d-none d-sm-flex
+          "
           dark
           large
           to="/login"
@@ -31,7 +40,14 @@
 
 <script>
 export default {
-  name: "Auth"
+  name: "Auth",
+  methods: {
+    // routerToHome() {
+    //   if (this.$route.path != "/") {
+    //     this.$router.push({ path: "/" });
+    //   }
+    // }
+  }
 };
 </script>
 
@@ -39,11 +55,13 @@ export default {
 .auth-form {
   max-width: 500px;
 }
+.width-logo {
+  width: 10rem;
+}
 
-// h2.logo {
-//   font-style: normal;
-//   font-weight: 400;
-//   font-size: 28px !important;
-//   line-height: 36px;
-// }
+@media (max-width: 370px) {
+  .custom-flex-width {
+    width: 100%;
+  }
+}
 </style>
