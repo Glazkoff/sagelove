@@ -20,6 +20,8 @@ class UpdateUserTestStatusMutation(graphene.Mutation):
         return UpdateUserTestStatusMutation(user=user)
 
 # Мутация изменения поля "О себе" пользователя
+
+
 class UpdateUserInformation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -34,3 +36,25 @@ class UpdateUserInformation(graphene.Mutation):
         user.save()
 
         return cls(ok=True)
+
+
+class AimsInput(graphene.InputObjectType):
+    partner_type = graphene.String(required=True)
+    purpose_meet = graphene.String(required=True)
+    number_foto_history_by_felling = graphene.Int(required=True)
+    user_id = graphene.ID(required=True)
+
+
+class UpdateAimsForUserMutation(graphene.Mutation):
+    class Arguments:
+        aims_data = AimsInput(required=True)
+
+    user = graphene.Field(CustomUserType)
+
+    def mutate(root, info, aims_data=None):
+        user = CustomUser.objects.get(pk=aims_data.user_id)
+        user.partner_type = aims_data.partner_type
+        user.purpose_meet = aims_data.purpose_meet
+        user.number_foto_history_by_felling = aims_data.number_foto_history_by_felling
+        user.save()
+        return UpdateAimsForUserMutation(user=user)

@@ -1,7 +1,8 @@
 import graphene
 from .models import CustomUser
 from .types import CustomUserType
-from .mutations import UpdateUserInformation, UpdateUserTestStatusMutation
+from .mutations import UpdateUserInformation, UpdateUserTestStatusMutation, UpdateAimsForUserMutation
+
 
 class Query(graphene.ObjectType):
     users = graphene.List(CustomUserType)
@@ -17,5 +18,7 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     updateUserTestStatus = UpdateUserTestStatusMutation.Field()
     updateUserInformation = UpdateUserInformation.Field()
+    updateAimsForUser = UpdateAimsForUserMutation.Field()
+
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
