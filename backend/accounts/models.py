@@ -29,7 +29,6 @@ class UserScaleAnswer(models.Model):
     """Ответ пользователя на вопрос со шкалой"""
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
-    # TODO: Зафиксировать в ERD
     answer_scale_line = models.ForeignKey(
         AnswerScale, on_delete=models.CASCADE, verbose_name="Строка вопроса со шкалой")
     answer = models.PositiveIntegerField("Значение ответа")
@@ -52,8 +51,6 @@ class UserOptionAnswer(models.Model):
         QuestionWithOption, on_delete=models.CASCADE, verbose_name="Вопросы с вариантами ответов")
     answer = models.ForeignKey(
         AnswerOption, on_delete=models.CASCADE, verbose_name="Значение ответа")
-    # TODO: Зафиксировать в ERD
-    # date_time_answer = models.DateTimeField(verbose_name="Дата и время ответа")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

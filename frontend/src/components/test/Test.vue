@@ -47,7 +47,10 @@ export default {
           route = "/result";
           break;
       }
-      if (this.$route.path != route) {
+      if (
+        this.$route.path != route &&
+        this.$route.path.substring(0, this.$route.path.length - 1) != route
+      ) {
         this.$router.push(route);
       }
     }

@@ -43,7 +43,8 @@
           </p>
           <div>
             <v-row
-              v-for="answer in questionElem.question.answerscaleSet"
+              v-for="(answer, answ_index) in questionElem.question
+                .answerscaleSet"
               :key="answer.id"
             >
               <v-col
@@ -67,7 +68,9 @@
                 lg="8"
               >
                 <v-slider
-                  v-model="userAnswers[question_index]"
+                  :value="getSliderValue(question_index, answ_index)"
+                  @input="setSliderValue($event, question_index, answ_index)"
+                  @change="setSliderValue($event, question_index, answ_index)"
                   color="colorOfSea"
                   track-color="colorOfSea"
                   thumb-color="colorOfSea"
@@ -146,6 +149,7 @@ import {
   QUESTION_GROUP,
   QUESTION_GROUP_COUNT
 } from "@/graphql/questions_queries";
+import { CREATE_USER_OPTION_ANSWER } from "@/graphql/questions_mutations";
 
 export default {
   name: "TestQuestion",
@@ -187,6 +191,53 @@ export default {
     window.removeEventListener("resize", this.resizeHandler);
   },
   methods: {
+    sendUserAnswers() {
+      for (let index = 0; index < this.questionsSet.length; index++) {
+        const element = this.questionsSet[index];
+        if (element.type == this.WITH_SCALE_TYPE) {
+          for (
+            let row_index = 0;
+            row_index < element.question.answerscaleSet.length;
+            row_index++
+          ) {
+            const scale_row = element.question.answerscaleSet[row_index];
+            console.log(
+              `Type: with_scale, question_row_id: ${scale_row.id}, answer: ${this.userAnswers[index][row_index]}`
+            );
+          }
+        } else {
+          console.log(
+            `Type: with_options, question_id: ${element.question.id}, answer: ${this.userAnswers[index]}`
+          );
+          // userId: this.$store.getters.decoded.user_id
+          this.$apollo.mutate({
+            mutation: CREATE_USER_OPTION_ANSWER,
+            variables: {
+              userId: this.$store.getters.decoded.user_id,
+              questionId: element.question.id,
+              answerId: this.userAnswers[index]
+            }
+          });
+        }
+      }
+    },
+    getSliderValue(question_index, answ_index) {
+      if (this.userAnswers[question_index] !== undefined) {
+        if (this.userAnswers[question_index][answ_index] === undefined) {
+          this.userAnswers[question_index][answ_index] = 2;
+        }
+      } else {
+        this.userAnswers[question_index] = [];
+        this.userAnswers[question_index][answ_index] = 2;
+      }
+      return this.userAnswers[question_index][answ_index];
+    },
+    setSliderValue(newValue, question_index, answ_index) {
+      if (this.userAnswers[question_index] === undefined) {
+        this.userAnswers[question_index] = [];
+      }
+      this.userAnswers[question_index][answ_index] = newValue;
+    },
     resizeHandler() {
       let width = document.body.clientWidth + 16;
       this.clientWidth = width;
@@ -196,10 +247,12 @@ export default {
       this.$router.push("/test");
     },
     goToNextGroup() {
+      this.sendUserAnswers();
       this.userAnswers = [];
       this.$router.push(`/question/${this.nextGroupId}`);
     },
     goToPrevGroup() {
+      this.sendUserAnswers();
       this.userAnswers = [];
       this.$router.push(`/question/${this.prevGroupId}`);
     }
@@ -217,6 +270,7 @@ export default {
       }
     },
     userAnswers(val) {
+      // TODO: SEND results
       console.log(val);
     }
   },

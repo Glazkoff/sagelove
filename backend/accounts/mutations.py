@@ -1,8 +1,62 @@
 import graphene
 from .models import AnswersCounting, UserScaleAnswer, UserOptionAnswer
-from questions.models import QuestionWithScale, AnswerScale
+from questions.models import QuestionWithScale, QuestionWithOption, AnswerScale, AnswerOption
 from users.models import CustomUser
 from .types import AnswersCountingType, UserScaleAnswerType, UserOptionAnswerType
+
+
+class CreateUserOptionAnswerMutation(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        question_id = graphene.ID(required=True)
+        answer_id = graphene.ID(required=True)
+
+    user_option_answer = graphene.Field(UserOptionAnswerType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, question_id, answer_id):
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+            try:
+                question_with_option = QuestionWithOption.objects.get(
+                    pk=question_id)
+                exist_answers_count = UserOptionAnswer.objects.filter(
+                    question_with_option=question_with_option, user=user).count()
+                if (exist_answers_count == 0):
+                    print("*****")
+                    try:
+                        answer_option = AnswerOption.objects.get(
+                            pk=answer_id)
+                        user_option_answer = UserOptionAnswer.objects.create(
+                            question_with_option=question_with_option, user=user, answer=answer_option)
+                        return CreateUserOptionAnswerMutation(user_option_answer=user_option_answer)
+                    except AnswerOption.DoesNotExist:
+                        print("****")
+                        return None
+                else:
+                    try:
+                        answer_option = AnswerOption.objects.get(
+                            pk=answer_id)
+                        try:
+                            user_option_answer = UserOptionAnswer.objects.get(
+                                question_with_option=question_with_option, user=user)
+                            # print(user_option_answer)
+                            user_option_answer.answer = answer_option
+                            user_option_answer.save()
+                            print(user_option_answer)
+                            return CreateUserOptionAnswerMutation(user_option_answer=user_option_answer)
+                        except UserOptionAnswer.DoesNotExist:
+                            print("**-**")
+                            return None
+                    except AnswerOption.DoesNotExist:
+                        print("***")
+                        return None
+            except QuestionWithOption.DoesNotExist:
+                print("**")
+                return None
+        except CustomUser.DoesNotExist:
+            print("*")
+            return None
 
 
 class CreateUserScaleAnswerMutation(graphene.Mutation):
