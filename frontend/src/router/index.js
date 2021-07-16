@@ -61,7 +61,6 @@ const routes = [
       {
         path: "/test",
         component: Test,
-        name: "Test",
         children: [
           {
             path: "",

@@ -50,7 +50,7 @@
                   v-on="on"
                 />
                 <p class="mb-0 mr-2 pointer" v-bind="attrs" v-on="on">
-                  {{ user.firstName }}
+                  {{ user !== undefined ? user.firstName : "-" }}
                 </p>
                 <v-icon
                   color="colorOfSea"
@@ -116,7 +116,7 @@
       <v-list nav dense>
         <v-list-item-group v-model="group" active-class="colorOfSea--text ">
           <p class="ma-2 pointer font-weight-bold">
-            Здравствуйте, {{ user.firstName }}!
+            Здравствуйте, {{ user !== undefined ? user.firstName : "-" }}!
           </p>
 
           <v-list-item>

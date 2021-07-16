@@ -148,7 +148,7 @@ export default {
         .catch(err => {
           console.log(err);
         });
-      this.$router.push({ name: "Test" });
+      this.$router.push({ name: "TestStatus" });
     },
     openDialog(n) {
       this.dialog = true;
