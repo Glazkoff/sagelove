@@ -30,13 +30,13 @@ const cache = new InMemoryCache({
 
 // Создание ссылки для Apollo
 const httpLink = new createHttpLink({
-  uri: process.env.VUE_APP_GRAPHQL_HTTP || "http://localhost:8000/api/graphql/"
+  uri: process.env.VUE_APP_GRAPHQL_HTTP || "http://localhost:8001/api/graphql/"
 });
 
 // Создание websocket ссылки для Subscription
 // TODO: включить
 // const wsLink = new WebSocketLink({
-//   uri: "ws://localhost:8000/api/graphql",
+//   uri: "ws://localhost:8001/api/graphql",
 //   options: {
 //     reconnect: true
 //   }
