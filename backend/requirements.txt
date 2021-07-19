@@ -9,3 +9,5 @@ djangorestframework-simplejwt
 psycopg2-binary
 markdown
 graphene-django
+gunicorn
+gevent
