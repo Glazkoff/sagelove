@@ -46,7 +46,7 @@ class AnswerScale(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Строка №{self.order_number} ответов на вопрос {self.question.id} "
+        return f"Строка №{self.id} ответов на вопрос {self.question.id} "
 
     class Meta:
         verbose_name = "Ответ на вопросы со шкалой"

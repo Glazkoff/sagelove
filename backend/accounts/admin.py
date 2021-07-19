@@ -30,21 +30,23 @@ class UserScaleAnswerAdmin(admin.ModelAdmin):
             'fields': ('user',)
         }),
         ('Вопрос', {
-            'fields': ('question_with_scale',)
+            'fields': ('answer_scale_line',)
         }),
         ('Ответы', {
             'fields': ('answer',)
         }),
     )
+
+
 class DatingsAdmin(admin.ModelAdmin):
     """Совпадения пользователей"""
     exclude = ('createdAt', 'updatedAt')
     # list_display=('',)
     # list_filter = ('')
-    search_fields=('user_1','user_2',)
+    search_fields = ('user_1', 'user_2',)
     fieldsets = (
         (None, {
-            'fields': ('user_1','user_2','algorithm',)
+            'fields': ('user_1', 'user_2', 'algorithm',)
         }),
     )
 
