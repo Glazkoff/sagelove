@@ -44,6 +44,7 @@ class AimsInput(graphene.InputObjectType):
     number_foto_history_by_felling = graphene.Int(required=True)
     user_id = graphene.ID(required=True)
 
+# Мутация создания или изменения целей пользователя
 
 class UpdateAimsForUserMutation(graphene.Mutation):
     class Arguments:
@@ -58,3 +59,20 @@ class UpdateAimsForUserMutation(graphene.Mutation):
         user.number_foto_history_by_felling = aims_data.number_foto_history_by_felling
         user.save()
         return UpdateAimsForUserMutation(user=user)
+
+# Мутация изменения статуса просмотра on-boarding 
+class UpdateWatchOnBoardingMutation(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        watch_on_boarding = graphene.Boolean(required=True)
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, watch_on_boarding):
+        user = CustomUser.objects.get(pk=user_id)
+        user.watch_on_boarding = watch_on_boarding
+        user.save()
+
+        return UpdateWatchOnBoardingMutation(user=user)
+

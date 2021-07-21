@@ -32,12 +32,12 @@
         </template>
 
         <div class="position-cross mr-3">
-          <router-link to="/aims"
-            ><img
-              src="../../assets/img/cross.svg"
-              alt="Cross"
-              class="mt-5 pr-5"
-          /></router-link>
+          <img
+            src="../../assets/img/cross.svg"
+            alt="Cross"
+            class="mt-5 pr-5"
+            @click="onWatchOnBoarding()"
+          />
         </div>
         <div class="position-text">
           <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10">{{ slide.header }}</h1>
@@ -52,13 +52,57 @@
 </template>
 
 <script>
+import {
+  WATCH_ON_BOARDING,
+  UPDATE_WATCH_ON_BOARDING
+} from "../../graphql/user_queries.js";
 export default {
   name: "OnBoarding",
-  methods: {
-    finallySlide(id) {
-      if (id == 5) {
-        console.log("Финальный слайд");
+  apollo: {
+    user: {
+      query: WATCH_ON_BOARDING,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
       }
+    }
+  },
+  watch: {
+    user: function (val) {
+      let route = "";
+      switch (val.watchOnBoarding) {
+        case true:
+        default:
+          route = { name: "TestStatus" };
+          break;
+        case false:
+          route = "";
+          break;
+      }
+      if (
+        this.$route.path != route &&
+        this.$route.path.substring(0, this.$route.path.length - 1) != route
+      ) {
+        this.$router.push(route);
+      }
+    }
+  },
+  methods: {
+    onWatchOnBoarding() {
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_WATCH_ON_BOARDING,
+          variables: {
+            watchOnBoarding: true,
+            userId: this.$store.getters.decoded.user_id
+          }
+        })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+        });
+      if (this.user.partnerType != null) {
+        this.$router.push({ name: "TestStatus" });
+      } else this.$router.push({ name: "AimsSignUp" });
     }
   },
   data() {
