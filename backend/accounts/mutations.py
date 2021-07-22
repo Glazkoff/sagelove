@@ -17,74 +17,66 @@ class CreateUserOptionAnswerMutation(graphene.Mutation):
     def mutate(cls, root, info, user_id, question_id, answer_id):
         try:
             user = CustomUser.objects.get(pk=user_id)
-            try:
-                question_with_option = QuestionWithOption.objects.get(
-                    pk=question_id)
-                exist_answers_count = UserOptionAnswer.objects.filter(
-                    question_with_option=question_with_option, user=user).count()
-                if (exist_answers_count == 0):
-                    print("*****")
-                    try:
-                        answer_option = AnswerOption.objects.get(
-                            pk=answer_id)
-                        user_option_answer = UserOptionAnswer.objects.create(
-                            question_with_option=question_with_option, user=user, answer=answer_option)
-                        return CreateUserOptionAnswerMutation(user_option_answer=user_option_answer)
-                    except AnswerOption.DoesNotExist:
-                        print("****")
-                        return None
-                else:
-                    try:
-                        answer_option = AnswerOption.objects.get(
-                            pk=answer_id)
-                        try:
-                            user_option_answer = UserOptionAnswer.objects.get(
-                                question_with_option=question_with_option, user=user)
-                            # print(user_option_answer)
-                            user_option_answer.answer = answer_option
-                            user_option_answer.save()
-                            print(user_option_answer)
-                            return CreateUserOptionAnswerMutation(user_option_answer=user_option_answer)
-                        except UserOptionAnswer.DoesNotExist:
-                            print("**-**")
-                            return None
-                    except AnswerOption.DoesNotExist:
-                        print("***")
-                        return None
-            except QuestionWithOption.DoesNotExist:
-                print("**")
-                return None
-        except CustomUser.DoesNotExist:
-            print("*")
+            question_with_option = QuestionWithOption.objects.get(
+                pk=question_id)
+            exist_answers_count = UserOptionAnswer.objects.filter(
+                question_with_option=question_with_option, user=user).count()
+            answer_option = AnswerOption.objects.get(
+                pk=answer_id)
+            if (exist_answers_count == 0):
+
+                user_option_answer = UserOptionAnswer.objects.create(
+                    question_with_option=question_with_option, user=user, answer=answer_option)
+            else:
+                user_option_answer = UserOptionAnswer.objects.get(
+                    question_with_option=question_with_option, user=user)
+                user_option_answer.answer = answer_option
+                user_option_answer.save()
+            return CreateUserOptionAnswerMutation(user_option_answer=user_option_answer)
+        except (CustomUser.DoesNotExist, QuestionWithOption.DoesNotExist, AnswerOption.DoesNotExist, UserOptionAnswer.DoesNotExist):
             return None
 
 
 class CreateUserScaleAnswerMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
-        question_id = graphene.ID(required=True)
+        question_row_id = graphene.ID(required=True)
         answer = graphene.Int(required=True)
 
     user_scale_answer = graphene.Field(UserScaleAnswerType)
 
     @classmethod
-    def mutate(cls, root, info, user_id, question_id, answer):
-      # TODO: переделать на UserScale
+    def mutate(cls, root, info, user_id, question_row_id, answer):
         try:
             user = CustomUser.objects.get(pk=user_id)
-            try:
-                question_with_scale = QuestionWithScale.objects.get(
-                    pk=question_id)
-                exist_answers_count = UserScaleAnswer.objects.filter(
-                    question_with_scale=question_with_scale, user=user).count()
-                if (exist_answers_count == 0):
-                    user_scale_answer = UserScaleAnswer.objects.create(
-                        question_with_scale=question_with_scale, answer=answer, user=user)
-                    user_scale_answer.save()
-                    return CreateUserScaleAnswerMutation(user_scale_answer=user_scale_answer)
-                else:
-                    return None
-            except QuestionWithScale.DoesNotExist:
-                return None
-        except CustomUser.DoesNotExist:
+            question_line = AnswerScale.objects.get(pk=question_row_id)
+            exist_answers_count = UserScaleAnswer.objects.filter(
+                answer_scale_line=question_line, user=user).count()
+            if exist_answers_count == 0:
+                user_scale_answer = UserScaleAnswer.objects.create(
+                    answer_scale_line=question_line, user=user, answer=answer)
+            else:
+                user_scale_answer = UserScaleAnswer.objects.get(
+                    answer_scale_line=question_line, user=user)
+                user_scale_answer.answer = answer
+                user_scale_answer.save()
+            return CreateUserScaleAnswerMutation(user_scale_answer=user_scale_answer)
+        except (CustomUser.DoesNotExist, AnswerScale.DoesNotExist, UserScaleAnswer.DoesNotExist):
             return None
+
+
+class FinishUserTesting(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+
+    status_ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, user_id):
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+            user.test_status = 'finish'
+            user.save()
+            return FinishUserTesting(status_ok=True)
+        except (CustomUser.DoesNotExist, ):
+            return FinishUserTesting(status_ok=False)

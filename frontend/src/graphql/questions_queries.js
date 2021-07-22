@@ -34,3 +34,29 @@ export const QUESTION_GROUP_COUNT = gql`
     questionGroupsCount
   }
 `;
+
+export const USER_GROUP_SCALE_ANSWERS = gql`
+  query ($userId: ID!, $groupId: ID!) {
+    userGroupScaleAnswers(userId: $userId, groupId: $groupId) {
+      id
+      answer
+      answerScaleLine {
+        id
+      }
+    }
+  }
+`;
+
+export const USER_GROUP_OPTION_ANSWERS = gql`
+  query ($userId: ID!, $groupId: ID!) {
+    userGroupOptionAnswers(userId: $userId, groupId: $groupId) {
+      id
+      answer {
+        id
+      }
+      questionWithOption {
+        id
+      }
+    }
+  }
+`;

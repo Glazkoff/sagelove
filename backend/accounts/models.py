@@ -18,7 +18,33 @@ class AnswersCounting(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Ответы пользователя №{self.user.id} от {self.date_time_counting}"
+        return f"Подсчёт ответов пользователя {self.user.first_name} ({self.user.email})"
+
+    def answers_count1(self):
+        return UserScaleAnswer.objects.filter(
+            user=self.user, answer=1).count()
+
+    def answers_count2(self):
+        return UserScaleAnswer.objects.filter(
+            user=self.user, answer=2).count()
+
+    def answers_count3(self):
+        return UserScaleAnswer.objects.filter(
+            user=self.user, answer=3).count()
+
+    def answers_count4(self):
+        return UserScaleAnswer.objects.filter(
+            user=self.user, answer=4).count()
+
+    def answers_count5(self):
+        return UserScaleAnswer.objects.filter(
+            user=self.user, answer=5).count()
+
+    answers_count1.short_description = "Количество ответов '1'"
+    answers_count2.short_description = "Количество ответов '2'"
+    answers_count3.short_description = "Количество ответов '3'"
+    answers_count4.short_description = "Количество ответов '4'"
+    answers_count5.short_description = "Количество ответов '5'"
 
     class Meta:
         verbose_name = "Подсчет ответов"

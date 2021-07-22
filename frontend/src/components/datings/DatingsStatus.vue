@@ -94,7 +94,7 @@
             @click="onRouteToPerson(person.id)"
             class="custom-img pointer"
             src="https://picsum.photos/200"
-            alt="Ававтар"
+            alt="Аватар"
           />
           <div class="custom-wrap user">
             <p class="font-weight-bold mb-1">

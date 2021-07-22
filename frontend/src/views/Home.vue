@@ -45,7 +45,7 @@
                 <img
                   class="custom-img mr-2"
                   src="https://picsum.photos/200"
-                  alt="Ававтар"
+                  alt="Аватар"
                   v-bind="attrs"
                   v-on="on"
                 />

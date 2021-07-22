@@ -59,8 +59,8 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('email', 'password')}),
         ('Личная информация', {
          'fields': ('first_name', 'gender', 'date_of_birth', 'phone_number', 'about_me')}),
-         ('Цели пользователя', {
-         'fields': ('partner_type', 'purpose_meet', 'number_foto_history_by_felling',)}),
+        ('Цели пользователя', {
+            'fields': ('partner_type', 'purpose_meet', 'number_foto_history_by_felling',)}),
         ('Права доступа', {'fields': ('is_admin',
          'is_active', 'groups', 'is_superuser')}),
         ('Прохождение теста', {'fields': ('test_status',)})

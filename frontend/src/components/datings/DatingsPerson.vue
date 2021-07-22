@@ -15,7 +15,7 @@
       </v-row>
       <v-row>
         <v-col class="col-12 col-sm-3">
-          <img class="custom-img" src="https://picsum.photos/200" alt="Ававтар"
+          <img class="custom-img" src="https://picsum.photos/200" alt="Аватар"
         /></v-col>
         <v-col class="col-12 col-sm-9">
           <div class="custom-card pa-4 pa-sm-8">

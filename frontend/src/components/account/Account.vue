@@ -8,7 +8,7 @@
           <img
             class="custom-img mr-md-4"
             src="https://picsum.photos/200"
-            alt="Ававтар"
+            alt="Аватар"
           />
 
           <v-btn

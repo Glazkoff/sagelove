@@ -30,8 +30,7 @@
         height="8"
       ></v-progress-linear>
       <h2 class="title colorOfSea--text">
-        Тема № {{ orderNumber }}.
-        {{ nameGroupQuestion }}
+        Тема № {{ orderNumber }}. {{ nameGroupQuestion }}
       </h2>
       <div
         v-for="(questionElem, question_index) in questionsSet"
@@ -110,6 +109,7 @@
               :label="answer.answerText"
               :value="answer.id"
               color="colorOfSea"
+              @change="radioButtonChanged"
             ></v-radio>
           </v-radio-group>
         </div>
@@ -135,8 +135,18 @@
               color="colorOfSea"
               class="my-button"
               @click="goToNextGroup"
-              >Далее</v-btn
             >
+              Далее
+            </v-btn>
+            <v-btn
+              v-else
+              dark
+              color="colorOfSea"
+              class="my-button"
+              @click="finishTesting"
+            >
+              Завершить тестирование
+            </v-btn>
           </div>
         </v-col>
       </v-row>
@@ -147,9 +157,15 @@
 <script>
 import {
   QUESTION_GROUP,
-  QUESTION_GROUP_COUNT
+  QUESTION_GROUP_COUNT,
+  USER_GROUP_SCALE_ANSWERS,
+  USER_GROUP_OPTION_ANSWERS
 } from "@/graphql/questions_queries";
-import { CREATE_USER_OPTION_ANSWER } from "@/graphql/questions_mutations";
+import {
+  CREATE_USER_OPTION_ANSWER,
+  CREATE_USER_SCALE_ANSWER,
+  FINISH_USER_TESTING
+} from "@/graphql/questions_mutations";
 
 export default {
   name: "TestQuestion",
@@ -164,6 +180,24 @@ export default {
     },
     questionGroupsCount: {
       query: QUESTION_GROUP_COUNT
+    },
+    userGroupScaleAnswers: {
+      query: USER_GROUP_SCALE_ANSWERS,
+      variables() {
+        return {
+          groupId: this.groupId,
+          userId: this.$store.getters.decoded.user_id
+        };
+      }
+    },
+    userGroupOptionAnswers: {
+      query: USER_GROUP_OPTION_ANSWERS,
+      variables() {
+        return {
+          groupId: this.groupId,
+          userId: this.$store.getters.decoded.user_id
+        };
+      }
     }
   },
   data() {
@@ -191,38 +225,147 @@ export default {
     window.removeEventListener("resize", this.resizeHandler);
   },
   methods: {
-    sendUserAnswers() {
-      for (let index = 0; index < this.questionsSet.length; index++) {
-        const element = this.questionsSet[index];
-        if (element.type == this.WITH_SCALE_TYPE) {
-          for (
-            let row_index = 0;
-            row_index < element.question.answerscaleSet.length;
-            row_index++
-          ) {
-            const scale_row = element.question.answerscaleSet[row_index];
-            console.log(
-              `Type: with_scale, question_row_id: ${scale_row.id}, answer: ${this.userAnswers[index][row_index]}`
-            );
+    finishTesting() {
+      this.$apollo
+        .mutate({
+          mutation: FINISH_USER_TESTING,
+          variables: {
+            userId: this.$store.getters.decoded.user_id
           }
-        } else {
-          console.log(
-            `Type: with_options, question_id: ${element.question.id}, answer: ${this.userAnswers[index]}`
-          );
-          // userId: this.$store.getters.decoded.user_id
-          this.$apollo.mutate({
-            mutation: CREATE_USER_OPTION_ANSWER,
-            variables: {
-              userId: this.$store.getters.decoded.user_id,
-              questionId: element.question.id,
-              answerId: this.userAnswers[index]
+        })
+        .then(res => {
+          if (res.data.finishUserTesting.statusOk) {
+            this.$router.push("/datings");
+          }
+        });
+    },
+    sendUserAnswers() {
+      let group = this.groupId;
+      return new Promise((resolve, reject) => {
+        try {
+          let userAnswersString = JSON.stringify(this.userAnswers);
+          let userAnswers = JSON.parse(userAnswersString);
+
+          for (let index = 0; index < this.questionsSet.length; index++) {
+            const element = this.questionsSet[index];
+            if (element.type == this.WITH_SCALE_TYPE) {
+              for (
+                let row_index = 0;
+                row_index < element.question.answerscaleSet.length;
+                row_index++
+              ) {
+                const scale_row = element.question.answerscaleSet[row_index];
+                // console.log(
+                //   `Type: with_scale, question_row_id: ${
+                //     scale_row.id
+                //   }, answer: ${userAnswers[index][row_index] + 1}`
+                // );
+                if (
+                  userAnswers[index] !== null &&
+                  userAnswers[index] != undefined
+                ) {
+                  if (
+                    userAnswers[index][row_index] !== null &&
+                    userAnswers[index][row_index] != undefined
+                  ) {
+                    this.$apollo.mutate({
+                      mutation: CREATE_USER_SCALE_ANSWER,
+                      variables: {
+                        userId: this.$store.getters.decoded.user_id,
+                        questionRowId: scale_row.id,
+                        answer: userAnswers[index][row_index] + 1
+                      },
+                      update: (cache, { data: { createUserScaleAnswer } }) => {
+                        const data = cache.readQuery({
+                          query: USER_GROUP_SCALE_ANSWERS,
+                          variables: {
+                            groupId: group,
+                            userId: this.$store.getters.decoded.user_id
+                          }
+                        });
+                        let findIndex = data.userGroupScaleAnswers.findIndex(
+                          el => {
+                            return el.answerScaleLine.id == scale_row.id;
+                          }
+                        );
+                        if (findIndex == -1) {
+                          data.userGroupScaleAnswers.push(
+                            createUserScaleAnswer.userScaleAnswer
+                          );
+                        } else {
+                          data.userGroupScaleAnswers[findIndex] =
+                            createUserScaleAnswer.userScaleAnswer;
+                        }
+                        cache.writeQuery({
+                          query: USER_GROUP_SCALE_ANSWERS,
+                          variables: {
+                            groupId: this.groupId,
+                            userId: this.$store.getters.decoded.user_id
+                          },
+                          data
+                        });
+                      }
+                    });
+                  }
+                }
+              }
+            } else {
+              // console.log(
+              //   `Type: with_options, question_id: ${element.question.id}, answer: ${userAnswers[index]}`
+              // );
+              if (
+                userAnswers[index] != null &&
+                userAnswers[index] != undefined
+              ) {
+                this.$apollo.mutate({
+                  mutation: CREATE_USER_OPTION_ANSWER,
+                  variables: {
+                    userId: this.$store.getters.decoded.user_id,
+                    questionId: element.question.id,
+                    answerId: userAnswers[index]
+                  },
+                  update: (cache, { data: { createUserOptionAnswer } }) => {
+                    const data = cache.readQuery({
+                      query: USER_GROUP_OPTION_ANSWERS,
+                      variables: {
+                        groupId: group,
+                        userId: this.$store.getters.decoded.user_id
+                      }
+                    });
+                    let findIndex = data.userGroupOptionAnswers.findIndex(
+                      el => {
+                        return el.questionWithOption.id == element.question.id;
+                      }
+                    );
+                    if (findIndex == -1) {
+                      data.userGroupOptionAnswers.push(
+                        createUserOptionAnswer.userOptionAnswer
+                      );
+                    } else {
+                      data.userGroupOptionAnswers[findIndex] =
+                        createUserOptionAnswer.userOptionAnswer;
+                    }
+                    cache.writeQuery({
+                      query: USER_GROUP_OPTION_ANSWERS,
+                      variables: {
+                        groupId: this.groupId,
+                        userId: this.$store.getters.decoded.user_id
+                      },
+                      data
+                    });
+                  }
+                });
+              }
             }
-          });
+          }
+          resolve();
+        } catch (error) {
+          reject(error);
         }
-      }
+      });
     },
     getSliderValue(question_index, answ_index) {
-      if (this.userAnswers[question_index] !== undefined) {
+      if (this.userAnswers[question_index] != undefined) {
         if (this.userAnswers[question_index][answ_index] === undefined) {
           this.userAnswers[question_index][answ_index] = 2;
         }
@@ -232,11 +375,15 @@ export default {
       }
       return this.userAnswers[question_index][answ_index];
     },
+    radioButtonChanged() {
+      this.sendUserAnswers();
+    },
     setSliderValue(newValue, question_index, answ_index) {
       if (this.userAnswers[question_index] === undefined) {
         this.userAnswers[question_index] = [];
       }
       this.userAnswers[question_index][answ_index] = newValue;
+      this.sendUserAnswers();
     },
     resizeHandler() {
       let width = document.body.clientWidth + 16;
@@ -247,17 +394,25 @@ export default {
       this.$router.push("/test");
     },
     goToNextGroup() {
-      this.sendUserAnswers();
-      this.userAnswers = [];
-      this.$router.push(`/question/${this.nextGroupId}`);
+      this.sendUserAnswers().then(() => {
+        this.userAnswers = [];
+        this.$router.push(`/question/${this.nextGroupId}`);
+      });
     },
     goToPrevGroup() {
-      this.sendUserAnswers();
-      this.userAnswers = [];
-      this.$router.push(`/question/${this.prevGroupId}`);
+      this.sendUserAnswers().then(() => {
+        this.userAnswers = [];
+        this.$router.push(`/question/${this.prevGroupId}`);
+      });
     }
   },
   watch: {
+    groupId() {
+      this.$apollo.queries.userGroupOptionAnswers.refetch();
+      this.$apollo.queries.userGroupOptionAnswers.refresh();
+      this.$apollo.queries.userGroupScaleAnswers.refetch();
+      this.$apollo.queries.userGroupScaleAnswers.refresh();
+    },
     clientWidth() {
       this.isLessThen600px = this.clientWidth < 600;
     },
@@ -266,12 +421,104 @@ export default {
         !this.$apollo.queries.questionGroup.loading &&
         this.questionGroup == null
       ) {
-        console.log(null);
+        // console.log(null);
       }
     },
-    userAnswers(val) {
-      // TODO: SEND results
-      console.log(val);
+    userAnswers() {
+      this.sendUserAnswers();
+    },
+    userGroupScaleAnswers(val) {
+      if (val != undefined) {
+        for (let index = 0; index < val.length; index++) {
+          const question = val[index];
+          if (question.type == this.WITH_SCALE_TYPE) {
+            this.userAnswers[index] = [];
+            for (
+              let scaleIndex = 0;
+              scaleIndex < question.question.answerscaleSet.length;
+              scaleIndex++
+            ) {
+              const scaleLine = question.question.answerscaleSet[scaleIndex];
+
+              if (val != undefined) {
+                let answerIndex = val.findIndex(el => {
+                  return el.answerScaleLine.id == scaleLine.id;
+                });
+
+                if (answerIndex != -1) {
+                  this.userAnswers[index][scaleIndex] =
+                    val[answerIndex].answer - 1;
+                } else {
+                  this.userAnswers[index][scaleIndex] = 2;
+                }
+              } else {
+                this.userAnswers[index][scaleIndex] = 2;
+              }
+            }
+          }
+        }
+      }
+    },
+    userGroupOptionAnswers(val) {
+      if (val != undefined) {
+        for (let index = 0; index < this.questionsSet.length; index++) {
+          const question = this.questionsSet[index];
+          if (question.type == this.WITH_OPTION_TYPE) {
+            this.userAnswers[index] = null;
+            let questionId = question.question.id;
+            let answerIndex = val.findIndex(el => {
+              return el.questionWithOption.id == questionId;
+            });
+            if (answerIndex != -1) {
+              this.userAnswers[index] = val[answerIndex];
+            }
+          }
+        }
+      }
+    },
+    questionsSet(val) {
+      if (val != undefined) this.userAnswers = [];
+      for (let index = 0; index < val.length; index++) {
+        const question = val[index];
+        if (question.type == this.WITH_SCALE_TYPE) {
+          this.userAnswers[index] = [];
+          for (
+            let scaleIndex = 0;
+            scaleIndex < question.question.answerscaleSet.length;
+            scaleIndex++
+          ) {
+            const scaleLine = question.question.answerscaleSet[scaleIndex];
+
+            if (this.userGroupScaleAnswers != undefined) {
+              let answerIndex = this.userGroupScaleAnswers.findIndex(el => {
+                return el.answerScaleLine.id == scaleLine.id;
+              });
+
+              if (answerIndex != -1) {
+                this.userAnswers[index][scaleIndex] =
+                  this.userGroupScaleAnswers[answerIndex].answer - 1;
+              } else {
+                this.userAnswers[index][scaleIndex] = 2;
+              }
+            } else {
+              this.userAnswers[index][scaleIndex] = 2;
+            }
+          }
+        } else {
+          if (this.userGroupOptionAnswers != undefined) {
+            let questionId = question.question.id;
+            let answerIndex = this.userGroupOptionAnswers.findIndex(el => {
+              return el.questionWithOption.id == questionId;
+            });
+            if (answerIndex != -1) {
+              this.userAnswers[index] =
+                this.userGroupOptionAnswers[answerIndex].answer.id;
+            } else {
+              this.userAnswers[index] = null;
+            }
+          }
+        }
+      }
     }
   },
   computed: {

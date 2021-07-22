@@ -6,12 +6,15 @@ from django.contrib import admin
 class AnswersCountingAdmin(admin.ModelAdmin):
     """Подсчет ответов"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
+    list_display = ('user', 'answers_count1', 'answers_count2',
+                    'answers_count3', 'answers_count4', 'answers_count5')
     # list_filter = ('',)
-    # search_fields=('',)
+    search_fields = ('user__first_name', 'user__email',)
+    readonly_fields = ('user', 'answers_count1', 'answers_count2',
+                       'answers_count3', 'answers_count4', 'answers_count5',)
     fieldsets = (
         (None, {
-            'fields': ('date_time_counting', 'user',)
+            'fields': ('user',)
         }),
         ('Количество ответов', {
             'fields': ('answers_count1', 'answers_count2', 'answers_count3', 'answers_count4', 'answers_count5',)
@@ -22,8 +25,8 @@ class AnswersCountingAdmin(admin.ModelAdmin):
 class UserScaleAnswerAdmin(admin.ModelAdmin):
     """Ответ пользователя на вопрос"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
-    # list_filter = ('')
+    list_display = ('user', 'answer_scale_line', 'answer',)
+    list_filter = ('user',)
     search_fields = ('answer',)
     fieldsets = (
         (None, {
@@ -41,7 +44,7 @@ class UserScaleAnswerAdmin(admin.ModelAdmin):
 class DatingsAdmin(admin.ModelAdmin):
     """Совпадения пользователей"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
+    list_display = ('id', 'user_1', 'user_2', 'algorithm',)
     # list_filter = ('')
     search_fields = ('user_1', 'user_2',)
     fieldsets = (
@@ -54,8 +57,8 @@ class DatingsAdmin(admin.ModelAdmin):
 class UserOptionAnswerAdmin(admin.ModelAdmin):
     """Ответ пользователя на вопрос"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
-    # list_filter = ('')
+    list_display = ('user', 'question_with_option', 'answer',)
+    list_filter = ('user',)
     search_fields = ('answer',)
     fieldsets = (
         (None, {
