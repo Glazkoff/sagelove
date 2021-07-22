@@ -48,7 +48,7 @@ class AnswersCounting(models.Model):
 
     class Meta:
         verbose_name = "Подсчет ответов"
-        verbose_name_plural = "Подсчеты ответов"
+        verbose_name_plural = "Подсчеты ответов пользователей"
 
 
 class UserScaleAnswer(models.Model):
@@ -66,7 +66,7 @@ class UserScaleAnswer(models.Model):
 
     class Meta:
         verbose_name = "Ответ пользователя на вопрос со шкалой"
-        verbose_name_plural = "Ответы пользователя на вопрос со шкалой"
+        verbose_name_plural = "Ответы пользователей на вопрос со шкалой"
 
 
 class UserOptionAnswer(models.Model):
@@ -85,7 +85,7 @@ class UserOptionAnswer(models.Model):
 
     class Meta:
         verbose_name = "Ответ пользователя на вопрос с вариантами"
-        verbose_name_plural = "Ответы пользователя на вопрос с вариантами"
+        verbose_name_plural = "Ответы пользователей на вопрос с вариантами"
 
 
 ALGORITHM_SELECTION = [

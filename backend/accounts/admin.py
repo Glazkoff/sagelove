@@ -21,13 +21,17 @@ class AnswersCountingAdmin(admin.ModelAdmin):
         }),
     )
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 class UserScaleAnswerAdmin(admin.ModelAdmin):
     """Ответ пользователя на вопрос"""
     exclude = ('createdAt', 'updatedAt')
     list_display = ('user', 'answer_scale_line', 'answer',)
     list_filter = ('user',)
-    search_fields = ('answer',)
+    search_fields = ('answer', 'user__first_name')
+    readonly_fields = ('user', 'answer_scale_line', 'answer',)
     fieldsets = (
         (None, {
             'fields': ('user',)
@@ -40,13 +44,16 @@ class UserScaleAnswerAdmin(admin.ModelAdmin):
         }),
     )
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 class DatingsAdmin(admin.ModelAdmin):
     """Совпадения пользователей"""
     exclude = ('createdAt', 'updatedAt')
     list_display = ('id', 'user_1', 'user_2', 'algorithm',)
-    # list_filter = ('')
-    search_fields = ('user_1', 'user_2',)
+    list_filter = ('algorithm',)
+    search_fields = ('user_1__first_name', 'user_2__first_name',)
     fieldsets = (
         (None, {
             'fields': ('user_1', 'user_2', 'algorithm',)
@@ -59,7 +66,8 @@ class UserOptionAnswerAdmin(admin.ModelAdmin):
     exclude = ('createdAt', 'updatedAt')
     list_display = ('user', 'question_with_option', 'answer',)
     list_filter = ('user',)
-    search_fields = ('answer',)
+    search_fields = ('answer__answer_text', 'user__first_name')
+    readonly_fields = ('user', 'question_with_option', 'answer',)
     fieldsets = (
         (None, {
             'fields': ('user',)
@@ -67,10 +75,13 @@ class UserOptionAnswerAdmin(admin.ModelAdmin):
         ('Вопрос', {
             'fields': ('question_with_option',)
         }),
-        ('Ответы', {
+        ('Ответ', {
             'fields': ('answer', )
         }),
     )
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(AnswersCounting, AnswersCountingAdmin)
