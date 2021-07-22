@@ -57,45 +57,6 @@ export const USER_NAME = gql`
   }
 `;
 
-//Общая мутация, которая используется при:
-//Создании целей у пользователя при регистрации;
-//Изменении целей в кабинете пользователя;
-export const UPDATE_USER_AIMS = gql`
-  mutation (
-    $partnerType: String!
-    $purposeMeet: String!
-    $numberFotoHistoryByFelling: Int!
-    $userId: ID!
-  ) {
-    updateAimsForUser(
-      aimsData: {
-        partnerType: $partnerType
-        purposeMeet: $purposeMeet
-        numberFotoHistoryByFelling: $numberFotoHistoryByFelling
-        userId: $userId
-      }
-    ) {
-      user {
-        partnerType
-        purposeMeet
-        numberFotoHistoryByFelling
-      }
-    }
-  }
-`;
-
-//Изменение статуса просмотра on-boarding
-export const UPDATE_WATCH_ON_BOARDING = gql`
-  mutation ($userId: ID!, $watchOnBoarding: Boolean!) {
-    updateWatchOnBoarding(userId: $userId, watchOnBoarding: $watchOnBoarding) {
-      user {
-        id
-        watchOnBoarding
-      }
-    }
-  }
-`;
-
 // Статус просмотра on-boarding
 export const WATCH_ON_BOARDING = gql`
   query ($userId: ID!) {

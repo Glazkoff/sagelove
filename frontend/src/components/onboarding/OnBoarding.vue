@@ -52,10 +52,8 @@
 </template>
 
 <script>
-import {
-  WATCH_ON_BOARDING,
-  UPDATE_WATCH_ON_BOARDING
-} from "../../graphql/user_queries.js";
+import { WATCH_ON_BOARDING } from "../../graphql/user_queries.js";
+import { UPDATE_WATCH_ON_BOARDING } from "../../graphql/user_mutation.js";
 export default {
   name: "OnBoarding",
   apollo: {

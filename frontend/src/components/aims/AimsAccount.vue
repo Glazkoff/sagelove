@@ -175,7 +175,8 @@
 
 <script>
 import AppLoader from "@/components/global/AppLoader.vue";
-import { USER_AIMS, UPDATE_USER_AIMS } from "@/graphql/user_queries";
+import { USER_AIMS } from "@/graphql/user_queries";
+import { UPDATE_USER_AIMS } from "@/graphql/user_mutation";
 export default {
   name: "AimsAccount",
   components: { AppLoader },

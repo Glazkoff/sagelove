@@ -119,7 +119,7 @@
 
 <script>
 import AppLoader from "@/components/global/AppLoader.vue";
-import { UPDATE_USER_AIMS } from "@/graphql/user_queries";
+import { UPDATE_USER_AIMS } from "@/graphql/user_mutation";
 export default {
   name: "AimsSignUp",
   components: { AppLoader },
