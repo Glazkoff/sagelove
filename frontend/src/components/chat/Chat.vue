@@ -1,5 +1,5 @@
 <template>
-  <div>Chat</div>
+  <div>Здесь будут чаты пользователя</div>
 </template>
 
 <script>
