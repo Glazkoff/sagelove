@@ -1,36 +1,33 @@
 <template>
   <div>
     <v-carousel height="37.5rem" class="rounded-lg my-4" show-arrows-on-hover>
-      <v-carousel-item
+      <template v-slot:prev="{ on, attrs }">
+        <img
+          src="../../assets/img/arrow.svg"
+          alt="arrow-left"
+          v-bind="attrs"
+          v-on="on"
+          width="35"
+          class="rotate-arrow mx-5"
+        />
+      </template>
+      <template v-slot:next="{ on, attrs }">
+        <!-- <router-link to="/aims"
+          ><img src="../../assets/img/arrow.svg" alt="arrow-right" width="35"
+        /></router-link> -->
+        <img
+          src="../../assets/img/arrow.svg"
+          alt="arrow-right"
+          v-bind="attrs"
+          v-on="on"
+          width="35"
+          class="mx-5"
+        /> </template
+      ><v-carousel-item
         v-for="(slide, i) in slides"
         :key="i"
         class="my-carousel"
       >
-        <template v-slot:prev="{ on, attrs }">
-          <img
-            src="../../assets/img/arrow.svg"
-            alt="arrow-left"
-            v-bind="attrs"
-            v-on="on"
-            width="35"
-            class="rotate-arrow mx-5"
-          />
-        </template>
-        <template v-slot:next="{ on, attrs }">
-          <router-link to="/aims" v-if="slides.indexOf(slide[i]) == 4"
-            ><img src="../../assets/img/arrow.svg" alt="arrow-right" width="35"
-          /></router-link>
-          <img
-            v-else
-            src="../../assets/img/arrow.svg"
-            alt="arrow-right"
-            v-bind="attrs"
-            v-on="on"
-            width="35"
-            class="mx-5"
-          />
-        </template>
-
         <div class="position-cross mr-3">
           <img
             src="../../assets/img/cross.svg"
@@ -66,15 +63,17 @@ export default {
   },
   watch: {
     user: function (val) {
-      let route = "";
-      switch (val.watchOnBoarding) {
-        case true:
-        default:
-          route = { name: "TestStatus" };
-          break;
-        case false:
-          route = "";
-          break;
+      if (val != undefined) {
+        let route = "";
+        switch (val.watchOnBoarding) {
+          case true:
+          default:
+            route = { name: "TestStatus" };
+            break;
+          case false:
+            route = "";
+            break;
+        }
       }
       if (
         this.$route.path != route &&
