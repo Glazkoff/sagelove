@@ -1,4 +1,4 @@
-from .models import AnswersCounting, UserScaleAnswer, UserOptionAnswer
+from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer
 from graphene_django.types import DjangoObjectType
 
 
@@ -17,4 +17,10 @@ class UserScaleAnswerType(DjangoObjectType):
 class UserOptionAnswerType(DjangoObjectType):
     class Meta:
         model = UserOptionAnswer
+        fields = "__all__"
+
+
+class MatchType(DjangoObjectType):
+    class Meta:
+        model = Datings
         fields = "__all__"

@@ -56,7 +56,7 @@ class DatingsAdmin(admin.ModelAdmin):
     search_fields = ('user_1__first_name', 'user_2__first_name',)
     fieldsets = (
         (None, {
-            'fields': ('user_1', 'user_2', 'algorithm',)
+            'fields': ('user_1', 'user_2', 'algorithm', 'blocked')
         }),
     )
 

@@ -1,12 +1,13 @@
+from .types import UserScaleAnswerType, UserOptionAnswerType, AnswersCountingType, MatchType
+from .mutations import CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, FinishUserTesting, BlockUserMatchMutation
+from django.db.models import Q
 import graphene
-from .models import AnswersCounting, UserScaleAnswer, UserOptionAnswer
+
+from .models import AnswersCounting, UserScaleAnswer, UserOptionAnswer, Datings
 from questions.models import GroupQuestion, QuestionWithScale, QuestionWithOption
 from questions.types import GroupQuestionType
 from users.models import CustomUser
-from .types import AnswersCountingType, UserScaleAnswerType, UserOptionAnswerType
-from .mutations import CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, FinishUserTesting
 from django.db.models import Max
-
 
 class Query(graphene.ObjectType):
     user_group_scale_answers = graphene.List(
@@ -14,6 +15,9 @@ class Query(graphene.ObjectType):
     user_group_option_answers = graphene.List(
         UserOptionAnswerType, user_id=graphene.ID(), group_id=graphene.ID())
     user_last_group = graphene.Field(GroupQuestionType, user_id=graphene.ID())
+    matches = graphene.List(MatchType)
+    match = graphene.Field(MatchType, match_id=graphene.ID())
+    match_for_user = graphene.List(MatchType, user_id=graphene.ID())
 
     def resolve_user_group_scale_answers(self, info, user_id, group_id):
         try:
@@ -54,11 +58,21 @@ class Query(graphene.ObjectType):
         except (CustomUser.DoesNotExist):
             return None
 
+    def resolve_matches(self, info, **kwargs):
+        return Datings.objects.all()
+
+    def resolve_match(self, info, match_id):
+        return Datings.objects.get(pk=match_id)
+
+    def resolve_match_for_user(self, info, user_id):
+        return Datings.objects.all().filter((Q(user_1=user_id) | Q(user_2=user_id)) & Q(blocked=False))
+
 
 class Mutation(graphene.ObjectType):
     create_user_scale_answer = CreateUserScaleAnswerMutation.Field()
     create_user_option_answer = CreateUserOptionAnswerMutation.Field()
     finish_user_testing = FinishUserTesting.Field()
+    block_user_match = BlockUserMatchMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

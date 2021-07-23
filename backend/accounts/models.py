@@ -104,6 +104,8 @@ class Datings(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='datingsseconduser', verbose_name="Пользователь 2")
     algorithm = models.CharField(
         verbose_name="Алгоритм", max_length=120, choices=ALGORITHM_SELECTION, null=True, blank=True)
+    blocked = models.BooleanField("Совпадение было заблокировано пользователем", default=False)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

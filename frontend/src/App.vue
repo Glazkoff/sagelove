@@ -118,6 +118,10 @@ export default {
 $body-font-family: "OpenSans";
 $title-font: "YesevaOne";
 
+div.h-100 {
+  height: 100% !important;
+}
+
 .v-application {
   font-family: $body-font-family, sans-serif !important;
   h1.title,

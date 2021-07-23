@@ -107,7 +107,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="pb-10">
+      <v-container class="h-100">
         <router-view></router-view>
       </v-container>
     </v-main>

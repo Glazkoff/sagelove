@@ -1,9 +1,9 @@
 import graphene
-from .models import AnswersCounting, UserScaleAnswer, UserOptionAnswer
+from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer
 from questions.models import QuestionWithScale, QuestionWithOption, AnswerScale, AnswerOption
 from users.models import CustomUser
-from .types import AnswersCountingType, UserScaleAnswerType, UserOptionAnswerType
-
+from .types import AnswersCountingType, MatchType, UserScaleAnswerType, UserOptionAnswerType
+from django.db.models import Q
 
 class CreateUserOptionAnswerMutation(graphene.Mutation):
     class Arguments:
@@ -80,3 +80,22 @@ class FinishUserTesting(graphene.Mutation):
             return FinishUserTesting(status_ok=True)
         except (CustomUser.DoesNotExist, ):
             return FinishUserTesting(status_ok=False)
+            
+# Заблокировать метч
+class BlockUserMatchMutation(graphene.Mutation):
+    class Arguments:
+        user_1 = graphene.ID(required=True)
+        user_2 = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, user_1, user_2):
+        match = Datings.objects.all().filter((Q(user_1=user_1) & Q(user_2=user_2)) | (Q(user_1=user_2) & Q(user_2=user_1)))
+        print(match)
+        for element in match:
+            element.blocked = True
+            element.save()
+
+        return cls(ok=True)
+

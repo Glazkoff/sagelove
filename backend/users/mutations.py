@@ -24,9 +24,40 @@ class UpdateUserTestStatusMutation(graphene.Mutation):
         except (CustomUser.DoesNotExist,):
             return UpdateUserTestStatusMutation(user=None)
 
+# Обновление результатов по тесту и сведений об оплате
+class UpdateUserTestResultDemoMutation(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        test_result_demo = graphene.String(required=True)
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, test_result_demo):
+        user = CustomUser.objects.get(pk=user_id)
+        user.test_result_demo = test_result_demo
+        user.save()
+
+        return UpdateUserTestResultDemoMutation(user=user)
+
+#  Обновление статуса просмотра поздравления о прохождении тестировании пользователем
+class UpdateUserCongratulationStatusMutation(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        congratulations_after_test = graphene.Boolean(required=True)
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, congratulations_after_test):
+        user = CustomUser.objects.get(pk=user_id)
+        user.congratulations_after_test = congratulations_after_test
+        user.save()
+
+        return UpdateUserCongratulationStatusMutation(user=user)
+
+
 # Мутация изменения поля "О себе" пользователя
-
-
 class UpdateUserInformation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
