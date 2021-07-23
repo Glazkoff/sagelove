@@ -47,3 +47,15 @@ export const UPDATE_USER_AIMS = gql`
     }
   }
 `;
+
+// Обновление статуса прохождения теста пользователем
+export const UPDATE_USER_TEST_STATUS = gql`
+  mutation ($testStatus: String!, $userId: ID!) {
+    updateUserTestStatus(testStatus: $testStatus, userId: $userId) {
+      user {
+        id
+        testStatus
+      }
+    }
+  }
+`;

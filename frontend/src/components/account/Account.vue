@@ -231,7 +231,7 @@
 import AppLoader from "@/components/global/AppLoader.vue";
 import { required, minLength } from "vuelidate/lib/validators";
 import { USER_INFORMATION } from "@/graphql/user_queries";
-import { EDIT_ABOUT_ME } from "@/graphql/user_mutation";
+import { EDIT_ABOUT_ME } from "@/graphql/user_mutations";
 export default {
   name: "Account",
   components: {

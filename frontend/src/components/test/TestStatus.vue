@@ -48,10 +48,8 @@
 </template>
 
 <script>
-import {
-  USER_TEST_STATUS,
-  UPDATE_USER_TEST_STATUS
-} from "@/graphql/user_queries";
+import { USER_TEST_STATUS } from "@/graphql/user_queries";
+import { UPDATE_USER_TEST_STATUS } from "@/graphql/user_mutations";
 import {
   QUESTION_GROUP_COUNT,
   USER_LAST_GROUP
