@@ -1,6 +1,8 @@
 <template>
   <v-layout>
-    <v-flex>
+    <AppLoader v-if="this.$apollo.queries.user.loading"></AppLoader>
+
+    <v-flex v-if="!this.$apollo.queries.user.loading">
       <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10 text-center">Знакомства</h1>
       <v-row>
         <v-col>
@@ -25,21 +27,21 @@
                 @click="dialog = true"
                 >Заблокировать</a
               >
-              <h2 class="title darkBlue--text mb-5">{{ person.user_name }}</h2>
+              <h2 class="title darkBlue--text mb-5">{{ user.firstName }}</h2>
             </div>
             <v-row>
               <v-col class="col-4">
                 <p class="mb-0">Дата рождения:</p>
               </v-col>
               <v-col class="col-8">
-                <p class="mb-0">{{ formatDate(person.user_birthday) }}</p>
+                <p class="mb-0">{{ formatDate(user.dateOfBirth) }}</p>
               </v-col>
               <v-col class="col-4">
                 <p class="mb-0">О себе:</p>
               </v-col>
               <v-col class="col-8">
                 <p class="mb-0">
-                  {{ person.personal_information }}
+                  {{ user.aboutMe }}
                 </p>
               </v-col>
             </v-row>
@@ -58,7 +60,11 @@
       </v-row>
     </v-flex>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+      v-if="!this.$apollo.queries.user.loading"
+    >
       <v-card>
         <v-card-title class="lightBlue pa-4 pr-12 custom-relative">
           <h4>Заблокировать пользователя</h4>
@@ -73,7 +79,7 @@
         <v-card-text class="pa-4">
           <p class="mb-0">
             Вы уверены, что хотите заблокировать пользователя
-            {{ person.user_name }}?
+            {{ user.firstName }}?
           </p>
         </v-card-text>
 
@@ -82,8 +88,7 @@
             color="colorOfSea"
             class="my-button wide-padding white--text"
             large
-            @click="dialog = false"
-            :to="{ name: 'DatingsStatus' }"
+            @click="onBlock()"
             >Заблокировать</v-btn
           >
         </v-card-actions>
@@ -93,22 +98,46 @@
 </template>
 
 <script>
+import AppLoader from "@/components/global/AppLoader.vue";
+
+import { BLOCK_USER_MATCH } from "@/graphql/accounts_mutations.js";
+import { USER_INFORMATION } from "@/graphql/user_queries";
 export default {
-  name: "DatingsPerson",
+  name: "Datingsuser",
+  components: {
+    AppLoader
+  },
+  apollo: {
+    user: {
+      query: USER_INFORMATION,
+      variables() {
+        return { userId: this.$route.params.id };
+      }
+    }
+  },
   data() {
     return {
-      dialog: false,
-      person: {
-        id: 1,
-        user_name: "Иван",
-        user_birthday: "1987-06-15",
-        url_foto: "",
-        personal_information:
-          "Текст о себе, текст о себе. Текст о себе, текст о себе.Текст о себе, текст о себе."
-      }
+      dialog: false
     };
   },
   methods: {
+    onBlock() {
+      this.$apollo
+        .mutate({
+          mutation: BLOCK_USER_MATCH,
+          variables: {
+            user2: this.$route.params.id,
+            user1: this.$store.getters.decoded.user_id
+          }
+        })
+        .then(() => {
+          this.dialog = false;
+          this.$router.push({ name: "DatingsStatus" });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     formatDate(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");

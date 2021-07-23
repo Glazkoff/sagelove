@@ -1,26 +1,48 @@
 <template>
-  <v-layout align-center="align-center" justify-center="justify-center">
-    <v-flex class="text-center width-window">
-      <h1 v-if="!isPaid" class="title mb-5 mt-5 mb-sm-10 mt-sm-10">
+  <v-layout class="d-flex justify-center align-center h-100">
+    <AppLoader
+      v-if="
+        this.$apollo.queries.user.loading ||
+        this.$apollo.queries.matchForUser.loading
+      "
+    ></AppLoader>
+
+    <v-flex
+      v-if="
+        !this.$apollo.queries.user.loading &&
+        !this.$apollo.queries.matchForUser.loading
+      "
+      class="text-center width-window pt-5 pt-sm-10 pb-5 pb-sm-10"
+    >
+      <h1
+        v-if="
+          (!isPaid && !wasFound && !wasCongratulated) || (!isPaid && wasFound)
+        "
+        class="title mb-5 mb-sm-10"
+      >
         Поздравляем!
       </h1>
-      <h1 v-if="isPaid" class="title mb-5 mt-5 mb-sm-10 mt-sm-10">
-        Знакомства
-      </h1>
-      <p v-if="!isPaid && !wasFound">
+      <h1 v-if="isPaid" class="title mb-5 mb-sm-10">Знакомства</h1>
+      <p v-if="!isPaid && !wasFound && !wasCongratulated">
         {{ textResultTest }}
       </p>
-      <p v-if="!isPaid && !wasFound">
-        Дайте нам немного времени и как только наш умный алгоритм просчитает
-        совпадение, мы Вас проинформируем. Обычно на это уходит не более 6 часов
+      <p v-if="!isPaid && !wasFound && !wasCongratulated">
+        Дайте нам немного времени, и, как только наш умный алгоритм просчитает
+        совпадение, мы вас проинформируем. Обычно на это уходит не более 6 часов
       </p>
 
       <v-row
         class="custom-relative"
-        v-if="!isPaid || (isPaid && persons.length == 0)"
+        v-if="
+          !isPaid || (isPaid && personsArr.length == 0) || (isPaid && !wasFound)
+        "
       >
         <h2
-          v-if="(!isPaid && !wasFound) || (isPaid && persons.length == 0)"
+          v-if="
+            (!isPaid && !wasFound) ||
+            (isPaid && personsArr.length == 0) ||
+            (isPaid && !wasFound)
+          "
           z-index="11"
           class="
             title
@@ -32,7 +54,7 @@
             align-center
           "
         >
-          Совсем скоро мы найдем для вас интересных людей
+          Совсем скоро мы найдем для вас интересных людей!
         </h2>
         <div
           z-index="10"
@@ -41,15 +63,15 @@
         >
           <p class="text-center ml-5 mr-5 ml-sm-12 mr-sm-12">
             Мы нашли варианты интересных людей, которые полностью совпадают с
-            твоими критериями поиска, если ты хочешь с ними познакомиться и
-            выбрать с кем будешь общаться, внеси клубный взнос в размере
-            10000руб
+            вашими критериями поиска, если вы хотите с ними познакомиться и
+            выбрать с кем будете общаться, внесите клубный взнос в размере 10
+            000 рублей.
           </p>
           <v-btn
             color="colorOfSea my-button wide-padding"
             dark
             large
-            @click="isPaid = true"
+            @click="onPay()"
             >Оплатить</v-btn
           >
         </div>
@@ -78,7 +100,7 @@
       <!-- Если оплачено, то показываются профили -->
       <v-row v-if="isPaid && wasFound">
         <v-col
-          v-for="person in persons"
+          v-for="person in personsArr"
           :key="person.id"
           class="
             col-12 col-sm-6
@@ -101,10 +123,10 @@
               <router-link
                 :to="{ name: 'DatingsPerson', params: { id: person.id } }"
                 class="link"
-                >{{ person.user_name }}</router-link
+                >{{ person.firstName }}</router-link
               >
             </p>
-            <p class="mb-1">{{ countAge(person.user_birthday) }}</p>
+            <p class="mb-1">{{ countAge(person.dateOfBirth) }}</p>
             <v-btn color="colorOfSea my-button" dark large>Написать</v-btn>
           </div>
         </v-col>
@@ -114,69 +136,126 @@
 </template>
 
 <script>
+import AppLoader from "@/components/global/AppLoader.vue";
+
+import { USER_AFTER_TEST_STATUS } from "@/graphql/user_queries.js";
+import {
+  UPDATE_USER_CONGRATULATIONS_STATUS,
+  UPDATE_USER_TEST_RESULT_DEMO
+} from "@/graphql/user_mutation.js";
+import { MATCHES_FOR_USER } from "@/graphql/accounts_queries.js";
 export default {
   name: "DatingsStatus",
+  components: {
+    AppLoader
+  },
+  apollo: {
+    user: {
+      query: USER_AFTER_TEST_STATUS,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
+      }
+    },
+    matchForUser: {
+      query: MATCHES_FOR_USER,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
+      }
+    }
+  },
+  watch: {
+    user: function (val) {
+      if (val.congratulationsAfterTest && !this.wasCongratulatedUpdated) {
+        this.wasCongratulated = true;
+      } else {
+        this.wasCongratulatedUpdated = true;
+        this.$apollo
+          .mutate({
+            mutation: UPDATE_USER_CONGRATULATIONS_STATUS,
+            variables: {
+              congratulationsAfterTest: true,
+              userId: this.$store.getters.decoded.user_id
+            }
+          })
+          .then(() => {})
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      switch (val.testResultDemo) {
+        case "NFNP":
+        default:
+          this.wasFound = false;
+          this.isPaid = false;
+          break;
+        case "FNP":
+          this.wasFound = true;
+          this.isPaid = false;
+          break;
+        case "NFP":
+          this.wasFound = false;
+          this.isPaid = true;
+          break;
+        case "FP":
+          this.wasFound = true;
+          this.isPaid = true;
+          break;
+      }
+    }
+    // matchForUser: function (val) {}
+  },
   data() {
     return {
+      wasCongratulated: false,
+      wasCongratulatedUpdated: false,
       isPaid: false,
       wasFound: false,
-      persons: [
-        { id: 1, user_name: "Иван", user_birthday: "1987-06-15", url_foto: "" },
-        {
-          id: 2,
-          user_name: "Кирилл",
-          user_birthday: "1995-03-13",
-          url_foto: ""
-        },
-        {
-          id: 3,
-          user_name: "Григорий",
-          user_birthday: "1997-08-17",
-          url_foto: ""
-        },
-        { id: 4, user_name: "Егор", user_birthday: "2000-12-01", url_foto: "" },
-        {
-          id: 5,
-          user_name: "Никита",
-          user_birthday: "1969-02-05",
-          url_foto: ""
-        },
-        {
-          id: 6,
-          user_name: "Антон",
-          user_birthday: "1991-06-25",
-          url_foto: ""
-        },
-        {
-          id: 7,
-          user_name: "Евгений",
-          user_birthday: "1984-04-29",
-          url_foto: ""
-        },
-        {
-          id: 8,
-          user_name: "Александр",
-          user_birthday: "1995-05-05",
-          url_foto: ""
-        },
-        {
-          id: 9,
-          user_name: "Василий",
-          user_birthday: "2001-09-16",
-          url_foto: ""
-        }
-      ],
       textResultTest:
         "Вы смелы и решительны. Вы можете принимать решения в зависимости от ситуации: то завоевать весь мир, то бросить все дела и переключить внимание на что-то очень важное. Вы не боятесь общественного мнения, у Вас есть свое мнение на любой счет."
     };
   },
+  computed: {
+    personsArr() {
+      if (this.matchForUser != undefined || this.matchForUser != null) {
+        let arr = [];
+        this.matchForUser.forEach(el => {
+          if (
+            el.user1.id == this.$store.getters.decoded.user_id &&
+            el.user2.id != this.$store.getters.decoded.user_id
+          )
+            arr.push(el.user2);
+          if (
+            el.user1.id != this.$store.getters.decoded.user_id &&
+            el.user2.id == this.$store.getters.decoded.user_id
+          )
+            arr.push(el.user1);
+        });
+        return arr;
+      } else return [];
+    }
+  },
   methods: {
+    onPay() {
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_USER_TEST_RESULT_DEMO,
+          variables: {
+            testResultDemo: "FP",
+            userId: this.$store.getters.decoded.user_id
+          }
+        })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
+        });
+    },
     onRouteToPerson(id) {
       this.$router.push({ name: "DatingsPerson", params: { id: id } });
     },
     countAge(dateString) {
       var today = new Date();
       var birthDate = new Date(dateString);
+      console.log(dateString);
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {

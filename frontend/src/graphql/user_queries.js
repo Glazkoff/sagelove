@@ -9,6 +9,18 @@ export const USER_TEST_STATUS = gql`
   }
 `;
 
+// Статус просмотра поздравления о прохождении тестировании пользователем и
+// информация о результатах тестов и об оплате
+export const USER_AFTER_TEST_STATUS = gql`
+  query ($userId: ID!) {
+    user(userId: $userId) {
+      id
+      congratulationsAfterTest
+      testResultDemo
+    }
+  }
+`;
+
 export const UPDATE_USER_TEST_STATUS = gql`
   mutation ($testStatus: String!, $userId: ID!) {
     updateUserTestStatus(testStatus: $testStatus, userId: $userId) {

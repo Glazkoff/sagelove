@@ -4,7 +4,7 @@ import users.schema
 import accounts.schema
 
 
-class Query(questions.schema.Query, users.schema.Query, graphene.ObjectType):
+class Query(accounts.schema.Query, questions.schema.Query, users.schema.Query, graphene.ObjectType):
     hello = graphene.String(default_value="Hi!")
 
 

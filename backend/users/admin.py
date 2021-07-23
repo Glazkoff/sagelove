@@ -63,7 +63,7 @@ class UserAdmin(BaseUserAdmin):
          'fields': ('partner_type', 'purpose_meet', 'number_foto_history_by_felling',)}),
         ('Права доступа', {'fields': ('is_admin',
          'is_active', 'groups', 'is_superuser')}),
-        ('Прохождение теста', {'fields': ('test_status',)})
+        ('Прохождение теста', {'fields': ('test_status', 'test_result_demo', 'congratulations_after_test')})
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.

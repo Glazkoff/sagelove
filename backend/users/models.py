@@ -73,6 +73,12 @@ TEST_STATUS_SELECTION = [
     ('finish', 'Тестирование завершено'),
 ]
 
+TEST_RESULT_DEMONSTRATION = [
+    ('NFNP', 'Не найдены, пользователь не оплатил'),
+    ('NFP', 'Не найдены, пользователь оплатил'),
+    ('FNP', 'Найдены, пользователь не оплатил'),
+    ('FP', 'Найдены, пользователь оплатил'),
+]
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """Данные пользователей"""
@@ -107,7 +113,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name="Номер фото истории по ощущениям", null=True, blank=True)
     test_status = models.CharField(
         "Статус прохождения теста", choices=TEST_STATUS_SELECTION, default="start", max_length=10)
-
+    congratulations_after_test = models.BooleanField("Был показан экрана поздравления после прохождения теста", default=False)
+    test_result_demo = models.CharField(
+        "Демонстрация результатов прохождения теста", choices=TEST_RESULT_DEMONSTRATION, default="NFNP", max_length=4)
+    
+    
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
