@@ -20,7 +20,8 @@ class AnswerOptionInline(admin.StackedInline):
 class GroupQuestionAdmin(admin.ModelAdmin):
     """Группа вопросов"""
     exclude = ('createdAt', 'updatedAt')
-    # list_display=('',)
+    list_display = ('order', 'name_group_question',)
+    list_display_links = ('order', 'name_group_question',)
     # list_filter = ('')
     search_fields = ('name_group_question',)
     fieldsets = (

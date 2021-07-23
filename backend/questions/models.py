@@ -6,11 +6,22 @@ from django.db import models
 class GroupQuestion(models.Model):
     """Группа вопросов"""
     name_group_question = models.CharField("Название группы", max_length=200)
+    order = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name_group_question}"
+
+    def order(self):
+        groups = GroupQuestion.objects.all()
+        order = 0
+        for group in groups:
+            order += 1
+            if group.id == self.id:
+                break
+        return order
+    order.short_description = "Порядок"
 
     class Meta:
         verbose_name = "Группа вопросов"

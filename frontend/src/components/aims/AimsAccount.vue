@@ -132,7 +132,7 @@
                 <v-col
                   v-for="n in 9"
                   :key="n"
-                  class="d-flex child-flex col-history"
+                  class="d-flex child-flex col-history hover-eye"
                   cols="4"
                 >
                   <v-img
@@ -154,8 +154,31 @@
                         ></v-progress-circular>
                       </v-row>
                     </template>
+                    <v-btn
+                      color="colorOfSea"
+                      class="btn-dialog"
+                      @click="openDialog(n)"
+                      fab
+                      x-small
+                      dark
+                    >
+                      <v-icon>mdi-eye</v-icon>
+                    </v-btn>
                   </v-img>
-                </v-col> </v-row
+                </v-col>
+                <v-dialog v-model="dialog">
+                  <v-card>
+                    <img
+                      :src="
+                        require('../../assets/img/history/' +
+                          isNumberFoto +
+                          '.jpg')
+                      "
+                      alt="history"
+                      class="width-dialog-image"
+                    />
+                  </v-card>
+                </v-dialog> </v-row
             ></v-col>
           </v-row>
           <v-btn
@@ -192,7 +215,9 @@ export default {
       isEdit: false,
       isBlueBorder: undefined,
       partner: null,
-      wish: null
+      wish: null,
+      dialog: false,
+      isNumberFoto: 1
     };
   },
   methods: {
@@ -244,6 +269,10 @@ export default {
           console.log(err);
         });
       this.isEdit = false;
+    },
+    openDialog(n) {
+      this.dialog = true;
+      this.isNumberFoto = n;
     }
   }
 };
@@ -272,6 +301,24 @@ export default {
 }
 .col .col-history {
   padding: 0.5rem !important;
+}
+.btn-dialog {
+  margin: 0 auto;
+  opacity: 0 !important;
+  position: absolute !important;
+  transition: opacity 0.3s !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.hover-eye:hover .btn-dialog {
+  opacity: 1 !important;
+  transition: opacity 0.3s !important;
+}
+.width-dialog-image {
+  max-height: 35rem !important;
+  max-width: 35rem !important;
 }
 @media (max-width: 600px) {
   .direction-block {

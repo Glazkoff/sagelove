@@ -1,6 +1,7 @@
 import graphene
 from .models import CustomUser
 from .types import CustomUserType
+from accounts.models import UserScaleAnswer, UserOptionAnswer
 
 
 class UpdateUserTestStatusMutation(graphene.Mutation):
@@ -12,12 +13,16 @@ class UpdateUserTestStatusMutation(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, user_id, test_status):
-        user = CustomUser.objects.get(pk=user_id)
-        # TODO: проверять есть ли ответы уже и стирать их при смене на start
-        user.test_status = test_status
-        user.save()
-
-        return UpdateUserTestStatusMutation(user=user)
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+            user.test_status = test_status
+            if test_status == 'start':
+                UserScaleAnswer.objects.filter(user=user).delete()
+                UserOptionAnswer.objects.filter(user=user).delete()
+            user.save()
+            return UpdateUserTestStatusMutation(user=user)
+        except (CustomUser.DoesNotExist,):
+            return UpdateUserTestStatusMutation(user=None)
 
 # Мутация изменения поля "О себе" пользователя
 

@@ -6,8 +6,8 @@
       </h1>
       <br />
       <p class="text-center mt-5 mb-5">
-        Это всего {{ full_question_count }} вопроса, если Вы остановитесь и
-        захотите продолжить чуть позже -<br />просто нажимите кнопку "продолжу
+        Это всего {{ questionGroupsCount }} групп вопросов, если Вы остановитесь
+        и захотите продолжить чуть позже -<br />просто нажимите кнопку "продолжу
         чуть позже"
       </p>
       <br />
@@ -23,8 +23,8 @@
       </h1>
       <br />
       <p class="text-center mt-5 mb-5">
-        Вы остановились на вопросе {{ last_question }} из
-        {{ full_question_count }}
+        Вы остановились на группе вопросов {{ userLastGroup.orderNumber }} из
+        {{ questionGroupsCount }}
       </p>
       <br />
       <div class="text-center">
@@ -52,7 +52,10 @@ import {
   USER_TEST_STATUS,
   UPDATE_USER_TEST_STATUS
 } from "@/graphql/user_queries";
-
+import {
+  QUESTION_GROUP_COUNT,
+  USER_LAST_GROUP
+} from "@/graphql/questions_queries";
 const START_STATUS = "START";
 const IN_PROGRESS_STATUS = "INPROGRESS";
 
@@ -64,13 +67,21 @@ export default {
       variables() {
         return { userId: this.$store.getters.decoded.user_id };
       }
+    },
+    questionGroupsCount: {
+      query: QUESTION_GROUP_COUNT
+    },
+    userLastGroup: {
+      query: USER_LAST_GROUP,
+      variables() {
+        return { userId: this.$store.getters.decoded.user_id };
+      }
     }
   },
   data() {
     return {
       status: START_STATUS,
-      last_question: 1,
-      full_question_count: 64
+      last_question_group: 1
     };
   },
   watch: {
@@ -106,7 +117,7 @@ export default {
         })
         .then(() => {
           // TODO: find last question group
-          let last = `/question/${1}`;
+          let last = `/question/${this.userLastGroup.id}`;
           this.$router.push(last);
         })
         .catch(err => {
@@ -115,7 +126,7 @@ export default {
     },
     onTestContinue() {
       // TODO: найти последний вопрос
-      this.$router.push(`/question/${1}`);
+      this.$router.push(`/question/${this.userLastGroup.id}`);
     },
     onTestReset() {
       this.$apollo

@@ -60,3 +60,13 @@ export const USER_GROUP_OPTION_ANSWERS = gql`
     }
   }
 `;
+
+export const USER_LAST_GROUP = gql`
+  query ($userId: ID!) {
+    userLastGroup(userId: $userId) {
+      id
+      nextGroupId
+      orderNumber
+    }
+  }
+`;
