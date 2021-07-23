@@ -63,8 +63,8 @@ export default {
   },
   watch: {
     user: function (val) {
+      let route = "";
       if (val != undefined) {
-        let route = "";
         switch (val.watchOnBoarding) {
           case true:
           default:
@@ -74,12 +74,12 @@ export default {
             route = "";
             break;
         }
-      }
-      if (
-        this.$route.path != route &&
-        this.$route.path.substring(0, this.$route.path.length - 1) != route
-      ) {
-        this.$router.push(route);
+        if (
+          this.$route.path != route &&
+          this.$route.path.substring(0, this.$route.path.length - 1) != route
+        ) {
+          this.$router.push(route);
+        }
       }
     }
   },
