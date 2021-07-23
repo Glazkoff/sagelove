@@ -107,7 +107,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name="Номер фото истории по ощущениям", null=True, blank=True)
     test_status = models.CharField(
         "Статус прохождения теста", choices=TEST_STATUS_SELECTION, default="start", max_length=10)
-
+    watch_on_boarding = models.BooleanField(
+        "Статус просмотра on-boarding", default=False)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
