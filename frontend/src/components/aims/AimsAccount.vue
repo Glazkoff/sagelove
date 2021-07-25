@@ -242,8 +242,7 @@ export default {
             numberFotoHistoryByFelling: n,
             userId: this.$store.getters.decoded.user_id
           },
-          update: (cache, { data: { updateAimsForUser } }) => {
-            console.log("updateAimsForUser ", updateAimsForUser);
+          update: cache => {
             let data = cache.readQuery({
               query: USER_AIMS,
               variables: {
