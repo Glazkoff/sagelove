@@ -34,6 +34,8 @@
       no-title
       @input="menu = false"
       color="colorOfSea"
+      :max="max"
+      :min="min"
     ></v-date-picker>
   </v-menu>
 </template>
@@ -42,7 +44,7 @@
 import { required } from "vuelidate/lib/validators";
 export default {
   name: "DatePicker",
-  props: ["label", "value", "autocomplete"],
+  props: ["label", "value", "autocomplete", "max", "min"],
   validations: {
     dateFormatted: {
       required
