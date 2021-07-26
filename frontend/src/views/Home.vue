@@ -1,7 +1,9 @@
 <template>
   <v-app>
-    <AppLoader v-if="this.$apollo.queries.user.loading"></AppLoader>
-    <v-app-bar v-if="!this.$apollo.queries.user.loading" app color="lightBlue">
+    <AppLoader
+      v-if="this.$apollo.queries.user.loading || user == undefined"
+    ></AppLoader>
+    <v-app-bar v-if="user != undefined" app color="lightBlue">
       <v-container class="py-0 fill-height">
         <v-app-bar-nav-icon
           color="colorOfSea"
@@ -18,6 +20,7 @@
         <v-spacer class="d-none d-md-flex"></v-spacer>
         <div id="nav" class="d-none d-md-flex flex-row align-center">
           <router-link
+            v-if="user != undefined && user.watchOnBoarding"
             :exact="true"
             to="/test"
             tag="p"
@@ -25,6 +28,7 @@
             >Тестирование</router-link
           >
           <router-link
+            v-if="user != undefined && user.testStatus == 'FINISH'"
             :exact="true"
             to="/datings"
             tag="p"
@@ -32,6 +36,7 @@
             >Знакомства</router-link
           >
           <router-link
+            v-if="user != undefined && user.testStatus == 'FINISH'"
             :exact="true"
             to="/chat"
             tag="p"
@@ -62,7 +67,7 @@
               </div>
             </template>
             <v-list>
-              <v-list-item>
+              <v-list-item v-if="user != undefined && user.watchOnBoarding">
                 <v-list-item-title>
                   <router-link
                     :exact="true"
@@ -73,7 +78,7 @@
                   ></v-list-item-title
                 >
               </v-list-item>
-              <v-list-item>
+              <v-list-item v-if="user != undefined && user.watchOnBoarding">
                 <v-list-item-title>
                   <router-link
                     :exact="true"
@@ -84,17 +89,7 @@
                   ></v-list-item-title
                 >
               </v-list-item>
-              <!-- <v-list-item>
-                <v-list-item-title>
-                  <router-link
-                    :exact="true"
-                    to="/aims"
-                    tag="p"
-                    class="mb-0 pointer"
-                    >Цели (регистрация)</router-link
-                  ></v-list-item-title
-                >
-              </v-list-item> -->
+
               <v-list-item>
                 <v-list-item-title>
                   <p class="mb-0 pointer" @click="dialog = true">Выйти</p>
@@ -119,7 +114,7 @@
             Здравствуйте, {{ user !== undefined ? user.firstName : "-" }}!
           </p>
 
-          <v-list-item>
+          <v-list-item v-if="user != undefined && user.watchOnBoarding">
             <v-list-item-title>
               <router-link :exact="true" to="/test" tag="p" class="mb-0 pointer"
                 >Тестирование</router-link
@@ -127,7 +122,7 @@
             >
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item v-if="user != undefined && user.testStatus == 'FINISH'">
             <v-list-item-title
               ><router-link
                 :exact="true"
@@ -139,7 +134,7 @@
             >
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item v-if="user != undefined && user.testStatus == 'FINISH'">
             <v-list-item-title
               ><router-link
                 :exact="true"
@@ -151,7 +146,7 @@
             >
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item v-if="user != undefined && user.watchOnBoarding">
             <v-list-item-title
               ><router-link
                 :exact="true"
@@ -163,7 +158,7 @@
             >
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item v-if="user != undefined && user.watchOnBoarding">
             <v-list-item-title
               ><router-link
                 :exact="true"
@@ -220,7 +215,7 @@
 </template>
 
 <script>
-import { USER_NAME } from "@/graphql/user_queries.js";
+import { USER_INFO_FOR_HEADER } from "@/graphql/user_queries.js";
 import AppLoader from "@/components/global/AppLoader.vue";
 
 export default {
@@ -230,7 +225,7 @@ export default {
   },
   apollo: {
     user: {
-      query: USER_NAME,
+      query: USER_INFO_FOR_HEADER,
       variables() {
         return { userId: this.$store.getters.decoded.user_id };
       }
