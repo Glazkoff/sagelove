@@ -153,13 +153,13 @@ export default {
     user: {
       query: USER_AFTER_TEST_STATUS,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     },
     matchForUser: {
       query: MATCHES_FOR_USER,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },
@@ -174,7 +174,7 @@ export default {
             mutation: UPDATE_USER_CONGRATULATIONS_STATUS,
             variables: {
               congratulationsAfterTest: true,
-              userId: this.$store.getters.decoded.user_id
+              userId: this.$store.getters.user_id
             }
           })
           .then(() => {})
@@ -220,13 +220,13 @@ export default {
         let arr = [];
         this.matchForUser.forEach(el => {
           if (
-            el.user1.id == this.$store.getters.decoded.user_id &&
-            el.user2.id != this.$store.getters.decoded.user_id
+            el.user1.id == this.$store.getters.user_id &&
+            el.user2.id != this.$store.getters.user_id
           )
             arr.push(el.user2);
           if (
-            el.user1.id != this.$store.getters.decoded.user_id &&
-            el.user2.id == this.$store.getters.decoded.user_id
+            el.user1.id != this.$store.getters.user_id &&
+            el.user2.id == this.$store.getters.user_id
           )
             arr.push(el.user1);
         });
@@ -241,7 +241,7 @@ export default {
           mutation: UPDATE_USER_TEST_RESULT_DEMO,
           variables: {
             testResultDemo: "FP",
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {})
