@@ -274,6 +274,18 @@ export default {
               this.formPasswordErrors.push(errors.password1[index]);
             }
           }
+          if (
+            errors.non_field_errors != null &&
+            errors.non_field_errors.length != 0
+          ) {
+            for (
+              let index = 0;
+              index < errors.non_field_errors.length;
+              index++
+            ) {
+              this.formPasswordErrors.push(errors.non_field_errors[index]);
+            }
+          }
         }
       );
     }
