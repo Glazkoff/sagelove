@@ -36,6 +36,15 @@ export default new Vuex.Store({
       } else {
         return null;
       }
+    },
+    user_id: state => {
+      const access_token = state.access_token;
+      if (access_token) {
+        const decoded = jwt_decode(access_token);
+        return decoded.user_id;
+      } else {
+        return null;
+      }
     }
   },
   mutations: {

@@ -207,7 +207,7 @@ export default {
     user: {
       query: USER_AIMS,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },
@@ -240,13 +240,13 @@ export default {
             partnerType: partner,
             purposeMeet: wish,
             numberFotoHistoryByFelling: n,
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           },
           update: cache => {
             let data = cache.readQuery({
               query: USER_AIMS,
               variables: {
-                userId: this.$store.getters.decoded.user_id
+                userId: this.$store.getters.user_id
               }
             });
             data.user.partnerType = this.partner;

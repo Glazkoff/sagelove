@@ -241,7 +241,7 @@ export default {
     user: {
       query: USER_INFORMATION,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },
@@ -352,18 +352,18 @@ export default {
             .mutate({
               mutation: EDIT_ABOUT_ME,
               variables: {
-                userId: this.$store.getters.decoded.user_id,
+                userId: this.$store.getters.user_id,
                 aboutMe: this.$v.form.aboutMe.$model
               },
               update: cache => {
                 let data = cache.readQuery({
                   query: USER_INFORMATION,
-                  variables: { userId: this.$store.getters.decoded.user_id }
+                  variables: { userId: this.$store.getters.user_id }
                 });
                 data.user.aboutMe = this.$v.form.aboutMe.$model;
                 cache.writeQuery({
                   query: USER_INFORMATION,
-                  variables: { userId: this.$store.getters.decoded.user_id },
+                  variables: { userId: this.$store.getters.user_id },
                   data
                 });
               },
@@ -371,7 +371,7 @@ export default {
                 __typename: "Mutation",
                 updateUserInformation: {
                   __typename: "CustomUserType",
-                  id: this.$store.getters.decoded.user_id,
+                  id: this.$store.getters.user_id,
                   firstName: this.user.firstName,
                   aboutMe: this.$v.form.aboutMe.$model,
                   dateOfBirth: this.user.dateOfBirth,
