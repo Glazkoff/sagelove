@@ -57,7 +57,7 @@ export default {
     user: {
       query: WATCH_ON_BOARDING,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },
@@ -90,7 +90,7 @@ export default {
           mutation: UPDATE_WATCH_ON_BOARDING,
           variables: {
             watchOnBoarding: true,
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {})

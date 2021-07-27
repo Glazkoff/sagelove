@@ -141,7 +141,7 @@ export default {
             partnerType: partner,
             purposeMeet: wish,
             numberFotoHistoryByFelling: n,
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {})

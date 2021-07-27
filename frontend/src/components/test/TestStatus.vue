@@ -63,7 +63,7 @@ export default {
     user: {
       query: USER_TEST_STATUS,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     },
     questionGroupsCount: {
@@ -72,7 +72,7 @@ export default {
     userLastGroup: {
       query: USER_LAST_GROUP,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },
@@ -110,7 +110,7 @@ export default {
           mutation: UPDATE_USER_TEST_STATUS,
           variables: {
             testStatus: "inprogress",
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {
@@ -132,7 +132,7 @@ export default {
           mutation: UPDATE_USER_TEST_STATUS,
           variables: {
             testStatus: "start",
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {

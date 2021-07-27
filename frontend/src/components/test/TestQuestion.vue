@@ -186,7 +186,7 @@ export default {
       variables() {
         return {
           groupId: this.groupId,
-          userId: this.$store.getters.decoded.user_id
+          userId: this.$store.getters.user_id
         };
       }
     },
@@ -195,7 +195,7 @@ export default {
       variables() {
         return {
           groupId: this.groupId,
-          userId: this.$store.getters.decoded.user_id
+          userId: this.$store.getters.user_id
         };
       }
     }
@@ -230,7 +230,7 @@ export default {
         .mutate({
           mutation: FINISH_USER_TESTING,
           variables: {
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(res => {
@@ -271,7 +271,7 @@ export default {
                     this.$apollo.mutate({
                       mutation: CREATE_USER_SCALE_ANSWER,
                       variables: {
-                        userId: this.$store.getters.decoded.user_id,
+                        userId: this.$store.getters.user_id,
                         questionRowId: scale_row.id,
                         answer: userAnswers[index][row_index] + 1
                       },
@@ -280,7 +280,7 @@ export default {
                           query: USER_GROUP_SCALE_ANSWERS,
                           variables: {
                             groupId: group,
-                            userId: this.$store.getters.decoded.user_id
+                            userId: this.$store.getters.user_id
                           }
                         });
                         let findIndex = data.userGroupScaleAnswers.findIndex(
@@ -300,7 +300,7 @@ export default {
                           query: USER_GROUP_SCALE_ANSWERS,
                           variables: {
                             groupId: this.groupId,
-                            userId: this.$store.getters.decoded.user_id
+                            userId: this.$store.getters.user_id
                           },
                           data
                         });
@@ -320,7 +320,7 @@ export default {
                 this.$apollo.mutate({
                   mutation: CREATE_USER_OPTION_ANSWER,
                   variables: {
-                    userId: this.$store.getters.decoded.user_id,
+                    userId: this.$store.getters.user_id,
                     questionId: element.question.id,
                     answerId: userAnswers[index]
                   },
@@ -329,7 +329,7 @@ export default {
                       query: USER_GROUP_OPTION_ANSWERS,
                       variables: {
                         groupId: group,
-                        userId: this.$store.getters.decoded.user_id
+                        userId: this.$store.getters.user_id
                       }
                     });
                     let findIndex = data.userGroupOptionAnswers.findIndex(
@@ -349,7 +349,7 @@ export default {
                       query: USER_GROUP_OPTION_ANSWERS,
                       variables: {
                         groupId: this.groupId,
-                        userId: this.$store.getters.decoded.user_id
+                        userId: this.$store.getters.user_id
                       },
                       data
                     });

@@ -232,7 +232,7 @@ export default {
     user: {
       query: USER_NAME,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },

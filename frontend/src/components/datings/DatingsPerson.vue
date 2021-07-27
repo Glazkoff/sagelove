@@ -127,7 +127,7 @@ export default {
           mutation: BLOCK_USER_MATCH,
           variables: {
             user2: this.$route.params.id,
-            user1: this.$store.getters.decoded.user_id
+            user1: this.$store.getters.user_id
           }
         })
         .then(() => {

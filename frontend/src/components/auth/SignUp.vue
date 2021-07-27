@@ -39,6 +39,7 @@
             autocomplete="date_of_birth"
             @update="form.date_of_birth = $event"
             :disabled="formLoading"
+            :max="getMaxDate"
           ></DatePicker>
           <v-text-field
             light="light"
@@ -196,6 +197,14 @@ export default {
     };
   },
   computed: {
+    getMaxDate() {
+      let endDate = new Date(
+        new Date().getFullYear() - 18,
+        new Date().getMonth(),
+        new Date().getDate()
+      );
+      return endDate.toISOString().slice(0, 10);
+    },
     nameErrors() {
       const errors = [];
       if (!this.$v.form.name.$dirty) return errors;
@@ -272,6 +281,18 @@ export default {
           if (errors.password1 != null && errors.password1.length != 0) {
             for (let index = 0; index < errors.password1.length; index++) {
               this.formPasswordErrors.push(errors.password1[index]);
+            }
+          }
+          if (
+            errors.non_field_errors != null &&
+            errors.non_field_errors.length != 0
+          ) {
+            for (
+              let index = 0;
+              index < errors.non_field_errors.length;
+              index++
+            ) {
+              this.formPasswordErrors.push(errors.non_field_errors[index]);
             }
           }
         }
