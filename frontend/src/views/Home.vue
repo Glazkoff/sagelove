@@ -28,7 +28,9 @@
             >Тестирование</router-link
           >
           <router-link
-            v-if="user != undefined && user.testStatus == 'FINISH'"
+            v-if="
+              user != undefined && user.testStatus.toUpperCase() == 'FINISH'
+            "
             :exact="true"
             to="/datings"
             tag="p"
@@ -36,7 +38,9 @@
             >Знакомства</router-link
           >
           <router-link
-            v-if="user != undefined && user.testStatus == 'FINISH'"
+            v-if="
+              user != undefined && user.testStatus.toUpperCase() == 'FINISH'
+            "
             :exact="true"
             to="/chat"
             tag="p"
@@ -122,7 +126,11 @@
             >
           </v-list-item>
 
-          <v-list-item v-if="user != undefined && user.testStatus == 'FINISH'">
+          <v-list-item
+            v-if="
+              user != undefined && user.testStatus.toUpperCase() == 'FINISH'
+            "
+          >
             <v-list-item-title
               ><router-link
                 :exact="true"
@@ -134,7 +142,11 @@
             >
           </v-list-item>
 
-          <v-list-item v-if="user != undefined && user.testStatus == 'FINISH'">
+          <v-list-item
+            v-if="
+              user != undefined && user.testStatus.toUpperCase() == 'FINISH'
+            "
+          >
             <v-list-item-title
               ><router-link
                 :exact="true"
