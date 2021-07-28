@@ -227,7 +227,7 @@ export default {
     user: {
       query: USER_INFO_FOR_HEADER,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },

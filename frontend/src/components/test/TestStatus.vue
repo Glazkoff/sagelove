@@ -23,7 +23,8 @@
       </h1>
       <br />
       <p class="text-center mt-5 mb-5">
-        Вы остановились на группе вопросов {{ userLastGroup.orderNumber }} из
+        Вы остановились на группе вопросов
+        {{ userLastGroup != undefined ? userLastGroup.orderNumber : "-" }} из
         {{ questionGroupsCount }}
       </p>
       <br />
@@ -63,7 +64,7 @@ export default {
     user: {
       query: USER_TEST_STATUS,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     },
     questionGroupsCount: {
@@ -72,7 +73,7 @@ export default {
     userLastGroup: {
       query: USER_LAST_GROUP,
       variables() {
-        return { userId: this.$store.getters.decoded.user_id };
+        return { userId: this.$store.getters.user_id };
       }
     }
   },
@@ -110,7 +111,7 @@ export default {
           mutation: UPDATE_USER_TEST_STATUS,
           variables: {
             testStatus: "inprogress",
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {
@@ -132,7 +133,7 @@ export default {
           mutation: UPDATE_USER_TEST_STATUS,
           variables: {
             testStatus: "start",
-            userId: this.$store.getters.decoded.user_id
+            userId: this.$store.getters.user_id
           }
         })
         .then(() => {
