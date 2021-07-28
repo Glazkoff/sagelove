@@ -76,7 +76,7 @@ class FinishUserTesting(graphene.Mutation):
     def mutate(cls, root, info, user_id):
         try:
             user = CustomUser.objects.get(pk=user_id)
-            user.test_status = 'FINISH'
+            user.test_status = 'finish'
             user.save()
             if AnswersCounting.objects.filter(user=user).count() == 0:
                 AnswersCounting.objects.create(user=user)
