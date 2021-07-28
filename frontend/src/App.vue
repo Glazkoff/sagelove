@@ -242,6 +242,8 @@ div.v-dialog__content div.v-dialog {
   max-width: 35rem !important;
   width: auto !important;
 }
+.v-sheet.v-card {
+}
 @media (max-width: 600px) {
   h1.title,
   .v-application h1.title {
