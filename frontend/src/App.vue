@@ -20,9 +20,11 @@ export default {
           this.$store.commit("STOP_APP_LOADING");
           this.$router.push({ path: this.$store.state.firstPath || "/" });
         },
-        errors => {
+        error => {
           this.$store.commit("STOP_APP_LOADING");
-          console.log("ERROR: ", errors);
+          if (error.code != "token_not_valid") {
+            console.log("ERROR: ", error);
+          }
         }
       );
     }

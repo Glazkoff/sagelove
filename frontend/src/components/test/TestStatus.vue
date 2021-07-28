@@ -23,7 +23,8 @@
       </h1>
       <br />
       <p class="text-center mt-5 mb-5">
-        Вы остановились на группе вопросов {{ userLastGroup.orderNumber }} из
+        Вы остановились на группе вопросов
+        {{ userLastGroup != undefined ? userLastGroup.orderNumber : "-" }} из
         {{ questionGroupsCount }}
       </p>
       <br />
