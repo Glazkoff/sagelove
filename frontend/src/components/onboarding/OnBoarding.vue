@@ -1,7 +1,31 @@
 <template>
-  <div>
-    <v-carousel height="37.5rem" class="rounded-lg my-4" show-arrows-on-hover>
-      <template v-slot:prev="{ on, attrs }">
+  <div id="inspire">
+    <div class="controls">
+      <label
+        >Toggle next-icon
+        <input type="checkbox" v-model="nextIconEnabled" />
+      </label>
+      <label
+        >next-icon:
+        <input v-model="nextIcon" placeholder="icon name" />
+      </label>
+      <label
+        >Toggle prev-icon
+        <input type="checkbox" v-model="prevIconEnabled" />
+      </label>
+      <label
+        >prev-icon:
+        <input v-model="prevIcon" placeholder="icon name" />
+      </label>
+    </div>
+    <v-carousel
+      height="37.5rem"
+      class="rounded-lg my-4"
+      show-arrows-on-hover
+      :prev-icon="prevIcon"
+      :next-icon="nextIcon"
+    >
+      <!-- <template v-slot:prev="{ on, attrs }">
         <img
           src="../../assets/img/arrow.svg"
           alt="arrow-left"
@@ -10,11 +34,11 @@
           width="35"
           class="rotate-arrow mx-5"
         />
-      </template>
-      <template v-slot:next="{ on, attrs }">
-        <!-- <router-link to="/aims"
+      </template> -->
+      <!-- <template v-slot:next="{ on, attrs }">
+        <router-link v-if="isLastArrow" to="/aims"
           ><img src="../../assets/img/arrow.svg" alt="arrow-right" width="35"
-        /></router-link> -->
+        /></router-link>
         <img
           src="../../assets/img/arrow.svg"
           alt="arrow-right"
@@ -23,7 +47,8 @@
           width="35"
           class="mx-5"
         /> </template
-      ><v-carousel-item
+      > -->
+      <v-carousel-item
         v-for="(slide, i) in slides"
         :key="i"
         class="my-carousel"
@@ -71,7 +96,7 @@ export default {
             route = { name: "TestStatus" };
             break;
           case false:
-            route = "";
+            route = "/";
             break;
         }
         if (
@@ -80,6 +105,22 @@ export default {
         ) {
           this.$router.push(route);
         }
+      }
+    },
+    nextIconEnabled(nextIconEnabled) {
+      if (nextIconEnabled) {
+        this.nextIcon = this._lastNextIcon;
+      } else {
+        this._lastNextIcon = this.nextIcon;
+        this.nextIcon = false;
+      }
+    },
+    prevIconEnabled(prevIconEnabled) {
+      if (prevIconEnabled) {
+        this.prevIcon = this._lastPrevIcon;
+      } else {
+        this._lastPrevIcon = this.prevIcon;
+        this.prevIcon = false;
       }
     }
   },
@@ -125,13 +166,21 @@ export default {
           header: "",
           text: "пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый слайд пятый"
         }
-      ]
+      ],
+      nextIcon: "$next",
+      prevIcon: "$prev",
+      nextIconEnabled: true,
+      prevIconEnabled: true
     };
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.controls {
+  display: flex;
+  flex-direction: column;
+}
 .position-cross {
   position: absolute;
   top: 0;

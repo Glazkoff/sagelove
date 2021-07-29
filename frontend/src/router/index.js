@@ -56,7 +56,15 @@ const routes = [
     children: [
       {
         path: "",
-        component: OnBoarding
+        component: OnBoarding,
+        name: OnBoarding,
+        beforeEnter: (from, to, next) => {
+          if (store.state.user.watch_on_boarding) {
+            next("/test");
+          } else {
+            next();
+          }
+        }
       },
       {
         path: "/test",
