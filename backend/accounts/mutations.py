@@ -99,3 +99,34 @@ class BlockUserMatchMutation(graphene.Mutation):
 
         return cls(ok=True)
 
+class CreateDatingsMutation(graphene.Mutation):
+    class Arguments:
+        user_first = graphene.ID(required=True)
+    
+    dating = graphene.Field(MatchType)
+
+    @classmethod
+    def mutate(cls, root, info, user_first):
+        users = CustomUser.objects.all()
+        count_answers = 0
+        questions_with_option = QuestionWithOption.objects.all()
+        questions_with_scale = QuestionWithScale.objects.all()
+        answer_scale_user_first = UserScaleAnswer.objects.filter(
+                user=user_first)
+        answer_option_user_first = UserOptionAnswer.objects.filter(
+                user=user_first)
+
+        for i in range(len(users)-1):
+            answer_scale_user_second =UserScaleAnswer.objects.filter(
+                user=users[i].id)
+            answer_option_user_second =UserOptionAnswer.objects.filter(
+                user=users[i].id)
+            for k in range(len(questions_with_option)-1):
+                if answer_scale_user_first[k].answer_scale_line == answer_scale_user_second[k].answer_scale_line and answer_scale_user_first[k].answer == answer_scale_user_second[k].answer:
+                    count_answers+=1
+            for n in range(len(questions_with_scale)):
+                if answer_option_user_first[n].question_with_option == answer_option_user_second[n].question_with_option and answer_option_user_first[k].answer == answer_option_user_second[k].answer:
+                    count_answers+=1
+            if count_answers == 45:
+                dating = MatchType(user_1=user_first, user_2=users[i], algorithm='A1')
+                return CreateDatingsMutation(dating=dating )
