@@ -96,7 +96,7 @@ export default {
             route = { name: "TestStatus" };
             break;
           case false:
-            route = "/";
+            route = "";
             break;
         }
         if (
