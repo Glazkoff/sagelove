@@ -103,30 +103,51 @@ class CreateDatingsMutation(graphene.Mutation):
     class Arguments:
         user_first = graphene.ID(required=True)
     
-    dating = graphene.Field(MatchType)
+    ok = graphene.Boolean()
+    count_match = graphene.Int()
 
     @classmethod
     def mutate(cls, root, info, user_first):
-        users = CustomUser.objects.all()
+        # TODO: test status done
+        users = CustomUser.objects.all().exclude(pk=user_first)
+        first_user_data = CustomUser.objects.get(pk=user_first)
         count_answers = 0
         questions_with_option = QuestionWithOption.objects.all()
         questions_with_scale = QuestionWithScale.objects.all()
-        answer_scale_user_first = UserScaleAnswer.objects.filter(
-                user=user_first)
-        answer_option_user_first = UserOptionAnswer.objects.filter(
-                user=user_first)
+        count_match = 0
+        for user_second in users:
+            print("users:")
+            print(users)
+            print("user_second:")
+            print(user_second)
+            count_answers = 0
 
-        for i in range(len(users)-1):
-            answer_scale_user_second =UserScaleAnswer.objects.filter(
-                user=users[i].id)
-            answer_option_user_second =UserOptionAnswer.objects.filter(
-                user=users[i].id)
-            for k in range(len(questions_with_option)-1):
-                if answer_scale_user_first[k].answer_scale_line == answer_scale_user_second[k].answer_scale_line and answer_scale_user_first[k].answer == answer_scale_user_second[k].answer:
+            # for k in range(len(questions_with_option)-1):
+            #     for j in range(2):
+            #         question_line = AnswerScale.objects.get(pk=j)
+            #         answer_scale_user_second =UserScaleAnswer.objects.filter(
+            #             user=users[i].id, answer_scale_line=question_line)
+            #         answer_scale_user_first = UserScaleAnswer.objects.filter(
+            #             user=user_first, answer_scale_line=question_line)
+            #         if answer_scale_user_first[k].answer_scale_line == answer_scale_user_second[k].answer_scale_line and answer_scale_user_first[k].answer == answer_scale_user_second[k].answer:
+            #             count_answers[i]+=1
+            
+            
+            
+            for n in questions_with_option:
+                a = UserOptionAnswer.objects.filter(user=user_first,question_with_option = n).first()
+                print("aaaaaaa")
+                print(a)
+                b = UserOptionAnswer.objects.filter(user=user_second,question_with_option = n).first()
+                print("bbbbbbb")
+                print(b)
+                if a.answer == b.answer:
                     count_answers+=1
-            for n in range(len(questions_with_scale)):
-                if answer_option_user_first[n].question_with_option == answer_option_user_second[n].question_with_option and answer_option_user_first[k].answer == answer_option_user_second[k].answer:
-                    count_answers+=1
-            if count_answers == 45:
-                dating = MatchType(user_1=user_first, user_2=users[i], algorithm='A1')
-                return CreateDatingsMutation(dating=dating )
+            print("count_answers: "+ str(count_answers))
+            if Datings.objects.all().filter((Q(user_1=first_user_data) & Q(user_2=user_second)) | (Q(user_1=user_second) & Q(user_2=first_user_data))).count == 0:
+                if count_answers >= (45/64)*len(questions_with_option):
+                    Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A1')
+                    count_match +=1
+        return CreateDatingsMutation(ok=True,count_match = count_match)
+            
+
