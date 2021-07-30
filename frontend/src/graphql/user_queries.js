@@ -60,11 +60,13 @@ export const USER_AIMS = gql`
 `;
 
 // Запрос на получение имени  пользователя для шапки
-export const USER_NAME = gql`
+export const USER_INFO_FOR_HEADER = gql`
   query ($userId: ID!) {
     user(userId: $userId) {
       id
       firstName
+      watchOnBoarding
+      testStatus
     }
   }
 `;

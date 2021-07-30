@@ -20,9 +20,11 @@ export default {
           this.$store.commit("STOP_APP_LOADING");
           this.$router.push({ path: this.$store.state.firstPath || "/" });
         },
-        errors => {
+        error => {
           this.$store.commit("STOP_APP_LOADING");
-          console.log("ERROR: ", errors);
+          if (error.code != "token_not_valid") {
+            console.log("ERROR: ", error);
+          }
         }
       );
     }
@@ -239,6 +241,8 @@ div.v-dialog__content div.v-dialog {
   max-height: 35rem !important;
   max-width: 35rem !important;
   width: auto !important;
+}
+.v-sheet.v-card {
 }
 @media (max-width: 600px) {
   h1.title,
