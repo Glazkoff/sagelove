@@ -99,7 +99,7 @@ class BlockUserMatchMutation(graphene.Mutation):
 
         return cls(ok=True)
 
-class CreateDatingsMutation(graphene.Mutation):
+class CreateDatingsFirstMutation(graphene.Mutation):
     class Arguments:
         user_first = graphene.ID(required=True)
     
@@ -150,7 +150,125 @@ class CreateDatingsMutation(graphene.Mutation):
                 ):
                     Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A1')
                     count_match +=1
-            return CreateDatingsMutation(ok=True,count_match = count_match)
+            return CreateDatingsFirstMutation(ok=True,count_match = count_match)
         except (CustomUser.DoesNotExist,QuestionWithOption.DoesNotExist,QuestionWithScale.DoesNotExist, ):
-            return CreateDatingsMutation(ok=False,count_match = -1)    
+            return CreateDatingsFirstMutation(ok=False,count_match = -1)    
 
+class CreateDatingsSecondMutation(graphene.Mutation):
+    class Arguments:
+        user_first = graphene.ID(required=True)
+    
+    ok = graphene.Boolean()
+    count_match = graphene.Int()
+
+    @classmethod
+    def mutate(cls, root, info, user_first):
+        try:
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
+            first_user_data = CustomUser.objects.get(pk=user_first)
+            count_match = 0
+            for user_second in users:
+                a = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
+                b = UserScaleAnswer.objects.filter(user=user_second,answer=1).count()
+                c = UserScaleAnswer.objects.filter(user=user_first,answer=5).count()
+                d = UserScaleAnswer.objects.filter(user=user_second,answer=5).count()
+                e = UserScaleAnswer.objects.filter(user=user_first,answer=2).count()
+                f = UserScaleAnswer.objects.filter(user=user_second,answer=2).count()
+                g = UserScaleAnswer.objects.filter(user=user_first,answer=4).count()
+                h = UserScaleAnswer.objects.filter(user=user_second,answer=4).count()
+                if Datings.objects.all().filter(
+                    (
+                        Q(user_1=first_user_data)
+                        & Q(user_2=user_second)
+                        & Q(algorithm='A2')
+                    )
+                    | (
+                        Q(user_1=user_second)
+                        & Q(user_2=first_user_data)
+                        & Q(algorithm='A2')
+                    )
+                ).count() == 0 and (((a==d)or(b==c))and((e==h)or(f==g))):
+                    Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A2')
+                    count_match +=1
+            return CreateDatingsSecondMutation(ok=True,count_match = count_match)
+        except (CustomUser.DoesNotExist,UserScaleAnswer.DoesNotExist, ):
+            return CreateDatingsSecondMutation(ok=False,count_match = -1)
+
+class CreateDatingsThirdMutation(graphene.Mutation):
+    class Arguments:
+        user_first = graphene.ID(required=True)
+    
+    ok = graphene.Boolean()
+    count_match = graphene.Int()
+
+    @classmethod
+    def mutate(cls, root, info, user_first):
+        try:
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
+            first_user_data = CustomUser.objects.get(pk=user_first)
+            count_match = 0
+            for user_second in users:
+                a = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
+                b = UserScaleAnswer.objects.filter(user=user_second,answer=1).count()
+                c = UserScaleAnswer.objects.filter(user=user_first,answer=5).count()
+                d = UserScaleAnswer.objects.filter(user=user_second,answer=5).count()
+                if Datings.objects.all().filter(
+                    (
+                        Q(user_1=first_user_data)
+                        & Q(user_2=user_second)
+                        & Q(algorithm='A3')
+                    )
+                    | (
+                        Q(user_1=user_second)
+                        & Q(user_2=first_user_data)
+                        & Q(algorithm='A3')
+                    )
+                ).count() == 0 and a>=35 and b>=35 and c>=5 and d>=5:
+                    Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A3')
+                    count_match +=1
+            return CreateDatingsThirdMutation(ok=True,count_match = count_match)
+        except (CustomUser.DoesNotExist,UserScaleAnswer.DoesNotExist, ):
+            return CreateDatingsThirdMutation(ok=False,count_match = -1)
+
+class CreateDatingsFourthMutation(graphene.Mutation):
+    class Arguments:
+        user_first = graphene.ID(required=True)
+    
+    ok = graphene.Boolean()
+    count_match = graphene.Int()
+
+    @classmethod
+    def mutate(cls, root, info, user_first):
+        try:
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
+            first_user_data = CustomUser.objects.get(pk=user_first)
+            count_match = 0
+            for user_second in users:
+                if (
+                    (
+                        first_user_data.number_foto_history_by_felling is not None
+                        or user_second.number_foto_history_by_felling is not None
+                    )
+                    and Datings.objects.all()
+                    .filter(
+                        (
+                            Q(user_1=first_user_data)
+                            & Q(user_2=user_second)
+                            & Q(algorithm='HBF')
+                        )
+                        | (
+                            Q(user_1=user_second)
+                            & Q(user_2=first_user_data)
+                            & Q(algorithm='HBF')
+                        )
+                    )
+                    .count()
+                    == 0
+                    and first_user_data.number_foto_history_by_felling
+                    == user_second.number_foto_history_by_felling
+                ):
+                    Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='HBF')
+                    count_match +=1
+            return CreateDatingsFourthMutation(ok=True,count_match = count_match)
+        except (CustomUser.DoesNotExist, ):
+            return CreateDatingsFourthMutation(ok=False,count_match = -1)
