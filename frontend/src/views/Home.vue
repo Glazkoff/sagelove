@@ -118,10 +118,33 @@
             Здравствуйте, {{ user !== undefined ? user.firstName : "-" }}!
           </p>
 
-          <v-list-item v-if="user != undefined && user.watchOnBoarding">
+          <v-list-item
+            v-if="
+              user != undefined &&
+              user.watchOnBoarding &&
+              user.testStatus.toUpperCase() != 'FINISH'
+            "
+          >
             <v-list-item-title>
               <router-link :exact="true" to="/test" tag="p" class="mb-0 pointer"
                 >Тестирование</router-link
+              ></v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item
+            v-if="
+              user != undefined &&
+              user.watchOnBoarding &&
+              user.testStatus.toUpperCase() == 'FINISH'
+            "
+          >
+            <v-list-item-title>
+              <router-link
+                :exact="true"
+                to="/result"
+                tag="p"
+                class="mb-0 pointer"
+                >Результаты тестирования</router-link
               ></v-list-item-title
             >
           </v-list-item>
