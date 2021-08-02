@@ -12,7 +12,11 @@ class Query(graphene.ObjectType):
         return CustomUser.objects.all()
 
     def resolve_user(self, info, user_id):
-        return CustomUser.objects.get(pk=user_id)
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+        except (CustomUser.DoesNotExist,):
+            user = None
+        return user
 
 
 class Mutation(graphene.ObjectType):

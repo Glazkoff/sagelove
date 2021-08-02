@@ -9,6 +9,7 @@ from questions.types import GroupQuestionType
 from users.models import CustomUser
 from django.db.models import Max
 
+
 class Query(graphene.ObjectType):
     user_group_scale_answers = graphene.List(
         UserScaleAnswerType, user_id=graphene.ID(), group_id=graphene.ID())
@@ -80,6 +81,8 @@ class Query(graphene.ObjectType):
                 pk = scale_answers_max_pk
             return GroupQuestion.objects.get(pk=pk)
         except (CustomUser.DoesNotExist):
+            return None
+        except:
             return None
 
     def resolve_matches(self, info, **kwargs):
