@@ -123,7 +123,7 @@ class CreateDatingsFirstMutation(graphene.Mutation):
                     for w in answer_scale_line_qu:
                         c = UserScaleAnswer.objects.filter(user=user_first,answer_scale_line = w).first()
                         d = UserScaleAnswer.objects.filter(user=user_second,answer_scale_line = w).first()
-                        if c.answer == d.answer:
+                        if c is not None and d is not None and c.answer == d.answer:
                             count_answers_line+=1
                     if count_answers_line == len(answer_scale_line_qu):
                         count_answers+=1

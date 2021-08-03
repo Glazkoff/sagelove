@@ -8,3 +8,65 @@ export const BLOCK_USER_MATCH = gql`
     }
   }
 `;
+
+//  Поиск партеров по всем плгоритмам
+export const CREATE_DATINGS_ALGORITHMS = gql`
+  mutation ($userFirst: ID!) {
+    createDatingsAlgorithmFirst(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+    createDatingsAlgorithmSecond(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+    createDatingsAlgorithmThird(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+    createDatingsAlgorithmFourth(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+  }
+`;
+
+//  Поиск партеров по первому алгоритму
+export const CREATE_DATINGS_ALGORITHM_FIRST = gql`
+  mutation ($userFirst: ID!) {
+    createDatingsAlgorithmFirst(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+  }
+`;
+
+//  Поиск партеров по второму алгоритму
+export const CREATE_DATINGS_ALGORITHM_SECOND = gql`
+  mutation ($userFirst: ID!) {
+    createDatingsAlgorithmSecond(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+  }
+`;
+
+//  Поиск партеров по третьему алгоритму
+export const CREATE_DATINGS_ALGORITHM_THIRD = gql`
+  mutation ($userFirst: ID!) {
+    createDatingsAlgorithmThird(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+  }
+`;
+
+//  Поиск партеров по истории по ощущениям
+export const CREATE_DATINGS_ALGORITHM_FOURTH = gql`
+  mutation ($userFirst: ID!) {
+    createDatingsAlgorithmFourth(userFirst: $userFirst) {
+      ok
+      countMatch
+    }
+  }
+`;
