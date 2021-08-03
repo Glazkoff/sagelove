@@ -88,7 +88,7 @@
               </v-btn>
             </v-col>
             <v-dialog v-model="dialog">
-              <v-card>
+              <v-card :style="sizeFunc(isNumberFoto)">
                 <img
                   :src="
                     require('../../assets/img/history/' + isNumberFoto + '.jpg')
@@ -153,12 +153,62 @@ export default {
     openDialog(n) {
       this.dialog = true;
       this.isNumberFoto = n;
+    },
+    sizeFunc(n) {
+      if (n == 1) {
+        return {
+          "--text-size": 432 + "px"
+        };
+      }
+      if (n == 2) {
+        return {
+          "--text-size": 300 + "px"
+        };
+      }
+      if (n == 3) {
+        return {
+          "--text-size": 350 + "px"
+        };
+      }
+      if (n == 4) {
+        return {
+          "--text-size": 313.06 + "px"
+        };
+      }
+      if (n == 5) {
+        return {
+          "--text-size": 316 + "px"
+        };
+      }
+      if (n == 6) {
+        return {
+          "--text-size": 326 + "px"
+        };
+      }
+      if (n == 7) {
+        return {
+          "--text-size": 373.33 + "px"
+        };
+      }
+      if (n == 8) {
+        return {
+          "--text-size": 385.46 + "px"
+        };
+      }
+      if (n == 9) {
+        return {
+          "--text-size": 372.36 + "px"
+        };
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.v-sheet.v-card {
+  height: var(--text-size);
+}
 .dark-blue-text {
   color: var(--v-darkBlue-base) !important;
 }

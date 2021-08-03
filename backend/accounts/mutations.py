@@ -5,6 +5,7 @@ from users.models import CustomUser
 from .types import AnswersCountingType, MatchType, UserScaleAnswerType, UserOptionAnswerType
 from django.db.models import Q
 
+
 class CreateUserOptionAnswerMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -77,11 +78,15 @@ class FinishUserTesting(graphene.Mutation):
             user = CustomUser.objects.get(pk=user_id)
             user.test_status = 'finish'
             user.save()
+            if AnswersCounting.objects.filter(user=user).count() == 0:
+                AnswersCounting.objects.create(user=user)
             return FinishUserTesting(status_ok=True)
         except (CustomUser.DoesNotExist, ):
             return FinishUserTesting(status_ok=False)
-            
+
 # Заблокировать метч
+
+
 class BlockUserMatchMutation(graphene.Mutation):
     class Arguments:
         user_1 = graphene.ID(required=True)
@@ -91,7 +96,8 @@ class BlockUserMatchMutation(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, user_1, user_2):
-        match = Datings.objects.all().filter((Q(user_1=user_1) & Q(user_2=user_2)) | (Q(user_1=user_2) & Q(user_2=user_1)))
+        match = Datings.objects.all().filter((Q(user_1=user_1) & Q(user_2=user_2))
+                                             | (Q(user_1=user_2) & Q(user_2=user_1)))
         print(match)
         for element in match:
             element.blocked = True
@@ -109,8 +115,8 @@ class CreateDatingsFirstMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, user_first):
         try:
-            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             count_answers = 0
             questions_with_option = QuestionWithOption.objects.all()
             questions_with_scale = QuestionWithScale.objects.all()
@@ -143,7 +149,7 @@ class CreateDatingsFirstMutation(graphene.Mutation):
                         & Q(user_2=first_user_data)
                         & Q(algorithm='A1')
                     )
-                ).count() == 0 and count_answers >= (45 / 64) * len(
+                ).count() == 0 and user_second.gender != first_user_data.gender and count_answers >= (45 / 64) * len(
                     questions_with_option
                 ) * len(
                     questions_with_scale
@@ -164,8 +170,8 @@ class CreateDatingsSecondMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, user_first):
         try:
-            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             count_match = 0
             for user_second in users:
                 a = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
@@ -187,7 +193,7 @@ class CreateDatingsSecondMutation(graphene.Mutation):
                         & Q(user_2=first_user_data)
                         & Q(algorithm='A2')
                     )
-                ).count() == 0 and (((a==d)or(b==c))and((e==h)or(f==g))):
+                ).count() == 0 and (((a==d)or(b==c))and((e==h)or(f==g))) and user_second.gender != first_user_data.gender:
                     Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A2')
                     count_match +=1
             return CreateDatingsSecondMutation(ok=True,count_match = count_match)
@@ -204,8 +210,8 @@ class CreateDatingsThirdMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, user_first):
         try:
-            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             count_match = 0
             for user_second in users:
                 a = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
@@ -223,7 +229,7 @@ class CreateDatingsThirdMutation(graphene.Mutation):
                         & Q(user_2=first_user_data)
                         & Q(algorithm='A3')
                     )
-                ).count() == 0 and a>=35 and b>=35 and c>=5 and d>=5:
+                ).count() == 0 and a>=35 and b>=35 and c>=5 and d>=5 and user_second.gender != first_user_data.gender:
                     Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A3')
                     count_match +=1
             return CreateDatingsThirdMutation(ok=True,count_match = count_match)
@@ -240,8 +246,8 @@ class CreateDatingsFourthMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, user_first):
         try:
-            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             count_match = 0
             for user_second in users:
                 if (
@@ -249,6 +255,7 @@ class CreateDatingsFourthMutation(graphene.Mutation):
                         first_user_data.number_foto_history_by_felling is not None
                         or user_second.number_foto_history_by_felling is not None
                     )
+                    and user_second.gender != first_user_data.gender
                     and Datings.objects.all()
                     .filter(
                         (

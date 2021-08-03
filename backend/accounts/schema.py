@@ -9,6 +9,7 @@ from questions.types import GroupQuestionType
 from users.models import CustomUser
 from django.db.models import Max
 
+
 class Query(graphene.ObjectType):
     user_group_scale_answers = graphene.List(
         UserScaleAnswerType, user_id=graphene.ID(), group_id=graphene.ID())
@@ -18,6 +19,7 @@ class Query(graphene.ObjectType):
     matches = graphene.List(MatchType)
     match = graphene.Field(MatchType, match_id=graphene.ID())
     match_for_user = graphene.List(MatchType, user_id=graphene.ID())
+    # algorithm_opposite = graphene.List(user_id=graphene.ID())
 
     def resolve_user_group_scale_answers(self, info, user_id, group_id):
         try:
@@ -26,6 +28,29 @@ class Query(graphene.ObjectType):
             return UserScaleAnswer.objects.filter(user=user, answer_scale_line__question__question_group=group)
         except (GroupQuestion.DoesNotExist, CustomUser.DoesNotExist):
             return None
+
+    # # Алгоритм для противопололжностей
+    # def resolve_algorithm_opposite(self, info, user_id):
+    #     try:
+    #         user = CustomUser.objects.get(pk=user_id)
+    #         user_answers_counting = AnswersCounting.objects.get(user=user)
+    #         search_gender = "NS"
+    #         if user.gender == "M":
+    #             search_gender = "F"
+    #         elif user.gender == "F":
+    #             search_gender = "M"
+    #         print(search_gender)
+    #         num_1 = user_answers_counting.answers_count1
+    #         num_2 = user_answers_counting.answers_count2
+    #         num_4 = user_answers_counting.answers_count4
+    #         num_5 = user_answers_counting.answers_count5
+    #         print(num_1)
+    #         print(num_2)
+    #         print(num_4)
+    #         print(num_5)
+    #         return AnswersCounting.objects.all().filter(user.gender == search_gender)
+    #     except (AnswersCounting.DoesNotExist, CustomUser.DoesNotExist):
+    #         return None
 
     def resolve_user_group_option_answers(self, info, user_id, group_id):
         try:
@@ -56,6 +81,8 @@ class Query(graphene.ObjectType):
                 pk = scale_answers_max_pk
             return GroupQuestion.objects.get(pk=pk)
         except (CustomUser.DoesNotExist):
+            return None
+        except:
             return None
 
     def resolve_matches(self, info, **kwargs):
