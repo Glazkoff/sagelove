@@ -11,3 +11,9 @@ markdown
 graphene-django
 gunicorn
 gevent
+redis
+django-redis
+celery
+flower
+django-celery-results
+django-celery-beat

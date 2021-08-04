@@ -3,6 +3,7 @@ version: "3.7"
 services:
   # База данных
   postgres:
+    container_name: sagelove_postgres
     image: postgres:10-alpine
     volumes:
       - db_data:/var/lib/postgresql/data
@@ -10,10 +11,12 @@ services:
 
   # Бэкенд Django
   backend:
+    container_name: sagelove_backend
     build:
       context: ./backend
     depends_on:
-      - postgres
+      - sagelove_postgres
+      - sagelove_redis
     volumes:
       - ./backend:/app
     command: /start.sh
@@ -23,6 +26,7 @@ services:
 
   # Сборка фронтенда
   frontend:
+    container_name: sagelove_frontend
     image: node:10-alpine
     command: npm run serve
     volumes:
@@ -33,17 +37,60 @@ services:
 
   # Веб-сервер
   nginx:
+    container_name: sagelove_nginx
     image: nginx:alpine
     ports:
       - "8001:80"
     depends_on:
-      - backend
+      - sagelove_backend
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
     # logging:
     # driver: none
+
+  # Брокер сообщений RabbitMQ
+  redis:
+    container_name: sagelove_redis
+    restart: always
+    image: redis:5-alpine
+    env_file: .env
+
+  celery-worker:
+    container_name: sagelove_celery-worker
+    restart: on-failure
+    build:
+      context: ./backend
+    command: celery -A backend worker --loglevel=info --pool=solo
+    volumes:
+      - ./backend:/app
+    env_file: .env
+    depends_on:
+      - sagelove_backend
+      - sagelove_redis
+
+  celery-beat:
+    container_name: sagelove_celery-beat
+    restart: on-failure
+    build:
+      context: ./backend
+    command: celery -A backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./backend:/app
+    env_file: .env
+    depends_on:
+      - sagelove_backend
+      - sagelove_redis
+
+  flower:
+    container_name: sagelove_flower
+    image: mher/flower
+    depends_on:
+      - sagelove_redis
+    env_file: .env
+    ports:
+      - 8888:8888
 
 volumes:
   db_data: {}
