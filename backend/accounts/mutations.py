@@ -86,7 +86,6 @@ class FinishUserTesting(graphene.Mutation):
 
 # Заблокировать метч
 
-
 class BlockUserMatchMutation(graphene.Mutation):
     class Arguments:
         user_1 = graphene.ID(required=True)
@@ -104,6 +103,8 @@ class BlockUserMatchMutation(graphene.Mutation):
             element.save()
 
         return cls(ok=True)
+
+# Первый алгоритм поиска партнера
 
 class CreateDatingsFirstMutation(graphene.Mutation):
     class Arguments:
@@ -124,19 +125,19 @@ class CreateDatingsFirstMutation(graphene.Mutation):
             for user_second in users:
                 count_answers = 0
                 count_answers_line = 0
-                for k in questions_with_scale:
-                    answer_scale_line_qu = AnswerScale.objects.filter(question = k)
-                    for w in answer_scale_line_qu:
-                        c = UserScaleAnswer.objects.filter(user=user_first,answer_scale_line = w).first()
-                        d = UserScaleAnswer.objects.filter(user=user_second,answer_scale_line = w).first()
-                        if c is not None and d is not None and c.answer == d.answer:
+                for question_with_scale in questions_with_scale:
+                    answer_scale_line_qu = AnswerScale.objects.filter(question = question_with_scale)
+                    for scale_line in answer_scale_line_qu:
+                        first_user_answer_scale = UserScaleAnswer.objects.filter(user=user_first,answer_scale_line = scale_line).first()
+                        second_user_answer_scale = UserScaleAnswer.objects.filter(user=user_second,answer_scale_line = scale_line).first()
+                        if first_user_answer_scale is not None and second_user_answer_scale is not None and first_user_answer_scale.answer == second_user_answer_scale.answer:
                             count_answers_line+=1
                     if count_answers_line == len(answer_scale_line_qu):
                         count_answers+=1
-                for n in questions_with_option:
-                    a = UserOptionAnswer.objects.filter(user=user_first,question_with_option = n).first()
-                    b = UserOptionAnswer.objects.filter(user=user_second,question_with_option = n).first()
-                    if a.answer == b.answer:
+                for question_with_option in questions_with_option:
+                    first_user_answer_option = UserOptionAnswer.objects.filter(user=user_first,question_with_option = question_with_option).first()
+                    second_user_answer_option = UserOptionAnswer.objects.filter(user=user_second,question_with_option = question_with_option).first()
+                    if first_user_answer_option is not None and second_user_answer_option is not None and first_user_answer_option.answer == second_user_answer_option.answer:
                         count_answers+=1
                 if Datings.objects.all().filter(
                     (
@@ -160,6 +161,8 @@ class CreateDatingsFirstMutation(graphene.Mutation):
         except (CustomUser.DoesNotExist,QuestionWithOption.DoesNotExist,QuestionWithScale.DoesNotExist, ):
             return CreateDatingsFirstMutation(ok=False,count_match = -1)    
 
+# Второй алгоритм поиска партнера
+
 class CreateDatingsSecondMutation(graphene.Mutation):
     class Arguments:
         user_first = graphene.ID(required=True)
@@ -174,14 +177,14 @@ class CreateDatingsSecondMutation(graphene.Mutation):
             users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             count_match = 0
             for user_second in users:
-                a = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
-                b = UserScaleAnswer.objects.filter(user=user_second,answer=1).count()
-                c = UserScaleAnswer.objects.filter(user=user_first,answer=5).count()
-                d = UserScaleAnswer.objects.filter(user=user_second,answer=5).count()
-                e = UserScaleAnswer.objects.filter(user=user_first,answer=2).count()
-                f = UserScaleAnswer.objects.filter(user=user_second,answer=2).count()
-                g = UserScaleAnswer.objects.filter(user=user_first,answer=4).count()
-                h = UserScaleAnswer.objects.filter(user=user_second,answer=4).count()
+                first_user_answer_scale_1 = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
+                second_user_answer_scale_1 = UserScaleAnswer.objects.filter(user=user_second,answer=1).count()
+                first_user_answer_scale_5 = UserScaleAnswer.objects.filter(user=user_first,answer=5).count()
+                second_user_answer_scale_5 = UserScaleAnswer.objects.filter(user=user_second,answer=5).count()
+                first_user_answer_scale_2 = UserScaleAnswer.objects.filter(user=user_first,answer=2).count()
+                second_user_answer_scale_2 = UserScaleAnswer.objects.filter(user=user_second,answer=2).count()
+                first_user_answer_scale_4 = UserScaleAnswer.objects.filter(user=user_first,answer=4).count()
+                second_user_answer_scale_4 = UserScaleAnswer.objects.filter(user=user_second,answer=4).count()
                 if Datings.objects.all().filter(
                     (
                         Q(user_1=first_user_data)
@@ -193,12 +196,14 @@ class CreateDatingsSecondMutation(graphene.Mutation):
                         & Q(user_2=first_user_data)
                         & Q(algorithm='A2')
                     )
-                ).count() == 0 and (((a==d)or(b==c))and((e==h)or(f==g))) and user_second.gender != first_user_data.gender:
+                ).count() == 0 and (((first_user_answer_scale_1==second_user_answer_scale_5)or(second_user_answer_scale_1==first_user_answer_scale_5))and((first_user_answer_scale_2==second_user_answer_scale_4)or(second_user_answer_scale_2==first_user_answer_scale_4))) and user_second.gender != first_user_data.gender:
                     Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A2')
                     count_match +=1
             return CreateDatingsSecondMutation(ok=True,count_match = count_match)
         except (CustomUser.DoesNotExist,UserScaleAnswer.DoesNotExist, ):
             return CreateDatingsSecondMutation(ok=False,count_match = -1)
+
+# Третий алгоритм поиска партнера
 
 class CreateDatingsThirdMutation(graphene.Mutation):
     class Arguments:
@@ -214,10 +219,10 @@ class CreateDatingsThirdMutation(graphene.Mutation):
             users = CustomUser.objects.all().exclude(pk=user_first).filter(test_status = 'finish')
             count_match = 0
             for user_second in users:
-                a = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
-                b = UserScaleAnswer.objects.filter(user=user_second,answer=1).count()
-                c = UserScaleAnswer.objects.filter(user=user_first,answer=5).count()
-                d = UserScaleAnswer.objects.filter(user=user_second,answer=5).count()
+                first_user_answer_scale_1 = UserScaleAnswer.objects.filter(user=user_first,answer=1).count()
+                second_user_answer_scale_1 = UserScaleAnswer.objects.filter(user=user_second,answer=1).count()
+                first_user_answer_scale_5 = UserScaleAnswer.objects.filter(user=user_first,answer=5).count()
+                second_user_answer_scale_5 = UserScaleAnswer.objects.filter(user=user_second,answer=5).count()
                 if Datings.objects.all().filter(
                     (
                         Q(user_1=first_user_data)
@@ -229,12 +234,14 @@ class CreateDatingsThirdMutation(graphene.Mutation):
                         & Q(user_2=first_user_data)
                         & Q(algorithm='A3')
                     )
-                ).count() == 0 and a>=35 and b>=35 and c>=5 and d>=5 and user_second.gender != first_user_data.gender:
+                ).count() == 0 and first_user_answer_scale_1>=35 and second_user_answer_scale_1>=35 and first_user_answer_scale_5>=5 and second_user_answer_scale_5>=5 and user_second.gender != first_user_data.gender:
                     Datings.objects.create(user_1=first_user_data, user_2=user_second, algorithm='A3')
                     count_match +=1
             return CreateDatingsThirdMutation(ok=True,count_match = count_match)
         except (CustomUser.DoesNotExist,UserScaleAnswer.DoesNotExist, ):
             return CreateDatingsThirdMutation(ok=False,count_match = -1)
+
+# Четвертый алгоритм поиска партнера
 
 class CreateDatingsFourthMutation(graphene.Mutation):
     class Arguments:
