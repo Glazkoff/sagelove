@@ -13,7 +13,7 @@ class GroupQuestionType(DjangoObjectType):
         fields = "__all__"
 
     def resolve_order_number(self, info):
-        groups = GroupQuestion.objects.all().order_by('pk')
+        groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
         count = 0
         for group in groups:
             count += 1
@@ -22,7 +22,7 @@ class GroupQuestionType(DjangoObjectType):
         return count
 
     def resolve_next_group_id(self, info):
-        groups = GroupQuestion.objects.all().order_by('pk')
+        groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
         next_group_id = None
         is_found = False
         for group in groups:
@@ -34,7 +34,7 @@ class GroupQuestionType(DjangoObjectType):
         return next_group_id
 
     def resolve_prev_group_id(self, info):
-        groups = GroupQuestion.objects.all().order_by('pk')
+        groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
         is_first = True
         prev_group_id = None
         prev_buffer = 0
