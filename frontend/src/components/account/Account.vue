@@ -18,7 +18,7 @@
             color="colorOfSea"
             large
           >
-            {{ buttonText }}
+            {{ buttonText | truncate(20) }}
           </v-btn>
           <input
             ref="finput"
@@ -237,6 +237,7 @@ export default {
   components: {
     AppLoader
   },
+
   apollo: {
     user: {
       query: USER_INFORMATION,
@@ -283,6 +284,17 @@ export default {
         passwordOld: null
       }
     };
+  },
+  filters: {
+    truncate: function (data, num) {
+      const reqdString = data.split("").slice(0, num).join("");
+      if (data != "Изменить фото") {
+        const reqdStringAll = reqdString + "...";
+        return reqdStringAll;
+      } else {
+        return reqdString;
+      }
+    }
   },
 
   computed: {
