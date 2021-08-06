@@ -20,7 +20,11 @@
         <v-spacer class="d-none d-md-flex"></v-spacer>
         <div id="nav" class="d-none d-md-flex flex-row align-center">
           <router-link
-            v-if="user != undefined && user.watchOnBoarding"
+            v-if="
+              user != undefined &&
+              user.watchOnBoarding &&
+              user.partnerType != null
+            "
             :exact="true"
             to="/test"
             tag="p"
@@ -82,7 +86,13 @@
                   ></v-list-item-title
                 >
               </v-list-item>
-              <v-list-item v-if="user != undefined && user.watchOnBoarding">
+              <v-list-item
+                v-if="
+                  user != undefined &&
+                  user.watchOnBoarding &&
+                  user.partnerType != null
+                "
+              >
                 <v-list-item-title>
                   <router-link
                     :exact="true"
@@ -193,7 +203,13 @@
             >
           </v-list-item>
 
-          <v-list-item v-if="user != undefined && user.watchOnBoarding">
+          <v-list-item
+            v-if="
+              user != undefined &&
+              user.watchOnBoarding &&
+              user.partnerType != null
+            "
+          >
             <v-list-item-title
               ><router-link
                 :exact="true"

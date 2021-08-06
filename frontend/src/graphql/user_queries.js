@@ -67,6 +67,7 @@ export const USER_INFO_FOR_HEADER = gql`
       firstName
       watchOnBoarding
       testStatus
+      partnerType
     }
   }
 `;
