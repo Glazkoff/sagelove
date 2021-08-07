@@ -57,8 +57,8 @@ def first_algorithm():
                         second_user_answer_scale = UserScaleAnswer.objects.filter(user=user_second,answer_scale_line = scale_line).first()
                         if first_user_answer_scale is not None and second_user_answer_scale is not None and first_user_answer_scale.answer == second_user_answer_scale.answer:
                             count_answers_line+=1
-                    if count_answers_line == len(answer_scale_line_qu):
-                        count_answers+=1
+                    if count_answers_line == answer_scale_line_qu.count():
+                        count_answers += 1
                 for question_with_option in questions_with_option:
                     first_user_answer_option = UserOptionAnswer.objects.filter(user=user_first,question_with_option = question_with_option).first()
                     second_user_answer_option = UserOptionAnswer.objects.filter(user=user_second,question_with_option = question_with_option).first()
