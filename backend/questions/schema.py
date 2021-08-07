@@ -11,7 +11,7 @@ class Query(graphene.ObjectType):
 
     def resolve_question_group(self, info, question_group_id):
         try:
-            return GroupQuestion.objects.get(pk=question_group_id)
+            return GroupQuestion.objects.get(pk=question_group_id,published_or_not = True)
         except GroupQuestion.DoesNotExist:
             return None
 
@@ -19,7 +19,7 @@ class Query(graphene.ObjectType):
         return GroupQuestion.objects.all()
 
     def resolve_question_groups_count(self, info, **kwargs):
-        return GroupQuestion.objects.count()
+        return GroupQuestion.objects.filter(published_or_not = True).count()
 
 
 class Mutation(graphene.ObjectType):
