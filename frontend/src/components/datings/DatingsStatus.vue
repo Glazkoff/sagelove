@@ -22,7 +22,9 @@
       >
         Поздравляем!
       </h1>
-      <h1 v-if="isPaid" class="title mb-5 mb-sm-10">Знакомства</h1>
+      <h1 v-if="isPaid || wasCongratulated" class="title mb-5 mb-sm-10">
+        Знакомства
+      </h1>
       <p v-if="!isPaid && !wasFound && !wasCongratulated">
         {{ textResultTest }}
       </p>

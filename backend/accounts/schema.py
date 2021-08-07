@@ -1,5 +1,5 @@
 from .types import UserScaleAnswerType, UserOptionAnswerType, AnswersCountingType, MatchType
-from .mutations import CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, FinishUserTesting, BlockUserMatchMutation
+from .mutations import CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, FinishUserTesting, BlockUserMatchMutation,CreateDatingsFirstMutation, CreateDatingsSecondMutation,CreateDatingsFourthMutation,CreateDatingsThirdMutation
 from django.db.models import Q
 import graphene
 
@@ -100,6 +100,10 @@ class Mutation(graphene.ObjectType):
     create_user_option_answer = CreateUserOptionAnswerMutation.Field()
     finish_user_testing = FinishUserTesting.Field()
     block_user_match = BlockUserMatchMutation.Field()
+    create_datings_algorithm_first = CreateDatingsFirstMutation.Field()
+    create_datings_algorithm_second = CreateDatingsSecondMutation.Field()
+    create_datings_algorithm_third = CreateDatingsThirdMutation.Field()
+    create_datings_algorithm_fourth = CreateDatingsFourthMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
