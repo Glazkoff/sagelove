@@ -1,5 +1,11 @@
 # Проект Натальи Ключевской (Опросники-знакомства)
 
+## Очереди
+
+1. Подключить RabbitMQ в docker-compose
+2. [Using Celery with Django](https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html)
+3.
+
 ## Как запустить проект
 
 ```
