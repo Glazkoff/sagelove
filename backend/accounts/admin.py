@@ -1,4 +1,4 @@
-from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer,Chats,Messages
+from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer,Chat,Message
 from django.contrib import admin
 # Register your models here.
 
@@ -83,7 +83,7 @@ class UserOptionAnswerAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
-class ChatsAdmin(admin.ModelAdmin):
+class ChatAdmin(admin.ModelAdmin):
     """Чаты пользователей"""
     exclude = ('createdAt', 'updatedAt')
     list_display = ('id', 'user_1', 'user_2',)
@@ -95,7 +95,7 @@ class ChatsAdmin(admin.ModelAdmin):
         }),
     )
 
-class MessagesAdmin(admin.ModelAdmin):
+class MessageAdmin(admin.ModelAdmin):
     """Сообщения пользователей"""
     exclude = ('createdAt', 'updatedAt')
     list_display = ('chat', 'message_author', 'message_text', 'message_check',)
@@ -111,5 +111,5 @@ admin.site.register(AnswersCounting, AnswersCountingAdmin)
 admin.site.register(UserScaleAnswer, UserScaleAnswerAdmin)
 admin.site.register(UserOptionAnswer, UserOptionAnswerAdmin)
 admin.site.register(Datings, DatingsAdmin)
-admin.site.register(Chats, ChatsAdmin)
-admin.site.register(Messages, MessagesAdmin)
+admin.site.register(Chat, ChatAdmin)
+admin.site.register(Message, MessageAdmin)

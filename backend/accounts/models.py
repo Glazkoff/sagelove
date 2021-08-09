@@ -116,7 +116,7 @@ class Datings(models.Model):
         verbose_name = "Совпадения пользователя"
         verbose_name_plural = "Совпадения пользователей"
 
-class Chats(models.Model):
+class Chat(models.Model):
     """Чаты пользователей"""
     user_1 = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='firstuser',verbose_name="Пользователь 1")
@@ -133,12 +133,12 @@ class Chats(models.Model):
         verbose_name = "Чат пользователей"
         verbose_name_plural = "Чаты пользователей"
 
-class Messages(models.Model):
+class Message(models.Model):
     """Сообщения пользователей"""
     message_author = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, verbose_name="Автор сообщения")
     chat = models.ForeignKey(
-        Chats, on_delete=models.CASCADE, verbose_name="Чат пользователей")
+        Chat, on_delete=models.CASCADE, verbose_name="Чат пользователей")
     message_text = models.TextField("Текст сообщения")
     message_check = models.BooleanField("Сообщение было прочитано", default=False)
     
