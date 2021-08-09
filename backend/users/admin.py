@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.safestring import mark_safe
+import math
 
 
 class UserCreationForm(forms.ModelForm):
@@ -58,7 +60,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Личная информация', {
-         'fields': ('first_name', 'gender', 'date_of_birth', 'phone_number', 'about_me')}),
+         'fields': ('first_name', 'gender', 'date_of_birth', 'phone_number', 'about_me', 'photo', 'photo_image')}),
         ('Цели пользователя', {
             'fields': ('partner_type', 'purpose_meet', 'number_foto_history_by_felling',)}),
         ('Права доступа', {'fields': ('is_admin',
@@ -67,7 +69,7 @@ class UserAdmin(BaseUserAdmin):
          'fields': ('test_status', 'test_result_demo', 'congratulations_after_test')}),
         ('Статусы системы', {'fields': ('watch_on_boarding',)})
     )
-    readonly_fields = ['watch_on_boarding', ]
+    readonly_fields = ['watch_on_boarding', 'photo_image']
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
@@ -79,6 +81,18 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
+
+    def photo_image(self, obj):
+        width = obj.photo.width
+        height = obj.photo.height
+        new_width = 300
+        new_height = math.ceil((height*new_width) / width)
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.photo.url,
+            width=new_width,
+            height=new_height
+        ))
+    photo_image.short_description = "Фото - изображение"
 
 
 # Register your models here.

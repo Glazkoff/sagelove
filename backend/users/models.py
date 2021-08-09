@@ -101,7 +101,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name="Дата рождения", null=True, blank=True)
     phone_number = models.CharField("Номер телефона", max_length=30)
     about_me = models.TextField("О себе")
-    photoURL = models.URLField("Фото", null=True, blank=True)
+    photo = models.ImageField(verbose_name="Загрузка фото",
+                              upload_to='photo', blank=True)
     is_active = models.BooleanField(
         verbose_name="Пользователь активирован",  default=True)
     is_admin = models.BooleanField(
