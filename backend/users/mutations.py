@@ -1,7 +1,12 @@
+import os
+import datetime
 import graphene
 from .models import CustomUser
 from .types import CustomUserType
 from accounts.models import UserScaleAnswer, UserOptionAnswer
+from graphene_file_upload.scalars import Upload
+from django.core.files.base import File
+from transliterate import translit
 
 
 class UpdateUserTestStatusMutation(graphene.Mutation):
@@ -25,6 +30,8 @@ class UpdateUserTestStatusMutation(graphene.Mutation):
             return UpdateUserTestStatusMutation(user=None)
 
 # Обновление результатов по тесту и сведений об оплате
+
+
 class UpdateUserTestResultDemoMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -41,6 +48,8 @@ class UpdateUserTestResultDemoMutation(graphene.Mutation):
         return UpdateUserTestResultDemoMutation(user=user)
 
 #  Обновление статуса просмотра поздравления о прохождении тестировании пользователем
+
+
 class UpdateUserCongratulationStatusMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -73,6 +82,8 @@ class UpdateUserInformation(graphene.Mutation):
 
         return cls(ok=True)
 
+# Мутация ввода целей пользователя
+
 
 class AimsInput(graphene.InputObjectType):
     partner_type = graphene.String(required=True)
@@ -81,6 +92,7 @@ class AimsInput(graphene.InputObjectType):
     user_id = graphene.ID(required=True)
 
 # Мутация создания или изменения целей пользователя
+
 
 class UpdateAimsForUserMutation(graphene.Mutation):
     class Arguments:
@@ -96,7 +108,9 @@ class UpdateAimsForUserMutation(graphene.Mutation):
         user.save()
         return UpdateAimsForUserMutation(user=user)
 
-# Мутация изменения статуса просмотра on-boarding 
+# Мутация изменения статуса просмотра on-boarding
+
+
 class UpdateWatchOnBoardingMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -112,3 +126,31 @@ class UpdateWatchOnBoardingMutation(graphene.Mutation):
 
         return UpdateWatchOnBoardingMutation(user=user)
 
+# Мутация загрузки фото пользователя
+
+
+class SetUserPhotoMutation(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        photo = Upload()
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, photo=None):
+        try:
+            user = CustomUser.objects.get(pk=user_id)
+            if photo is not None:
+                now = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
+                filename, extension = os.path.splitext(photo.name)
+                first_name = translit(
+                    user.first_name, language_code='ru', reversed=True)
+                last_name = translit(
+                    user.name, language_code='ru', reversed=True)
+                new_filename = f"{first_name}_{last_name}_photo_{now}{extension}"
+                user.photo.save(
+                    new_filename, File(photo))
+                user.save()
+            return SetUserPhotoMutation(user=user)
+        except:
+            return SetUserPhotoMutation(user=None)

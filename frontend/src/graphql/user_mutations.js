@@ -59,3 +59,14 @@ export const UPDATE_USER_TEST_STATUS = gql`
     }
   }
 `;
+
+export const SET_USER_PHOTO = gql`
+  mutation ($userId: ID!, $photo: Upload) {
+    setUserPhotoMutation(userId: $userId, photo: $photo) {
+      user {
+        id
+        photo
+      }
+    }
+  }
+`;
