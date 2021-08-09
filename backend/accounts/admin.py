@@ -1,4 +1,4 @@
-from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer
+from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer,Chats,Messages
 from django.contrib import admin
 # Register your models here.
 
@@ -83,8 +83,33 @@ class UserOptionAnswerAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
+class ChatsAdmin(admin.ModelAdmin):
+    """Чаты пользователей"""
+    exclude = ('createdAt', 'updatedAt')
+    list_display = ('id', 'user_1', 'user_2',)
+    list_filter = ('user_1', 'user_2',)
+    search_fields = ('user_1__first_name', 'user_2__first_name',)
+    fieldsets = (
+        (None, {
+            'fields': ('user_1', 'user_2',)
+        }),
+    )
+
+class MessagesAdmin(admin.ModelAdmin):
+    """Сообщения пользователей"""
+    exclude = ('createdAt', 'updatedAt')
+    list_display = ('chat', 'message_author', 'message_text', 'message_check',)
+    search_fields = ('chat', 'message_author__first_name',)
+    fieldsets = (
+        (None, {
+            'fields': ('message_author', 'chat','message_text', 'message_check',)
+        }),
+    )
+    readonly_fields = ['message_check', ]
 
 admin.site.register(AnswersCounting, AnswersCountingAdmin)
 admin.site.register(UserScaleAnswer, UserScaleAnswerAdmin)
 admin.site.register(UserOptionAnswer, UserOptionAnswerAdmin)
 admin.site.register(Datings, DatingsAdmin)
+admin.site.register(Chats, ChatsAdmin)
+admin.site.register(Messages, MessagesAdmin)
