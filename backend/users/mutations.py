@@ -4,9 +4,9 @@ import graphene
 from .models import CustomUser
 from .types import CustomUserType
 from accounts.models import UserScaleAnswer, UserOptionAnswer
-from graphene_file_upload.scalars import Upload
 from django.core.files.base import File
 from transliterate import translit
+from graphene_file_upload.scalars import Upload
 
 
 class UpdateUserTestStatusMutation(graphene.Mutation):
@@ -71,18 +71,19 @@ class UpdateUserInformation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
         about_me = graphene.String(required=True)
+        photo = Upload()
 
     ok = graphene.Boolean()
 
     @classmethod
-    def mutate(cls, root, info, user_id, about_me):
+    def mutate(cls, root, info, user_id, about_me, photo=None):
+        print("PHOTO!!!: ")
+        print(photo)
         user = CustomUser.objects.get(pk=user_id)
         user.about_me = about_me
         user.save()
 
         return cls(ok=True)
-
-# Мутация ввода целей пользователя
 
 
 class AimsInput(graphene.InputObjectType):
@@ -138,19 +139,33 @@ class SetUserPhotoMutation(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, user_id, photo=None):
-        try:
-            user = CustomUser.objects.get(pk=user_id)
-            if photo is not None:
-                now = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
-                filename, extension = os.path.splitext(photo.name)
-                first_name = translit(
-                    user.first_name, language_code='ru', reversed=True)
-                last_name = translit(
-                    user.name, language_code='ru', reversed=True)
-                new_filename = f"{first_name}_{last_name}_photo_{now}{extension}"
-                user.photo.save(
-                    new_filename, File(photo))
-                user.save()
-            return SetUserPhotoMutation(user=user)
-        except:
-            return SetUserPhotoMutation(user=None)
+        # try:
+        print('PHOTO!')
+        print(photo)
+        user = CustomUser.objects.get(pk=user_id)
+        # now = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
+        # if photo is not None:
+        #     print("photo")
+        #     print(photo)
+        #     print("photo.name")
+        #     print(photo.name)
+        #     filename, extension = os.path.splitext(photo.name)
+        #     if user.first_name is not None:
+        #         first_name = translit(
+        #             user.first_name, language_code='ru', reversed=True)
+        #     else:
+        #         first_name = ""
+
+        #     if user.last_name is not None:
+        #         last_name = translit(
+        #             user.last_name, language_code='ru', reversed=True)
+        #     else:
+        #         last_name = ""
+        #     new_filename = f"{first_name}_{last_name}_photo_{now}{extension}"
+        #     print("new_filename", new_filename)
+        #     user.photo.save(
+        #         new_filename, File(photo))
+        # user.save()
+        return SetUserPhotoMutation(user=user)
+        # except:
+        #     return SetUserPhotoMutation(user=None)

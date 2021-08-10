@@ -64,13 +64,18 @@
         >Зарегистрируйтесь!</router-link
       >
     </div>
+    <Test></Test>
   </v-flex>
 </template>
 
 <script>
+import Test from "@/components/Test";
 import { required, email } from "vuelidate/lib/validators";
 export default {
   name: "LogIn",
+  components: {
+    Test
+  },
   data() {
     return {
       passShow: false,

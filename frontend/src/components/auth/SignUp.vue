@@ -3,7 +3,7 @@
     <h1 class="mt-13 title mb-12">Регистрация</h1>
     <v-card flat light="light">
       <v-card-text>
-        <v-form>
+        <v-form ref="form" lazy-validation>
           <v-text-field
             light="light"
             label="Имя"
@@ -97,10 +97,17 @@
             :disabled="formLoading"
           ></v-text-field>
           <v-file-input
+            chips
+            accept="image/png, image/jpeg, image/bmp"
             :disabled="formLoading"
             truncate-length="15"
             label="Ваша фотография"
             color="colorOfSea"
+            prepend-icon="mdi-camera"
+            :error-messages="photoErrors"
+            v-model="$v.form.photo.$model"
+            @input="$v.form.photo.$touch()"
+            @blur="$v.form.photo.$touch()"
           ></v-file-input>
           <v-textarea
             :disabled="formLoading"
@@ -142,6 +149,7 @@ import {
   maxLength,
   email
 } from "vuelidate/lib/validators";
+import { SET_USER_PHOTO } from "@/graphql/user_mutations.js";
 
 export default {
   name: "SignUp",
@@ -169,7 +177,9 @@ export default {
       date_of_birth: {
         required
       },
-
+      photo: {
+        required
+      },
       about_me: {
         required
       }
@@ -192,7 +202,8 @@ export default {
         name: null,
         date_of_birth: null,
         phone: null,
-        about_me: null
+        about_me: null,
+        photo: null
       }
     };
   },
@@ -254,6 +265,12 @@ export default {
       !this.$v.form.about_me.required &&
         errors.push("Укажите информацию о себе!");
       return errors;
+    },
+    photoErrors() {
+      const errors = [];
+      if (!this.$v.form.photo.$dirty) return errors;
+      !this.$v.form.photo.required && errors.push("Загрузите фото!");
+      return errors;
     }
   },
   methods: {
@@ -266,10 +283,29 @@ export default {
       sendObj.phone_number = this.form.phone;
       sendObj.phone = undefined;
       this.formLoading = true;
+      let photoObj = this.$v.form.$model.photo;
+      console.log(photoObj);
       this.$store.dispatch("SIGN_UP", sendObj).then(
-        () => {
-          this.formLoading = false;
-          this.$router.push("/");
+        res => {
+          if (res.user != undefined) {
+            if (res.user.pk != undefined) {
+              this.$apollo
+                .mutate({
+                  mutation: SET_USER_PHOTO,
+                  variables: {
+                    userId: res.user.pk,
+                    photoObj: photoObj
+                  }
+                })
+                .then(() => {
+                  this.formLoading = false;
+                  this.$router.push("/");
+                })
+                .catch(() => {
+                  this.formLoading = false;
+                });
+            }
+          }
         },
         errors => {
           this.formLoading = false;

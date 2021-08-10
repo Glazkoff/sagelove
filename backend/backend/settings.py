@@ -66,7 +66,7 @@ LOCAL_APPS = [
 ]
 
 OPTIMIZATION = [
-    'django_cleanup.apps.CleanupConfig',
+    # 'django_cleanup.apps.CleanupConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + OPTIMIZATION

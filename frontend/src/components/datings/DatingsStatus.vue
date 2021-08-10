@@ -144,7 +144,7 @@ import { USER_AFTER_TEST_STATUS } from "@/graphql/user_queries.js";
 import {
   UPDATE_USER_CONGRATULATIONS_STATUS,
   UPDATE_USER_TEST_RESULT_DEMO
-} from "@/graphql/user_mutation.js";
+} from "@/graphql/user_mutations.js";
 import { MATCHES_FOR_USER } from "@/graphql/accounts_queries.js";
 export default {
   name: "DatingsStatus",

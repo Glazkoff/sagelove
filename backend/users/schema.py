@@ -26,7 +26,7 @@ class Mutation(graphene.ObjectType):
     updateUserInformation = UpdateUserInformation.Field()
     updateAimsForUser = UpdateAimsForUserMutation.Field()
     updateWatchOnBoarding = UpdateWatchOnBoardingMutation.Field()
-    setUserPhotoMutation = SetUserPhotoMutation.Field()
+    set_user_photo_mutation = SetUserPhotoMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
