@@ -15,8 +15,8 @@ services:
     build:
       context: ./backend
     depends_on:
-      - sagelove_postgres
-      - sagelove_redis
+      - postgres
+      - redis
     volumes:
       - ./backend:/app
     command: /start.sh
@@ -42,7 +42,7 @@ services:
     ports:
       - "8001:80"
     depends_on:
-      - sagelove_backend
+      - backend
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
@@ -67,8 +67,8 @@ services:
       - ./backend:/app
     env_file: .env
     depends_on:
-      - sagelove_backend
-      - sagelove_redis
+      - backend
+      - redis
 
   celery-beat:
     container_name: sagelove_celery-beat
@@ -80,14 +80,14 @@ services:
       - ./backend:/app
     env_file: .env
     depends_on:
-      - sagelove_backend
-      - sagelove_redis
+      - backend
+      - redis
 
   flower:
     container_name: sagelove_flower
     image: mher/flower
     depends_on:
-      - sagelove_redis
+      - redis
     env_file: .env
     ports:
       - 8888:8888
