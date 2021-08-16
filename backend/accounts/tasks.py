@@ -6,6 +6,7 @@ from .models import Datings, UserScaleAnswer, UserOptionAnswer
 from questions.models import QuestionWithScale, QuestionWithOption, AnswerScale
 from users.models import CustomUser
 from django.db.models import Q
+import math
 
 # schedule, created = IntervalSchedule.objects.get_or_create(
 #     every=5,
@@ -50,7 +51,6 @@ def first_algorithm():
             count_match = 0
             for user_second in users:
                 count_answers = 0
-                count_answers_line = 0
                 for question_with_scale in questions_with_scale:
                     answer_scale_line_qu = AnswerScale.objects.filter(
                         question=question_with_scale)
@@ -60,9 +60,7 @@ def first_algorithm():
                         second_user_answer_scale = UserScaleAnswer.objects.filter(
                             user=user_second, answer_scale_line=scale_line).first()
                         if first_user_answer_scale is not None and second_user_answer_scale is not None and first_user_answer_scale.answer == second_user_answer_scale.answer:
-                            count_answers_line += 1
-                    if count_answers_line == answer_scale_line_qu.count():
-                        count_answers += 1
+                            count_answers += 1
                 for question_with_option in questions_with_option:
                     first_user_answer_option = UserOptionAnswer.objects.filter(
                         user=user_first, question_with_option=question_with_option).first()
@@ -81,11 +79,11 @@ def first_algorithm():
                         & Q(user_2=first_user_data)
                         & Q(algorithm='A1')
                     )
-                ).count() == 0 and user_second.gender != first_user_data.gender and count_answers >= (45 / 64) * len(
+                ).count() == 0 and user_second.gender != first_user_data.gender and count_answers >= math.floor((45 / 64) * len(
                     questions_with_option
                 ) * len(
                     questions_with_scale
-                ):
+                )):
                     Datings.objects.create(
                         user_1=first_user_data, user_2=user_second, algorithm='A1')
                     count_match += 1
