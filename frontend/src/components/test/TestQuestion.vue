@@ -534,15 +534,14 @@ export default {
     progress() {
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
         return Math.ceil(
-          ((this.questionGroup.orderNumber - 1) / this.questionGroupsCount) *
-            100
+          ((this.questionGroup.order - 1) / this.questionGroupsCount) * 100
         );
       } else {
         return 0;
       }
     },
     orderNumber() {
-      return this.questionGroup != null ? this.questionGroup.orderNumber : "-";
+      return this.questionGroup != null ? this.questionGroup.order : "-";
     },
     nameGroupQuestion() {
       return this.questionGroup != null

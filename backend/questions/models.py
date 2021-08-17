@@ -6,7 +6,7 @@ from django.db import models
 class GroupQuestion(models.Model):
     """Группа вопросов"""
     name_group_question = models.CharField("Название группы", max_length=200)
-    order = models.IntegerField()
+    order = models.IntegerField(null=True,blank=True,verbose_name="Порядок")
     published_or_not = models.BooleanField(
         default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -15,15 +15,15 @@ class GroupQuestion(models.Model):
     def __str__(self):
         return f"{self.name_group_question}"
 
-    def order(self):
-        groups = GroupQuestion.objects.all()
-        order = 0
-        for group in groups:
-            order += 1
-            if group.id == self.id:
-                break
-        return order
-    order.short_description = "Порядок"
+    # def order(self):
+    #     groups = GroupQuestion.objects.all()
+    #     order = 0
+    #     for group in groups:
+    #         order += 1
+    #         if group.id == self.id:
+    #             break
+    #     return order
+    # order.short_description = "Порядок"
 
     class Meta:
         verbose_name = "Группа вопросов"

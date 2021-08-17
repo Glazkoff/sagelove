@@ -4,7 +4,7 @@ from .models import GroupQuestion, QuestionWithScale, AnswerScale, QuestionWithO
 
 
 class GroupQuestionType(DjangoObjectType):
-    order_number = graphene.Int()
+    # order_number = graphene.Int()
     next_group_id = graphene.ID()
     prev_group_id = graphene.ID()
 
@@ -12,22 +12,21 @@ class GroupQuestionType(DjangoObjectType):
         model = GroupQuestion
         fields = "__all__"
 
-    def resolve_order_number(self, info):
-        groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
-        count = 0
-        for group in groups:
-            count += 1
-            if group.id == self.id:
-                break
-        return count
+    # def resolve_order_number(self, info):
+    #     groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
+    #     count = 0
+    #     for group in groups:
+    #         count += 1
+    #         if group.id == self.id:
+    #             break
+    #     return count
 
     def resolve_next_group_id(self, info):
         groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
         next_group_id = None
-        is_found = False
         for group in groups:
-            if group.id == self.id:
-                next_group_id = group.id+1
+            if group.order == self.order:
+                next_group_id = group.order+1
                 if next_group_id == groups.count()+1:
                     next_group_id = None
                 else:

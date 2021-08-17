@@ -4,7 +4,7 @@ export const QUESTION_GROUP = gql`
   query ($questionGroupId: ID!) {
     questionGroup(questionGroupId: $questionGroupId) {
       id
-      orderNumber
+      order
       prevGroupId
       nextGroupId
       nameGroupQuestion
@@ -66,7 +66,7 @@ export const USER_LAST_GROUP = gql`
     userLastGroup(userId: $userId) {
       id
       nextGroupId
-      orderNumber
+      order
     }
   }
 `;
