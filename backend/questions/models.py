@@ -6,7 +6,7 @@ from django.db import models
 class GroupQuestion(models.Model):
     """Группа вопросов"""
     name_group_question = models.CharField("Название группы", max_length=200)
-    order = models.IntegerField(verbose_name="Прядок",default=0)
+    order = models.IntegerField(verbose_name="Прядок",default=0,unique=True)
     published_or_not = models.BooleanField(
         default=False, verbose_name="Публикация")
     created_at = models.DateTimeField(auto_now_add=True)
