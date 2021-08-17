@@ -7,4 +7,5 @@ set -o xtrace
 
 python manage.py migrate
 python manage.py collectstatic --noinput --verbosity 0
+python manage.py loaddata questions.json
 python manage.py runserver 0.0.0.0:8001

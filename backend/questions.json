@@ -1,0 +1,625 @@
+[
+{
+    "model": "questions.groupquestion",
+    "pk": 1,
+    "fields": {
+        "name_group_question": "Запахи",
+        "published_or_not": true,
+        "created_at": "2021-08-17T08:30:20.716Z",
+        "updated_at": "2021-08-17T08:47:26.603Z"
+    }
+},
+{
+    "model": "questions.groupquestion",
+    "pk": 2,
+    "fields": {
+        "name_group_question": "Еда",
+        "published_or_not": true,
+        "created_at": "2021-08-17T08:30:27.441Z",
+        "updated_at": "2021-08-17T08:47:26.213Z"
+    }
+},
+{
+    "model": "questions.groupquestion",
+    "pk": 3,
+    "fields": {
+        "name_group_question": "Привычки/предпочтения",
+        "published_or_not": true,
+        "created_at": "2021-08-17T08:30:45.235Z",
+        "updated_at": "2021-08-17T08:47:26.208Z"
+    }
+},
+{
+    "model": "questions.groupquestion",
+    "pk": 4,
+    "fields": {
+        "name_group_question": "Спорт",
+        "published_or_not": true,
+        "created_at": "2021-08-17T08:30:53.794Z",
+        "updated_at": "2021-08-17T08:47:26.201Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 1,
+    "fields": {
+        "question_text": "Какие запахи духов Вы обычно выбираете для себя?",
+        "question_group": 1,
+        "question_number": 1,
+        "created_at": "2021-08-17T08:32:39.670Z",
+        "updated_at": "2021-08-17T08:32:39.670Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 2,
+    "fields": {
+        "question_text": "Какую еду Вы обычно кушаете/готовите дома?",
+        "question_group": 2,
+        "question_number": 2,
+        "created_at": "2021-08-17T08:34:36.838Z",
+        "updated_at": "2021-08-17T08:34:36.838Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 3,
+    "fields": {
+        "question_text": "В какое время Вам наиболее комфортно просыпаться?",
+        "question_group": 3,
+        "question_number": 3,
+        "created_at": "2021-08-17T08:36:34.469Z",
+        "updated_at": "2021-08-17T08:36:34.469Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 4,
+    "fields": {
+        "question_text": "Какой период в течение дня у Вас наиболее активная?",
+        "question_group": 3,
+        "question_number": 4,
+        "created_at": "2021-08-17T08:37:24.635Z",
+        "updated_at": "2021-08-17T08:37:24.636Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 5,
+    "fields": {
+        "question_text": "Какой период дня у Вас наименее активный?",
+        "question_group": 3,
+        "question_number": 5,
+        "created_at": "2021-08-17T08:39:15.464Z",
+        "updated_at": "2021-08-17T08:39:15.464Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 6,
+    "fields": {
+        "question_text": "Какой отдых в свои выходные предпочитаете?",
+        "question_group": 3,
+        "question_number": 6,
+        "created_at": "2021-08-17T08:40:47.982Z",
+        "updated_at": "2021-08-17T08:40:47.982Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 7,
+    "fields": {
+        "question_text": "Какая погода для Вас наиболее комфортная для прогулок?",
+        "question_group": 3,
+        "question_number": 7,
+        "created_at": "2021-08-17T08:41:40.467Z",
+        "updated_at": "2021-08-17T08:41:40.467Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 8,
+    "fields": {
+        "question_text": "Какое Ваше любимое увлечение?",
+        "question_group": 3,
+        "question_number": 8,
+        "created_at": "2021-08-17T08:43:10.475Z",
+        "updated_at": "2021-08-17T08:43:10.475Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 9,
+    "fields": {
+        "question_text": "Какие Ваши любимые животные?",
+        "question_group": 3,
+        "question_number": 9,
+        "created_at": "2021-08-17T08:44:04.131Z",
+        "updated_at": "2021-08-17T08:44:04.132Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 10,
+    "fields": {
+        "question_text": "Как Вы относитесь к порядку в доме?",
+        "question_group": 3,
+        "question_number": 10,
+        "created_at": "2021-08-17T08:45:19.817Z",
+        "updated_at": "2021-08-17T08:45:19.817Z"
+    }
+},
+{
+    "model": "questions.questionwithscale",
+    "pk": 11,
+    "fields": {
+        "question_text": "тест",
+        "question_group": 4,
+        "question_number": 11,
+        "created_at": "2021-08-17T08:53:44.322Z",
+        "updated_at": "2021-08-17T08:53:44.322Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 1,
+    "fields": {
+        "left_answer_text": "Лилия, фрезия, роза",
+        "right_answer_text": "Цветочные ароматы и интересные цветочные композиции без привязки к запаху какого-то цветка",
+        "question": 1,
+        "created_at": "2021-08-17T08:32:39.671Z",
+        "updated_at": "2021-08-17T08:32:39.671Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 2,
+    "fields": {
+        "left_answer_text": "Восточные ароматы (ваниль, амбра, специи)",
+        "right_answer_text": "Морская свежесть, бриз, дождь",
+        "question": 1,
+        "created_at": "2021-08-17T08:32:39.673Z",
+        "updated_at": "2021-08-17T08:32:39.673Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 3,
+    "fields": {
+        "left_answer_text": "Фруктовые ароматы: дыня, арбуз, персик, малина",
+        "right_answer_text": "Древесные ароматы: сандал, кедровое дерево",
+        "question": 1,
+        "created_at": "2021-08-17T08:32:39.673Z",
+        "updated_at": "2021-08-17T08:32:39.673Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 4,
+    "fields": {
+        "left_answer_text": "\"Зеленые ароматы\" с нотками бамбука, травы, теплого сена,  мха, утренней росы",
+        "right_answer_text": "Цитрусовые ароматы",
+        "question": 1,
+        "created_at": "2021-08-17T08:32:39.674Z",
+        "updated_at": "2021-08-17T08:32:39.674Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 5,
+    "fields": {
+        "left_answer_text": "Морская свежесть, бриз, дождь",
+        "right_answer_text": "Свежие ароматы: воздух, лед, морозная свежесть",
+        "question": 1,
+        "created_at": "2021-08-17T08:32:39.674Z",
+        "updated_at": "2021-08-17T08:32:39.674Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 6,
+    "fields": {
+        "left_answer_text": "Нет предпочтений (полки холодильника завалены разной едой)",
+        "right_answer_text": "Мясо, колбасы, копчености",
+        "question": 2,
+        "created_at": "2021-08-17T08:34:36.839Z",
+        "updated_at": "2021-08-17T08:34:36.839Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 7,
+    "fields": {
+        "left_answer_text": "Мясо, колбасы, копчености",
+        "right_answer_text": "Рыба, морепродукты",
+        "question": 2,
+        "created_at": "2021-08-17T08:34:36.840Z",
+        "updated_at": "2021-08-17T08:34:36.840Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 8,
+    "fields": {
+        "left_answer_text": "Холодильник забит овощами и фруктами",
+        "right_answer_text": "Нет предпочтений (полки холодильника завалены разной едой)",
+        "question": 2,
+        "created_at": "2021-08-17T08:34:36.841Z",
+        "updated_at": "2021-08-17T08:34:36.841Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 9,
+    "fields": {
+        "left_answer_text": "Пирожные, конфеты, шоколад",
+        "right_answer_text": "Соленое, кислое",
+        "question": 2,
+        "created_at": "2021-08-17T08:34:36.844Z",
+        "updated_at": "2021-08-17T08:34:36.844Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 10,
+    "fields": {
+        "left_answer_text": "Жирная пища",
+        "right_answer_text": "Острое",
+        "question": 2,
+        "created_at": "2021-08-17T08:34:36.845Z",
+        "updated_at": "2021-08-17T08:34:36.845Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 11,
+    "fields": {
+        "left_answer_text": "Нет предпочтений (полки холодильника завалены разной едой)",
+        "right_answer_text": "Острое",
+        "question": 2,
+        "created_at": "2021-08-17T08:34:36.846Z",
+        "updated_at": "2021-08-17T08:34:36.846Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 12,
+    "fields": {
+        "left_answer_text": "Я жаворонок и просыпаюсь рано, в 7 утра я уже на ногах: активно приступаю к текущим делам",
+        "right_answer_text": "Я жаворонок и просыпаюсь рано: у меня обязательно утренняя пробежка/спорт, далее время для себя",
+        "question": 3,
+        "created_at": "2021-08-17T08:36:34.471Z",
+        "updated_at": "2021-08-17T08:36:34.471Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 13,
+    "fields": {
+        "left_answer_text": "Я сова, просыпаюсь после чашки ароматного кофе/чая",
+        "right_answer_text": "Я сова и просыпаюсь в первой половине дня после спортивной разминки",
+        "question": 3,
+        "created_at": "2021-08-17T08:36:34.473Z",
+        "updated_at": "2021-08-17T08:36:34.473Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 14,
+    "fields": {
+        "left_answer_text": "После того как я просыпаюсь, я обязательно еще 5 минут полежу в теплой постели",
+        "right_answer_text": "После того как я просыпаюсь, я встаю и на автопилоте начинаю свое  утро (мне важно чтобы все вещи и предметы были на своих местах)",
+        "question": 3,
+        "created_at": "2021-08-17T08:36:34.474Z",
+        "updated_at": "2021-08-17T08:36:34.474Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 15,
+    "fields": {
+        "left_answer_text": "Утром я встаю всегда первым",
+        "right_answer_text": "Утром я встаю всегда после того, как члены семьи уже проснулись",
+        "question": 3,
+        "created_at": "2021-08-17T08:36:34.474Z",
+        "updated_at": "2021-08-17T08:36:34.474Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 16,
+    "fields": {
+        "left_answer_text": "Утро",
+        "right_answer_text": "Полдень",
+        "question": 4,
+        "created_at": "2021-08-17T08:37:24.637Z",
+        "updated_at": "2021-08-17T08:37:24.637Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 17,
+    "fields": {
+        "left_answer_text": "Вторая половина дня",
+        "right_answer_text": "Вечер",
+        "question": 4,
+        "created_at": "2021-08-17T08:37:24.639Z",
+        "updated_at": "2021-08-17T08:37:24.639Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 18,
+    "fields": {
+        "left_answer_text": "Несколько периодов в течение дня: утром и во второй половине дня",
+        "right_answer_text": "Во второй половине дня и вечером, когда возвращаюсь с работы",
+        "question": 4,
+        "created_at": "2021-08-17T08:37:24.641Z",
+        "updated_at": "2021-08-17T08:37:24.641Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 19,
+    "fields": {
+        "left_answer_text": "Утро",
+        "right_answer_text": "Полдень",
+        "question": 5,
+        "created_at": "2021-08-17T08:39:15.466Z",
+        "updated_at": "2021-08-17T08:39:15.466Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 20,
+    "fields": {
+        "left_answer_text": "Вторая половина дня",
+        "right_answer_text": "После работы",
+        "question": 5,
+        "created_at": "2021-08-17T08:39:15.467Z",
+        "updated_at": "2021-08-17T08:39:15.467Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 21,
+    "fields": {
+        "left_answer_text": "Планирую выходные заблаговременно и с утра отравляюсь по делам",
+        "right_answer_text": "Выходные проходят в зависимости от усталости на работе в течение недели, иногда просто отсыпаюсь",
+        "question": 6,
+        "created_at": "2021-08-17T08:40:47.984Z",
+        "updated_at": "2021-08-17T08:40:47.985Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 22,
+    "fields": {
+        "left_answer_text": "Люблю посетить магазины, посмотреть что по чем и пообедать/поужинать в кафе",
+        "right_answer_text": "Пробежка по магазинам под потребности, не люблю скопление людей",
+        "question": 6,
+        "created_at": "2021-08-17T08:40:47.986Z",
+        "updated_at": "2021-08-17T08:40:47.986Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 23,
+    "fields": {
+        "left_answer_text": "Уезжаю на выходные на дачу",
+        "right_answer_text": "Уезжаю на выходные в гости",
+        "question": 6,
+        "created_at": "2021-08-17T08:40:47.987Z",
+        "updated_at": "2021-08-17T08:40:47.987Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 24,
+    "fields": {
+        "left_answer_text": "В выходные обязательно прогулка по городу/в кинотеатр",
+        "right_answer_text": "Прогулки по городу/кинотеатр по настроению, нечасто (не чаще 1 раза в 2 месяца)",
+        "question": 6,
+        "created_at": "2021-08-17T08:40:47.987Z",
+        "updated_at": "2021-08-17T08:40:47.987Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 25,
+    "fields": {
+        "left_answer_text": "В выходные планирую путешествие выходного дня в другой город",
+        "right_answer_text": "Запланированные путешествия случаются не часто, в основном остаюсь в своем городе/даче",
+        "question": 6,
+        "created_at": "2021-08-17T08:40:47.988Z",
+        "updated_at": "2021-08-17T08:40:47.988Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 26,
+    "fields": {
+        "left_answer_text": "Люблю снег и прогулки в горах",
+        "right_answer_text": "Люблю прохладу и прогулки в лесу",
+        "question": 7,
+        "created_at": "2021-08-17T08:41:40.468Z",
+        "updated_at": "2021-08-17T08:41:40.468Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 27,
+    "fields": {
+        "left_answer_text": "Люблю дождь и прогулки по городу под дождем",
+        "right_answer_text": "Люблю солнечную погоду и прогулки в окрестностях",
+        "question": 7,
+        "created_at": "2021-08-17T08:41:40.469Z",
+        "updated_at": "2021-08-17T08:41:40.469Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 28,
+    "fields": {
+        "left_answer_text": "Любая погода хороша, я передвигаюсь на машине",
+        "right_answer_text": "Любая погода приемлема для прогулок",
+        "question": 7,
+        "created_at": "2021-08-17T08:41:40.471Z",
+        "updated_at": "2021-08-17T08:41:40.471Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 29,
+    "fields": {
+        "left_answer_text": "Рыбалка",
+        "right_answer_text": "Дачный ландшафт",
+        "question": 8,
+        "created_at": "2021-08-17T08:43:10.477Z",
+        "updated_at": "2021-08-17T08:43:10.477Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 30,
+    "fields": {
+        "left_answer_text": "Охота",
+        "right_answer_text": "Рукоделие (вязание, вышивка)",
+        "question": 8,
+        "created_at": "2021-08-17T08:43:10.478Z",
+        "updated_at": "2021-08-17T08:43:10.478Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 31,
+    "fields": {
+        "left_answer_text": "Сбор грибов",
+        "right_answer_text": "Нумизматика",
+        "question": 8,
+        "created_at": "2021-08-17T08:43:10.479Z",
+        "updated_at": "2021-08-17T08:43:10.479Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 32,
+    "fields": {
+        "left_answer_text": "Путешествия",
+        "right_answer_text": "Рисование",
+        "question": 8,
+        "created_at": "2021-08-17T08:43:10.479Z",
+        "updated_at": "2021-08-17T08:43:10.479Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 33,
+    "fields": {
+        "left_answer_text": "Кулинария",
+        "right_answer_text": "Мастерение чего-либо",
+        "question": 8,
+        "created_at": "2021-08-17T08:43:10.480Z",
+        "updated_at": "2021-08-17T08:43:10.480Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 34,
+    "fields": {
+        "left_answer_text": "Кошки",
+        "right_answer_text": "Птицы (попугаи, канарейки и тд)",
+        "question": 9,
+        "created_at": "2021-08-17T08:44:04.134Z",
+        "updated_at": "2021-08-17T08:44:04.134Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 35,
+    "fields": {
+        "left_answer_text": "Собаки",
+        "right_answer_text": "Грызуны (морские свинки, крысы и тд)",
+        "question": 9,
+        "created_at": "2021-08-17T08:44:04.135Z",
+        "updated_at": "2021-08-17T08:44:04.135Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 36,
+    "fields": {
+        "left_answer_text": "Аквариумные рыбки",
+        "right_answer_text": "Членистоногие (пауки, богомолы и тд)",
+        "question": 9,
+        "created_at": "2021-08-17T08:44:04.136Z",
+        "updated_at": "2021-08-17T08:44:04.136Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 37,
+    "fields": {
+        "left_answer_text": "Черепахи",
+        "right_answer_text": "Змеи",
+        "question": 9,
+        "created_at": "2021-08-17T08:44:04.137Z",
+        "updated_at": "2021-08-17T08:44:04.137Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 38,
+    "fields": {
+        "left_answer_text": "Мне очень важно чтобы все было на своих местах, так как это было расположено уже давно",
+        "right_answer_text": "Я спокойно отношусь к перемещению вещей/предметов на другие места",
+        "question": 10,
+        "created_at": "2021-08-17T08:45:19.818Z",
+        "updated_at": "2021-08-17T08:45:19.818Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 39,
+    "fields": {
+        "left_answer_text": "Я очень люблю чистоту и мне важно чтобы уборка проводилась ежедневно",
+        "right_answer_text": "Я люблю чистоту и мне важно чтобы уборка в  доме проводилась еженедельно",
+        "question": 10,
+        "created_at": "2021-08-17T08:45:19.820Z",
+        "updated_at": "2021-08-17T08:45:19.820Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 40,
+    "fields": {
+        "left_answer_text": "Мне важно лично заниматься уборкой в доме",
+        "right_answer_text": "Я приглашаю специального работника для уборки в доме и оговариваю с ней все мои требования",
+        "question": 10,
+        "created_at": "2021-08-17T08:45:19.821Z",
+        "updated_at": "2021-08-17T08:45:19.821Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 41,
+    "fields": {
+        "left_answer_text": "Мне важна смена постельного  белья не менее 1 раза в 2 недели",
+        "right_answer_text": "Я не придаю большого значения периодичности смены белья, меня по мере необходимости",
+        "question": 10,
+        "created_at": "2021-08-17T08:45:19.822Z",
+        "updated_at": "2021-08-17T08:45:19.822Z"
+    }
+},
+{
+    "model": "questions.answerscale",
+    "pk": 42,
+    "fields": {
+        "left_answer_text": "йцукен",
+        "right_answer_text": "йфячыц",
+        "question": 11,
+        "created_at": "2021-08-17T08:53:44.323Z",
+        "updated_at": "2021-08-17T08:53:44.323Z"
+    }
+}
+]
