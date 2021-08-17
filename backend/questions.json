@@ -4,9 +4,10 @@
     "pk": 1,
     "fields": {
         "name_group_question": "Запахи",
+        "order": 1,
         "published_or_not": true,
         "created_at": "2021-08-17T08:30:20.716Z",
-        "updated_at": "2021-08-17T08:47:26.603Z"
+        "updated_at": "2021-08-17T16:31:57.914Z"
     }
 },
 {
@@ -14,9 +15,10 @@
     "pk": 2,
     "fields": {
         "name_group_question": "Еда",
+        "order": 2,
         "published_or_not": true,
         "created_at": "2021-08-17T08:30:27.441Z",
-        "updated_at": "2021-08-17T08:47:26.213Z"
+        "updated_at": "2021-08-17T16:32:04.759Z"
     }
 },
 {
@@ -24,9 +26,10 @@
     "pk": 3,
     "fields": {
         "name_group_question": "Привычки/предпочтения",
+        "order": 3,
         "published_or_not": true,
         "created_at": "2021-08-17T08:30:45.235Z",
-        "updated_at": "2021-08-17T08:47:26.208Z"
+        "updated_at": "2021-08-17T16:32:09.499Z"
     }
 },
 {
@@ -34,9 +37,10 @@
     "pk": 4,
     "fields": {
         "name_group_question": "Спорт",
+        "order": 4,
         "published_or_not": true,
         "created_at": "2021-08-17T08:30:53.794Z",
-        "updated_at": "2021-08-17T08:47:26.201Z"
+        "updated_at": "2021-08-17T16:32:13.927Z"
     }
 },
 {
@@ -147,17 +151,6 @@
         "question_number": 10,
         "created_at": "2021-08-17T08:45:19.817Z",
         "updated_at": "2021-08-17T08:45:19.817Z"
-    }
-},
-{
-    "model": "questions.questionwithscale",
-    "pk": 11,
-    "fields": {
-        "question_text": "тест",
-        "question_group": 4,
-        "question_number": 11,
-        "created_at": "2021-08-17T08:53:44.322Z",
-        "updated_at": "2021-08-17T08:53:44.322Z"
     }
 },
 {
@@ -612,14 +605,104 @@
     }
 },
 {
-    "model": "questions.answerscale",
-    "pk": 42,
+    "model": "questions.questionwithoption",
+    "pk": 1,
     "fields": {
-        "left_answer_text": "йцукен",
-        "right_answer_text": "йфячыц",
-        "question": 11,
-        "created_at": "2021-08-17T08:53:44.323Z",
-        "updated_at": "2021-08-17T08:53:44.323Z"
+        "question_text": "Каким видом спорта Вы занимаетесь регулярно? (или занимались регулярно не менее 2-х лет)",
+        "question_group": 4,
+        "question_number": 11,
+        "created_at": "2021-08-17T16:54:37.281Z",
+        "updated_at": "2021-08-17T16:54:37.281Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 1,
+    "fields": {
+        "answer_text": "футбол",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.283Z",
+        "updated_at": "2021-08-17T16:54:37.283Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 2,
+    "fields": {
+        "answer_text": "бег, плавание, велоспорт",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.285Z",
+        "updated_at": "2021-08-17T16:54:37.285Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 3,
+    "fields": {
+        "answer_text": "карате, стрельба",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.286Z",
+        "updated_at": "2021-08-17T16:54:37.286Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 4,
+    "fields": {
+        "answer_text": "бои без правил, ММА",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.287Z",
+        "updated_at": "2021-08-17T16:54:37.287Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 5,
+    "fields": {
+        "answer_text": "шахматы",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.288Z",
+        "updated_at": "2021-08-17T16:54:37.288Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 6,
+    "fields": {
+        "answer_text": "лыжи, сноуборд",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.288Z",
+        "updated_at": "2021-08-17T16:54:37.288Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 7,
+    "fields": {
+        "answer_text": "бодибилдинг",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.289Z",
+        "updated_at": "2021-08-17T16:54:37.289Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 8,
+    "fields": {
+        "answer_text": "профессиональные танцы",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.289Z",
+        "updated_at": "2021-08-17T16:54:37.289Z"
+    }
+},
+{
+    "model": "questions.answeroption",
+    "pk": 9,
+    "fields": {
+        "answer_text": "регулярные занятия в спортзале",
+        "question": 1,
+        "created_at": "2021-08-17T16:54:37.290Z",
+        "updated_at": "2021-08-17T16:54:37.290Z"
     }
 }
 ]
