@@ -27,10 +27,11 @@ class GroupQuestionType(DjangoObjectType):
         is_found = False
         for group in groups:
             if group.id == self.id:
-                is_found = True
-                continue
-            if is_found:
-                next_group_id = group.id
+                next_group_id = group.id+1
+                if next_group_id == groups.count()+1:
+                    next_group_id = None
+                else:
+                    next_group_id = group.id+1
         return next_group_id
 
     def resolve_prev_group_id(self, info):

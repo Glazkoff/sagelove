@@ -86,6 +86,8 @@ def first_algorithm():
                 )):
                     Datings.objects.create(
                         user_1=first_user_data, user_2=user_second, algorithm='A1')
+                    first_user_data.test_result_demo = "FNP"
+                    first_user_data.save()
                     count_match += 1
             print(f"Алгоритм 1 работает!")
             ok = True
@@ -142,6 +144,8 @@ def second_algorithm():
                 ).count() == 0 and (((first_user_answer_scale_1 == second_user_answer_scale_5) or (second_user_answer_scale_1 == first_user_answer_scale_5)) and ((first_user_answer_scale_2 == second_user_answer_scale_4) or (second_user_answer_scale_2 == first_user_answer_scale_4))) and user_second.gender != first_user_data.gender:
                     Datings.objects.create(
                         user_1=first_user_data, user_2=user_second, algorithm='A2')
+                    first_user_data.test_result_demo = "FNP"
+                    first_user_data.save()
                     count_match += 1
             print(f"Алгоритм 2 работает!")
             ok = True
@@ -190,6 +194,8 @@ def third_algorithm():
                 ).count() == 0 and first_user_answer_scale_1 >= 35 and second_user_answer_scale_1 >= 35 and first_user_answer_scale_5 >= 5 and second_user_answer_scale_5 >= 5 and user_second.gender != first_user_data.gender:
                     Datings.objects.create(
                         user_1=first_user_data, user_2=user_second, algorithm='A3')
+                    first_user_data.test_result_demo = "FNP"
+                    first_user_data.save()
                     count_match += 1
             print(f"Алгоритм 3 работает!")
             ok = True
@@ -242,6 +248,8 @@ def fourth_algorithm():
                 ):
                     Datings.objects.create(
                         user_1=first_user_data, user_2=user_second, algorithm='HBF')
+                    first_user_data.test_result_demo = "FNP"
+                    first_user_data.save()
                     count_match += 1
             print(f"Алгоритм 4 работает!")
             ok = True
