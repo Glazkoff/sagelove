@@ -47,10 +47,8 @@ services:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
-    # logging:
-    # driver: none
 
-  # Брокер сообщений RabbitMQ
+  # Брокер сообщений Redis
   redis:
     container_name: sagelove_redis
     restart: always
@@ -70,6 +68,7 @@ services:
       - backend
       - redis
 
+  # Celery Beat
   celery-beat:
     container_name: sagelove_celery-beat
     restart: on-failure
@@ -83,6 +82,7 @@ services:
       - backend
       - redis
 
+  # Flower
   flower:
     container_name: sagelove_flower
     image: mher/flower

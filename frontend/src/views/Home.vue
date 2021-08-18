@@ -341,5 +341,8 @@ p.custom-menu-link:hover:after {
 
 .p-0-imp {
   padding: 0 !important;
+  margin-left: 0px;
+  margin-right: 0px;
+  max-width: 100vw;
 }
 </style>
