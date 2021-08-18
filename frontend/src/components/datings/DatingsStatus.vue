@@ -184,18 +184,39 @@ export default {
             console.log(err);
           });
       }
+      //TODO: ВЕРНУТЬ КОД, КОТОРЫЙ ЗАККОМЕНТИРОВАН, ПОСЛЕ ДОБАВЛЕНИЯ ЧАСТИ С ОПЛАТОЙ
+      // switch (val.testResultDemo) {
+      //   case "NFNP":
+      //   default:
+      //     this.wasFound = false;
+      //     this.isPaid = false;
+      //     break;
+      //   case "FNP":
+      //     this.wasFound = true;
+      //     this.isPaid = false;
+      //     break;
+      //   case "NFP":
+      //     this.wasFound = false;
+      //     this.isPaid = true;
+      //     break;
+      //   case "FP":
+      //     this.wasFound = true;
+      //     this.isPaid = true;
+      //     break;
+      // }
+      // TODO: УБРАТЬ ЭТОТ КОД ПОСЛЕ ДОБАВЛЕНИЯ ЧАСТИ С ОПЛАТОЙ
       switch (val.testResultDemo) {
         case "NFNP":
         default:
-          this.wasFound = false;
-          this.isPaid = false;
+          this.wasFound = true;
+          this.isPaid = true;
           break;
         case "FNP":
           this.wasFound = true;
-          this.isPaid = false;
+          this.isPaid = true;
           break;
         case "NFP":
-          this.wasFound = false;
+          this.wasFound = true;
           this.isPaid = true;
           break;
         case "FP":
