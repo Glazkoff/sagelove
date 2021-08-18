@@ -106,7 +106,10 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="h-100">
+      <v-container
+        class="h-100"
+        :class="{ 'p-0-imp': this.$route.path == '/chat' }"
+      >
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -334,5 +337,9 @@ p.custom-menu-link:hover:after {
     width: auto;
     right: 16px;
   }
+}
+
+.p-0-imp {
+  padding: 0 !important;
 }
 </style>

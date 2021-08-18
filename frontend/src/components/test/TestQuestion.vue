@@ -166,7 +166,7 @@ import {
   CREATE_USER_SCALE_ANSWER,
   FINISH_USER_TESTING
 } from "@/graphql/questions_mutations";
-import { CREATE_DATINGS_ALGORITHMS } from "@/graphql/accounts_mutations";
+// import { CREATE_DATINGS_ALGORITHMS } from "@/graphql/accounts_mutations";
 export default {
   name: "TestQuestion",
   apollo: {
@@ -234,12 +234,12 @@ export default {
           }
         })
         .then(res => {
-          this.$apollo.mutate({
-            mutation: CREATE_DATINGS_ALGORITHMS,
-            variables: {
-              userFirst: this.$store.getters.user_id
-            }
-          });
+          // this.$apollo.mutate({
+          //   mutation: CREATE_DATINGS_ALGORITHMS,
+          //   variables: {
+          //     userFirst: this.$store.getters.user_id
+          //   }
+          // });
           if (res.data.finishUserTesting.statusOk) {
             this.$router.push("/datings");
           }
@@ -534,15 +534,14 @@ export default {
     progress() {
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
         return Math.ceil(
-          ((this.questionGroup.orderNumber - 1) / this.questionGroupsCount) *
-            100
+          ((this.questionGroup.order - 1) / this.questionGroupsCount) * 100
         );
       } else {
         return 0;
       }
     },
     orderNumber() {
-      return this.questionGroup != null ? this.questionGroup.orderNumber : "-";
+      return this.questionGroup != null ? this.questionGroup.order : "-";
     },
     nameGroupQuestion() {
       return this.questionGroup != null
