@@ -174,7 +174,7 @@ export default {
       query: QUESTION_GROUP,
       variables() {
         return {
-          questionGroupId: this.groupId
+          questionGroupOrder: this.groupId
         };
       }
     },

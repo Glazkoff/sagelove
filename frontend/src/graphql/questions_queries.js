@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const QUESTION_GROUP = gql`
-  query ($questionGroupId: ID!) {
-    questionGroup(questionGroupId: $questionGroupId) {
+  query ($questionGroupOrder: ID!) {
+    questionGroup(questionGroupOrder: $questionGroupOrder) {
       id
       order
       prevGroupId
