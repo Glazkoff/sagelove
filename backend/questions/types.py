@@ -30,21 +30,16 @@ class GroupQuestionType(DjangoObjectType):
                 if next_group_id == groups.count()+1:
                     next_group_id = None
                 else:
-                    next_group_id = group.id+1
+                    next_group_id = group.order+1
         return next_group_id
 
     def resolve_prev_group_id(self, info):
         groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
-        is_first = True
         prev_group_id = None
-        prev_buffer = 0
         for group in groups:
-            if not is_first and self.id == group.id:
-                prev_group_id = prev_buffer
-                break
-            if prev_buffer == 0:
-                is_first = False
-            prev_buffer = group.id
+            if group.order == self.order:
+                prev_group_id = group.order-1
+                prev_group_id = None if prev_group_id == 0 else group.order-1
         return prev_group_id
 
 
