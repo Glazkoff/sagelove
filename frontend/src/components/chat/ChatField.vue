@@ -3,8 +3,6 @@
     fluid
     class="h-100 pa-0 d-flex flex-column align-stretch justify-space-between"
   >
-    <!-- <v-row class="h-100" no-gutters> -->
-
     <v-app-bar class="w-100 chat-bar">
       <v-avatar class="mr-4">
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="Avatar" />
@@ -57,28 +55,19 @@
       </v-container>
     </div>
     <div>
-      <v-container>
-        <form>
-          <v-textarea
-            outlined
-            rows="3"
-            placeholder="Введите сообщение..."
-            no-resize
-          ></v-textarea>
-          <div class="d-flex">
-            <v-spacer></v-spacer>
-            <v-btn dark color="colorOfSea">Отправить</v-btn>
-          </div>
-        </form>
-      </v-container>
+      <ChatMessageInput></ChatMessageInput>
     </div>
-    <!-- </v-row> -->
   </v-container>
 </template>
 
 <script>
+import ChatMessageInput from "./ChatMessageInput.vue";
+
 export default {
-  name: "ChatField"
+  name: "ChatField",
+  components: {
+    ChatMessageInput
+  }
 };
 </script>
 

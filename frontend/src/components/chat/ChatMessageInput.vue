@@ -1,0 +1,95 @@
+<template>
+  <v-container class="d-flex flex-row align-stretch justify-space-between">
+    <div class="emoji-wrap">
+      <VEmojiPicker
+        class="emoji-picker"
+        @select="selectEmoji"
+        v-if="emojiPickerShow"
+        :i18n="i18n"
+        :emojiSize="28"
+        v-on-clickaway="closeEmojiPicker"
+      />
+      <v-btn
+        icon
+        color="colorOfSea"
+        @click="emojiPickerShow = !emojiPickerShow"
+      >
+        <v-icon>mdi-emoticon-happy-outline</v-icon>
+      </v-btn>
+    </div>
+    <form id="chat-form" class="ml-2 mr-2">
+      <v-textarea
+        outlined
+        rows="3"
+        placeholder="Введите сообщение..."
+        no-resize
+        v-model="newMessage"
+      ></v-textarea>
+    </form>
+    <div class="d-flex">
+      <v-spacer></v-spacer>
+      <v-btn dark color="colorOfSea">Отправить</v-btn>
+    </div>
+  </v-container>
+</template>
+
+<script>
+import { VEmojiPicker } from "v-emoji-picker";
+import { mixin as clickaway } from "vue-clickaway";
+
+const i18n = {
+  search: "Поиск...",
+  categories: {
+    Activity: "Активности",
+    Flags: "Флаги",
+    Foods: "Еда",
+    Frequently: "Недавнее",
+    Objects: "Объекты",
+    Nature: "Природа",
+    Peoples: "Люди",
+    Symbols: "Символы",
+    Places: "Места"
+  }
+};
+
+export default {
+  name: "ChatMessageInput",
+  mixins: [clickaway],
+  components: {
+    VEmojiPicker
+  },
+  data() {
+    return {
+      emojiPickerShow: false,
+      newMessage: "",
+      i18n
+    };
+  },
+  methods: {
+    selectEmoji(emoji) {
+      console.log(emoji);
+      this.newMessage += emoji.data;
+    },
+    closeEmojiPicker() {
+      this.emojiPickerShow = false;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+#chat-form {
+  width: 100%;
+}
+.emoji-wrap {
+  position: relative;
+  .emoji-picker {
+    position: absolute;
+    bottom: 110%;
+    left: 0;
+  }
+}
+#InputSearch {
+  display: none !important;
+}
+</style>
