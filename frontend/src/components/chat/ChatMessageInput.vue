@@ -1,14 +1,18 @@
 <template>
   <v-container class="d-flex flex-row align-stretch justify-space-between">
     <div class="emoji-wrap">
-      <VEmojiPicker
-        class="emoji-picker"
-        @select="selectEmoji"
-        v-if="emojiPickerShow"
-        :i18n="i18n"
-        :emojiSize="28"
-        v-on-clickaway="closeEmojiPicker"
-      />
+      <SlideYDownTransition>
+        <VEmojiPicker
+          class="emoji-picker"
+          @select="selectEmoji"
+          v-if="emojiPickerShow"
+          :i18n="i18n"
+          :emojiSize="28"
+          :showSearch="false"
+          :emojisByRow="5"
+          v-on-clickaway="closeEmojiPicker"
+        />
+      </SlideYDownTransition>
       <v-btn
         icon
         color="colorOfSea"
@@ -24,6 +28,7 @@
         placeholder="Введите сообщение..."
         no-resize
         v-model="newMessage"
+        ref="messageField"
       ></v-textarea>
     </form>
     <div class="d-flex">
@@ -36,6 +41,7 @@
 <script>
 import { VEmojiPicker } from "v-emoji-picker";
 import { mixin as clickaway } from "vue-clickaway";
+import { SlideYDownTransition } from "vue2-transitions";
 
 const i18n = {
   search: "Поиск...",
@@ -56,7 +62,8 @@ export default {
   name: "ChatMessageInput",
   mixins: [clickaway],
   components: {
-    VEmojiPicker
+    VEmojiPicker,
+    SlideYDownTransition
   },
   data() {
     return {
