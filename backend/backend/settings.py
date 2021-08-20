@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
     'graphene_django',
     'django_celery_results',
     'django_celery_beat',
+    'graphene_subscriptions',
 ]
 
 LOCAL_APPS = [
@@ -221,3 +222,9 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = env.str('CELERY_BROKER')
 CELERY_RESULT_BACKEND = env.str('CELERY_BROKER')
+
+CHANNEL_LAYERS  = {
+     "default" : {
+         "BACKEND" : "channels.layers.InMemoryChannelLayer"
+    }
+}
