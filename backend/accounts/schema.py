@@ -1,5 +1,5 @@
 from .types import UserScaleAnswerType, UserOptionAnswerType, AnswersCountingType, MatchType
-from .mutations import CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, FinishUserTesting, BlockUserMatchMutation,CreateDatingsFirstMutation, CreateDatingsSecondMutation,CreateDatingsFourthMutation,CreateDatingsThirdMutation
+from .mutations import CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, FinishUserTesting, BlockUserMatchMutation, CreateDatingsFirstMutation, CreateDatingsSecondMutation, CreateDatingsFourthMutation, CreateDatingsThirdMutation
 from django.db.models import Q
 import graphene
 
@@ -8,6 +8,8 @@ from questions.models import GroupQuestion, QuestionWithScale, QuestionWithOptio
 from questions.types import GroupQuestionType
 from users.models import CustomUser
 from django.db.models import Max
+
+from accounts.subscriptions import YourSubscription
 
 
 class Query(graphene.ObjectType):
@@ -106,4 +108,10 @@ class Mutation(graphene.ObjectType):
     create_datings_algorithm_fourth = CreateDatingsFourthMutation.Field()
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+class Subscription(YourSubscription):
+    pass
+
+
+schema = graphene.Schema(query=Query,
+                         mutation=Mutation,
+                         subscription=Subscription)

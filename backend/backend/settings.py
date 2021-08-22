@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
     'graphene_django',
     'django_celery_results',
     'django_celery_beat',
+    'channels',
     'graphene_subscriptions',
 ]
 
@@ -212,7 +213,9 @@ MEDIA_ROOT = str(ROOT_DIR('media'))
 MEDIA_URL = '/media/'
 
 GRAPHENE = {
-    "SCHEMA": "backend.schema.schema"
+    "SCHEMA": "backend.schema.schema",
+    # The path you configured in `routing.py`, including a leading slash.
+    "SUBSCRIPTION_PATH": "/ws/subscriptions/"
 }
 
 # Celery Configuration Options
@@ -223,8 +226,10 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = env.str('CELERY_BROKER')
 CELERY_RESULT_BACKEND = env.str('CELERY_BROKER')
 
-CHANNEL_LAYERS  = {
-     "default" : {
-         "BACKEND" : "channels.layers.InMemoryChannelLayer"
+ASGI_APPLICATION = "backend.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }

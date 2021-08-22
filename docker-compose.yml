@@ -9,7 +9,7 @@ services:
       - db_data:/var/lib/postgresql/data
     env_file: .env
 
-  # Бэкенд Django
+  # Бэкенд Django WSGI
   backend:
     container_name: sagelove_backend
     build:
@@ -20,6 +20,22 @@ services:
     volumes:
       - ./backend:/app
     command: /start.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env
+
+  # Бэкенд Django ASGI
+  backend_asgi:
+    container_name: sagelove_backend_asgi
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.asgi
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+    command: /start_asgi.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
     env_file: .env

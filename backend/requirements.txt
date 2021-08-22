@@ -17,4 +17,7 @@ celery
 flower
 django-celery-results
 django-celery-beat
-graphene-subscriptions
+daphne
+uwsgi
+channels
+graphene_subscriptions
