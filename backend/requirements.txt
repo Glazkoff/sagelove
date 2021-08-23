@@ -19,5 +19,7 @@ django-celery-results
 django-celery-beat
 daphne
 uwsgi
-channels
-graphene_subscriptions
+channels==1.1.8
+graphene-subscriptions
+rx
+uvicorn

@@ -9,8 +9,6 @@ from questions.types import GroupQuestionType
 from users.models import CustomUser
 from django.db.models import Max
 
-from accounts.subscriptions import YourSubscription
-
 
 class Query(graphene.ObjectType):
     user_group_scale_answers = graphene.List(
@@ -108,10 +106,5 @@ class Mutation(graphene.ObjectType):
     create_datings_algorithm_fourth = CreateDatingsFourthMutation.Field()
 
 
-class Subscription(YourSubscription):
-    pass
-
-
 schema = graphene.Schema(query=Query,
-                         mutation=Mutation,
-                         subscription=Subscription)
+                         mutation=Mutation)
