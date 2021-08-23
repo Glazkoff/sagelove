@@ -115,3 +115,40 @@ class Datings(models.Model):
     class Meta:
         verbose_name = "Совпадения пользователя"
         verbose_name_plural = "Совпадения пользователей"
+
+
+class Chat(models.Model):
+    """Чаты пользователей"""
+    user_1 = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name='firstuser',verbose_name="Пользователь 1")
+    user_2 = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE,related_name='seconduser', verbose_name="Пользователь 2")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Чат пользователя {self.user_1.first_name}(#{self.user_1.id}) и пользователя {self.user_2.first_name}(#{self.user_2.id})"
+
+    class Meta:
+        verbose_name = "Чат пользователей"
+        verbose_name_plural = "Чаты пользователей"
+
+class Message(models.Model):
+    """Сообщения пользователей"""
+    message_author = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, verbose_name="Автор сообщения")
+    chat = models.ForeignKey(
+        Chat, on_delete=models.CASCADE, verbose_name="Чат пользователей")
+    message_text = models.TextField("Текст сообщения")
+    message_check = models.BooleanField("Сообщение было прочитано", default=False)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.message_text
+
+    class Meta:
+        verbose_name = "Сообщение пользователей"
+        verbose_name_plural = "Сообщения пользователей"
