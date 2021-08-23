@@ -104,8 +104,9 @@ class Datings(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='datingsseconduser', verbose_name="Пользователь 2")
     algorithm = models.CharField(
         verbose_name="Алгоритм", max_length=120, choices=ALGORITHM_SELECTION, null=True, blank=True)
-    blocked = models.BooleanField("Совпадение было заблокировано пользователем", default=False)
-    
+    blocked = models.BooleanField(
+        "Совпадение было заблокировано пользователем", default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -120,10 +121,10 @@ class Datings(models.Model):
 class Chat(models.Model):
     """Чаты пользователей"""
     user_1 = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='firstuser',verbose_name="Пользователь 1")
+        CustomUser, on_delete=models.CASCADE, related_name='firstuser', verbose_name="Пользователь 1")
     user_2 = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE,related_name='seconduser', verbose_name="Пользователь 2")
-    
+        CustomUser, on_delete=models.CASCADE, related_name='seconduser', verbose_name="Пользователь 2")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -134,6 +135,7 @@ class Chat(models.Model):
         verbose_name = "Чат пользователей"
         verbose_name_plural = "Чаты пользователей"
 
+
 class Message(models.Model):
     """Сообщения пользователей"""
     message_author = models.ForeignKey(
@@ -141,8 +143,9 @@ class Message(models.Model):
     chat = models.ForeignKey(
         Chat, on_delete=models.CASCADE, verbose_name="Чат пользователей")
     message_text = models.TextField("Текст сообщения")
-    message_check = models.BooleanField("Сообщение было прочитано", default=False)
-    
+    message_check = models.BooleanField(
+        "Сообщение было прочитано", default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
