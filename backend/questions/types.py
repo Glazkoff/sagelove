@@ -5,8 +5,8 @@ from .models import GroupQuestion, QuestionWithScale, AnswerScale, QuestionWithO
 
 class GroupQuestionType(DjangoObjectType):
     # order_number = graphene.Int()
-    next_group_id = graphene.ID()
-    prev_group_id = graphene.ID()
+    next_group_order = graphene.ID()
+    prev_group_order = graphene.ID()
 
     class Meta:
         model = GroupQuestion
@@ -21,26 +21,26 @@ class GroupQuestionType(DjangoObjectType):
     #             break
     #     return count
 
-    def resolve_next_group_id(self, info):
+    def resolve_next_group_order(self, info):
         groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
-        next_group_id = None
+        next_group_order = None
         for group in groups:
             if group.order == self.order:
-                next_group_id = group.order+1
-                if next_group_id == groups.count()+1:
-                    next_group_id = None
+                next_group_order = group.order+1
+                if next_group_order == groups.count()+1:
+                    next_group_order = None
                 else:
-                    next_group_id = group.order+1
-        return next_group_id
+                    next_group_order = group.order+1
+        return next_group_order
 
-    def resolve_prev_group_id(self, info):
+    def resolve_prev_group_order(self, info):
         groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
-        prev_group_id = None
+        prev_group_order = None
         for group in groups:
             if group.order == self.order:
-                prev_group_id = group.order-1
-                prev_group_id = None if prev_group_id == 0 else group.order-1
-        return prev_group_id
+                prev_group_order = group.order-1
+                prev_group_order = None if prev_group_order == 0 else group.order-1
+        return prev_group_order
 
 
 class QuestionWithScaleType(DjangoObjectType):

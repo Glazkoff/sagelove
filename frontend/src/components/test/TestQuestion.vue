@@ -121,7 +121,7 @@
               dark
               color="colorOfSea"
               class="my-button"
-              v-if="prevGroupId !== null"
+              v-if="prevGroupOrder !== null"
               @click="goToPrevGroup"
               >Назад</v-btn
             >
@@ -130,7 +130,7 @@
         <v-col>
           <div class="text-right">
             <v-btn
-              v-if="nextGroupId !== null"
+              v-if="nextGroupOrder !== null"
               dark
               color="colorOfSea"
               class="my-button"
@@ -174,7 +174,7 @@ export default {
       query: QUESTION_GROUP,
       variables() {
         return {
-          questionGroupOrder: this.groupId
+          questionGroupOrder: this.questionGroupOrder
         };
       }
     },
@@ -185,7 +185,7 @@ export default {
       query: USER_GROUP_SCALE_ANSWERS,
       variables() {
         return {
-          groupId: this.groupId,
+          questionGroupOrder: this.questionGroupOrder,
           userId: this.$store.getters.user_id
         };
       }
@@ -194,7 +194,7 @@ export default {
       query: USER_GROUP_OPTION_ANSWERS,
       variables() {
         return {
-          groupId: this.groupId,
+          questionGroupOrder: this.questionGroupOrder,
           userId: this.$store.getters.user_id
         };
       }
@@ -246,7 +246,7 @@ export default {
         });
     },
     sendUserAnswers() {
-      let group = this.groupId;
+      let group = this.questionGroupOrder;
       return new Promise((resolve, reject) => {
         try {
           let userAnswersString = JSON.stringify(this.userAnswers);
@@ -285,7 +285,7 @@ export default {
                         const data = cache.readQuery({
                           query: USER_GROUP_SCALE_ANSWERS,
                           variables: {
-                            groupId: group,
+                            questionGroupOrder: group,
                             userId: this.$store.getters.user_id
                           }
                         });
@@ -305,7 +305,7 @@ export default {
                         cache.writeQuery({
                           query: USER_GROUP_SCALE_ANSWERS,
                           variables: {
-                            groupId: this.groupId,
+                            questionGroupOrder: this.questionGroupOrder,
                             userId: this.$store.getters.user_id
                           },
                           data
@@ -334,7 +334,7 @@ export default {
                     const data = cache.readQuery({
                       query: USER_GROUP_OPTION_ANSWERS,
                       variables: {
-                        groupId: group,
+                        questionGroupOrder: group,
                         userId: this.$store.getters.user_id
                       }
                     });
@@ -354,7 +354,7 @@ export default {
                     cache.writeQuery({
                       query: USER_GROUP_OPTION_ANSWERS,
                       variables: {
-                        groupId: this.groupId,
+                        questionGroupOrder: this.questionGroupOrder,
                         userId: this.$store.getters.user_id
                       },
                       data
@@ -402,18 +402,18 @@ export default {
     goToNextGroup() {
       this.sendUserAnswers().then(() => {
         this.userAnswers = [];
-        this.$router.push(`/question/${this.nextGroupId}`);
+        this.$router.push(`/question/${this.nextGroupOrder}`);
       });
     },
     goToPrevGroup() {
       this.sendUserAnswers().then(() => {
         this.userAnswers = [];
-        this.$router.push(`/question/${this.prevGroupId}`);
+        this.$router.push(`/question/${this.prevGroupOrder}`);
       });
     }
   },
   watch: {
-    groupId() {
+    questionGroupOrder() {
       this.$apollo.queries.userGroupOptionAnswers.refetch();
       this.$apollo.queries.userGroupOptionAnswers.refresh();
       this.$apollo.queries.userGroupScaleAnswers.refetch();
@@ -528,7 +528,7 @@ export default {
     }
   },
   computed: {
-    groupId() {
+    questionGroupOrder() {
       return this.$route.params.id;
     },
     progress() {
@@ -566,16 +566,16 @@ export default {
       }
       return questionsSet;
     },
-    nextGroupId() {
+    nextGroupOrder() {
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
-        return this.questionGroup.nextGroupId;
+        return this.questionGroup.nextGroupOrder;
       } else {
         return null;
       }
     },
-    prevGroupId() {
+    prevGroupOrder() {
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
-        return this.questionGroup.prevGroupId;
+        return this.questionGroup.prevGroupOrder;
       } else {
         return null;
       }

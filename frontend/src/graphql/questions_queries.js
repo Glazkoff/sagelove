@@ -5,8 +5,8 @@ export const QUESTION_GROUP = gql`
     questionGroup(questionGroupOrder: $questionGroupOrder) {
       id
       order
-      prevGroupId
-      nextGroupId
+      prevGroupOrder
+      nextGroupOrder
       nameGroupQuestion
       questionwithscaleSet {
         id
@@ -36,8 +36,11 @@ export const QUESTION_GROUP_COUNT = gql`
 `;
 
 export const USER_GROUP_SCALE_ANSWERS = gql`
-  query ($userId: ID!, $groupId: ID!) {
-    userGroupScaleAnswers(userId: $userId, groupId: $groupId) {
+  query ($userId: ID!, $questionGroupOrder: ID!) {
+    userGroupScaleAnswers(
+      userId: $userId
+      questionGroupOrder: $questionGroupOrder
+    ) {
       id
       answer
       answerScaleLine {
@@ -48,8 +51,11 @@ export const USER_GROUP_SCALE_ANSWERS = gql`
 `;
 
 export const USER_GROUP_OPTION_ANSWERS = gql`
-  query ($userId: ID!, $groupId: ID!) {
-    userGroupOptionAnswers(userId: $userId, groupId: $groupId) {
+  query ($userId: ID!, $questionGroupOrder: ID!) {
+    userGroupOptionAnswers(
+      userId: $userId
+      questionGroupOrder: $questionGroupOrder
+    ) {
       id
       answer {
         id
@@ -65,7 +71,7 @@ export const USER_LAST_GROUP = gql`
   query ($userId: ID!) {
     userLastGroup(userId: $userId) {
       id
-      nextGroupId
+      nextGroupOrder
       order
     }
   }
