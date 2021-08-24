@@ -76,8 +76,6 @@ services:
     env_file: .env
     volumes:
       - redis-data:/var/lib/redis
-    # ports:
-    #   - "6379:6379"
 
   celery-worker:
     container_name: sagelove_celery-worker
