@@ -6,7 +6,7 @@ import graphene
 import questions.schema
 import users.schema
 import accounts.schema
-from graphene_subscriptions.events import CREATED, DELETED
+from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 
 
 class Query(accounts.schema.Query, questions.schema.Query, users.schema.Query, graphene.ObjectType):
@@ -21,6 +21,15 @@ class Subscription(graphene.ObjectType):
     hello = graphene.String()
     chat_created = graphene.Field(ChatType)
     chat_deleted = graphene.Field(ChatType, id=graphene.ID())
+    chat_updated = graphene.Field(ChatType, id=graphene.ID())
+
+    def resolve_chat_updated(root, info, id):
+        return root.filter(
+            lambda event:
+                event.operation == UPDATED and
+                isinstance(event.instance, ChatType) and
+                event.instance.pk == int(id)
+        ).map(lambda event: event.instance)
 
     def resolve_chat_created(root, info):
         return root.filter(

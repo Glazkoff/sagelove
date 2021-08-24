@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 import environ
 from pathlib import Path
 from datetime import timedelta
@@ -59,6 +60,7 @@ THIRD_PARTY_APPS = [
     'django_celery_beat',
     'graphene_subscriptions',
     'channels',
+    'channels_redis'
 ]
 
 LOCAL_APPS = [
@@ -228,8 +230,13 @@ CELERY_RESULT_BACKEND = env.str('CELERY_BROKER')
 
 ASGI_APPLICATION = "backend.asgi.application"
 
+redis_host = os.environ.get('REDIS_HOST', 'localhost')
+
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        }
     }
 }

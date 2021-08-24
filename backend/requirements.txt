@@ -20,7 +20,9 @@ django-celery-beat
 daphne
 uwsgi
 channels
-# channels==1.1.8
+# channels-redis
+channels_redis
+asgi_redis
 graphene-subscriptions
 rx
 uvicorn

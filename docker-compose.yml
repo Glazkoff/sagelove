@@ -39,6 +39,8 @@ services:
     entrypoint: /entrypoint.sh
     restart: on-failure
     env_file: .env
+    links:
+      - redis
 
   # Сборка фронтенда
   frontend:
@@ -72,6 +74,10 @@ services:
     restart: always
     image: redis:5-alpine
     env_file: .env
+    volumes:
+      - redis-data:/var/lib/redis
+    # ports:
+    #   - "6379:6379"
 
   celery-worker:
     container_name: sagelove_celery-worker
@@ -110,3 +116,4 @@ services:
 
 volumes:
   db_data: {}
+  redis-data: {}
