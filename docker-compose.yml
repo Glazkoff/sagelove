@@ -103,14 +103,14 @@ services:
       - backend
       - redis
 
-  # flower:
-  #   container_name: sagelove_flower
-  #   image: mher/flower
-  #   depends_on:
-  #     - redis
-  #   env_file: .env
-  #   ports:
-  #     - 8888:8888
+  flower:
+    container_name: sagelove_flower
+    image: mher/flower
+    depends_on:
+      - redis
+    env_file: .env
+    ports:
+      - 8888:8888
 
 volumes:
   db_data: {}
