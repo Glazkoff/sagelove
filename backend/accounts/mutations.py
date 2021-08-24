@@ -301,8 +301,11 @@ class CreateChat(graphene.Mutation):
         try:
             user_1 = CustomUser.objects.get(pk=user1_id)
             user_2 = CustomUser.objects.get(pk=user2_id)
-            Chat.objects.create(user_1=user_1,user_2=user_2)
-            return CreateChat(ok=True)
+            if Chat.objects.all().filter((Q(user_1=user_1)& Q(user_2=user_2))| (Q(user_1=user_2)& Q(user_2=user_1))).count()== 0:
+                Chat.objects.create(user_1=user_1,user_2=user_2)
+                return CreateChat(ok=True)
+            else:
+                return CreateChat(ok=False)
         except:
             return CreateChat(ok=False)
 
@@ -321,9 +324,9 @@ class CreateMessage(graphene.Mutation):
             author = CustomUser.objects.get(pk=author_id)
             chat = Chat.objects.get(pk=chat_id)
             Message.objects.create(message_author=author,chat=chat,message_text = message_text,message_check = False)
-            return CreateChat(ok=True)
+            return CreateMessage(ok=True)
         except:
-            return CreateChat(ok=False)
+            return CreateMessage(ok=False)
 
 class DeleteChat(graphene.Mutation):
     ok = graphene.Boolean()
