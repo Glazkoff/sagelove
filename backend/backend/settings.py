@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 import environ
 from pathlib import Path
 from datetime import timedelta
@@ -57,6 +58,9 @@ THIRD_PARTY_APPS = [
     'graphene_django',
     'django_celery_results',
     'django_celery_beat',
+    'graphene_subscriptions',
+    'channels',
+    'channels_redis'
 ]
 
 LOCAL_APPS = [
@@ -211,7 +215,9 @@ MEDIA_ROOT = str(ROOT_DIR('media'))
 MEDIA_URL = '/media/'
 
 GRAPHENE = {
-    "SCHEMA": "backend.schema.schema"
+    "SCHEMA": "backend.schema.schema",
+    # The path you configured in `routing.py`, including a leading slash.
+    "SUBSCRIPTION_PATH": "/ws/subscriptions/"
 }
 
 # Celery Configuration Options
@@ -221,3 +227,16 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = env.str('CELERY_BROKER')
 CELERY_RESULT_BACKEND = env.str('CELERY_BROKER')
+
+ASGI_APPLICATION = "backend.asgi.application"
+
+redis_host = os.environ.get('REDIS_HOST', 'localhost')
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        }
+    }
+}

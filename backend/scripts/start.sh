@@ -7,4 +7,4 @@ set -o xtrace
 
 python manage.py migrate
 python manage.py collectstatic --noinput --verbosity 0
-python manage.py runserver 0.0.0.0:8001
+uwsgi --socket=:8001 --module=backend.wsgi:application --py-autoreload=1

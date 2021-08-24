@@ -1,5 +1,5 @@
 import graphene
-from .models import AnswersCounting, Datings, UserScaleAnswer, UserOptionAnswer
+from .models import AnswersCounting, Chat, Datings, Message, UserScaleAnswer, UserOptionAnswer
 from questions.models import QuestionWithScale, QuestionWithOption, AnswerScale, AnswerOption
 from users.models import CustomUser
 from .types import AnswersCountingType, MatchType, UserScaleAnswerType, UserOptionAnswerType
@@ -286,3 +286,59 @@ class CreateDatingsFourthMutation(graphene.Mutation):
             return CreateDatingsFourthMutation(ok=True,count_match = count_match)
         except (CustomUser.DoesNotExist, ):
             return CreateDatingsFourthMutation(ok=False,count_match = -1)
+
+
+# Создание чата
+class CreateChat(graphene.Mutation):
+    class Arguments:
+        user1_id = graphene.ID(required=True)
+        user2_id = graphene.ID(required=True)
+    
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info,user1_id,user2_id):
+        try:
+            user_1 = CustomUser.objects.get(pk=user1_id)
+            user_2 = CustomUser.objects.get(pk=user2_id)
+            if Chat.objects.all().filter((Q(user_1=user_1)& Q(user_2=user_2))| (Q(user_1=user_2)& Q(user_2=user_1))).count()== 0:
+                Chat.objects.create(user_1=user_1,user_2=user_2)
+                return CreateChat(ok=True)
+            else:
+                return CreateChat(ok=False)
+        except:
+            return CreateChat(ok=False)
+
+# Создание сообщения
+class CreateMessage(graphene.Mutation):
+    class Arguments:
+        author_id = graphene.ID(required=True)
+        chat_id = graphene.ID(required=True)
+        message_text = graphene.String(required=True)
+    
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info,author_id,chat_id,message_text):
+        try:
+            author = CustomUser.objects.get(pk=author_id)
+            chat = Chat.objects.get(pk=chat_id)
+            Message.objects.create(message_author=author,chat=chat,message_text = message_text,message_check = False)
+            return CreateMessage(ok=True)
+        except:
+            return CreateMessage(ok=False)
+
+class DeleteChat(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        chat_id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info,chat_id):
+        try:
+            chat = Chat.objects.get(pk=chat_id)
+            chat.delete()
+            return DeleteChat(ok=True)
+        except:
+            return DeleteChat(ok=False)
