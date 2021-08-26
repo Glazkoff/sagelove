@@ -357,7 +357,10 @@ export default {
         this.form.aboutMe = this.user.aboutMe;
         this.editAboutMeFlag = true;
       } else {
-        if (this.user.aboutMe == this.$v.form.aboutMe.$model) {
+        if (
+          this.user.aboutMe == this.$v.form.aboutMe.$model &&
+          this.selectedFile == null
+        ) {
           this.editAboutMeFlag = false;
         } else {
           this.$apollo
@@ -365,7 +368,8 @@ export default {
               mutation: EDIT_ABOUT_ME,
               variables: {
                 userId: this.$store.getters.user_id,
-                aboutMe: this.$v.form.aboutMe.$model
+                aboutMe: this.$v.form.aboutMe.$model,
+                photo: this.selectedFile
               },
               update: cache => {
                 let data = cache.readQuery({
@@ -388,7 +392,7 @@ export default {
                   aboutMe: this.$v.form.aboutMe.$model,
                   dateOfBirth: this.user.dateOfBirth,
                   gender: this.user.gender,
-                  photoURL: this.user.photoURL,
+                  photo: this.user.photo,
                   phoneNumber: this.user.phoneNumber
                 }
               }

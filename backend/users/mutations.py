@@ -2,6 +2,7 @@ import graphene
 from .models import CustomUser
 from .types import CustomUserType
 from accounts.models import UserScaleAnswer, UserOptionAnswer
+from graphene_file_upload.scalars import Upload
 
 
 class UpdateUserTestStatusMutation(graphene.Mutation):
@@ -25,6 +26,8 @@ class UpdateUserTestStatusMutation(graphene.Mutation):
             return UpdateUserTestStatusMutation(user=None)
 
 # Обновление результатов по тесту и сведений об оплате
+
+
 class UpdateUserTestResultDemoMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -41,6 +44,8 @@ class UpdateUserTestResultDemoMutation(graphene.Mutation):
         return UpdateUserTestResultDemoMutation(user=user)
 
 #  Обновление статуса просмотра поздравления о прохождении тестировании пользователем
+
+
 class UpdateUserCongratulationStatusMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -62,11 +67,14 @@ class UpdateUserInformation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
         about_me = graphene.String(required=True)
+        photo = Upload()
 
     ok = graphene.Boolean()
 
     @classmethod
-    def mutate(cls, root, info, user_id, about_me):
+    def mutate(cls, root, info, user_id, about_me, photo=None):
+        print("PHOTO")
+        print(photo)
         user = CustomUser.objects.get(pk=user_id)
         user.about_me = about_me
         user.save()
@@ -82,6 +90,7 @@ class AimsInput(graphene.InputObjectType):
 
 # Мутация создания или изменения целей пользователя
 
+
 class UpdateAimsForUserMutation(graphene.Mutation):
     class Arguments:
         aims_data = AimsInput(required=True)
@@ -96,7 +105,9 @@ class UpdateAimsForUserMutation(graphene.Mutation):
         user.save()
         return UpdateAimsForUserMutation(user=user)
 
-# Мутация изменения статуса просмотра on-boarding 
+# Мутация изменения статуса просмотра on-boarding
+
+
 class UpdateWatchOnBoardingMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -111,4 +122,3 @@ class UpdateWatchOnBoardingMutation(graphene.Mutation):
         user.save()
 
         return UpdateWatchOnBoardingMutation(user=user)
-
