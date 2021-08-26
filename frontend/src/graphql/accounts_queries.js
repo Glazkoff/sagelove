@@ -8,13 +8,13 @@ export const MATCHES_FOR_USER = gql`
       user1 {
         id
         firstName
-        photoURL
+        photo
         dateOfBirth
       }
       user2 {
         id
         firstName
-        photoURL
+        photo
         dateOfBirth
       }
       blocked

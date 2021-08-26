@@ -41,7 +41,7 @@ export const USER_INFORMATION = gql`
       aboutMe
       dateOfBirth
       gender
-      photoURL
+      photo
       phoneNumber
     }
   }

@@ -11,9 +11,10 @@ import Vuelidate from "vuelidate";
 import VueApollo from "vue-apollo";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { createHttpLink } from "apollo-link-http";
+// import { createHttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
 import Cookies from "js-cookie";
+import { createUploadLink } from "apollo-upload-client";
 
 Vue.directive("mask", VueMaskDirective);
 
@@ -29,7 +30,7 @@ const cache = new InMemoryCache({
 });
 
 // Создание ссылки для Apollo
-const httpLink = new createHttpLink({
+const httpLink = new createUploadLink({
   uri: process.env.VUE_APP_GRAPHQL_HTTP || "http://localhost:8001/api/graphql/"
 });
 

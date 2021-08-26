@@ -20,9 +20,13 @@ django-celery-beat
 daphne
 uwsgi
 channels
-# channels-redis
-channels_redis
+channels-redis
+# channels_redis
 asgi_redis
 graphene-subscriptions
 rx
 uvicorn
+graphene-file-upload
+Pillow
+transliterate
+django-cleanup
