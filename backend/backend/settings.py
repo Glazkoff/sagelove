@@ -60,7 +60,8 @@ THIRD_PARTY_APPS = [
     'django_celery_beat',
     'graphene_subscriptions',
     'channels',
-    'channels_redis'
+    'channels_redis',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 LOCAL_APPS = [

@@ -28,3 +28,5 @@ rx
 uvicorn
 graphene-file-upload
 Pillow
+transliterate
+django-cleanup

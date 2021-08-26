@@ -4,7 +4,11 @@ import gql from "graphql-tag";
 export const EDIT_ABOUT_ME = gql`
   mutation ($userId: ID!, $aboutMe: String!, $photo: Upload) {
     updateUserInformation(userId: $userId, aboutMe: $aboutMe, photo: $photo) {
-      ok
+      user {
+        id
+        aboutMe
+        photo
+      }
     }
   }
 `;
@@ -40,6 +44,7 @@ export const UPDATE_USER_AIMS = gql`
       }
     ) {
       user {
+        id
         partnerType
         purposeMeet
         numberFotoHistoryByFelling

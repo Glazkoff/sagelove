@@ -5,12 +5,24 @@
       <h1 class="title mb-5 mt-5 mb-sm-10 mt-sm-10 text-center">Профиль</h1>
       <v-row class="mt-sm-3">
         <v-col class="col-12 col-sm-3 d-flex flex-column align-center">
-          <img
-            class="custom-img mr-md-4"
-            src="https://picsum.photos/200"
-            alt="Аватар"
-          />
-
+          <v-avatar
+            size="144"
+            class="mr-md-4"
+            v-if="user.photo && user.photo != ''"
+          >
+            <img
+              class="custom-img"
+              :src="`/media/${user.photo}`"
+              alt="Аватар"
+            />
+          </v-avatar>
+          <v-avatar size="144" class="mr-md-4" v-else>
+            <img
+              class="custom-img"
+              :src="`/media/photo_placeholder.svg`"
+              alt="Аватар"
+            />
+          </v-avatar>
           <v-btn
             v-if="editFlag"
             @click="onFileInputClick()"
@@ -371,12 +383,17 @@ export default {
                 aboutMe: this.$v.form.aboutMe.$model,
                 photo: this.selectedFile
               },
-              update: cache => {
+              update: (cache, { data: { updateUserInformation } }) => {
                 let data = cache.readQuery({
                   query: USER_INFORMATION,
                   variables: { userId: this.$store.getters.user_id }
                 });
-                data.user.aboutMe = this.$v.form.aboutMe.$model;
+
+                if (updateUserInformation.user != undefined) {
+                  data.user.aboutMe = updateUserInformation.user.aboutMe;
+                  data.user.photo = updateUserInformation.user.photo;
+                }
+
                 cache.writeQuery({
                   query: USER_INFORMATION,
                   variables: { userId: this.$store.getters.user_id },
@@ -386,14 +403,17 @@ export default {
               optimisticResponse: {
                 __typename: "Mutation",
                 updateUserInformation: {
-                  __typename: "CustomUserType",
-                  id: this.$store.getters.user_id,
-                  firstName: this.user.firstName,
-                  aboutMe: this.$v.form.aboutMe.$model,
-                  dateOfBirth: this.user.dateOfBirth,
-                  gender: this.user.gender,
-                  photo: this.user.photo,
-                  phoneNumber: this.user.phoneNumber
+                  __typename: "UpdateUserInformation",
+                  user: {
+                    __typename: "CustomUserType",
+                    id: this.$store.getters.user_id,
+                    firstName: this.user.firstName,
+                    aboutMe: this.$v.form.aboutMe.$model,
+                    dateOfBirth: this.user.dateOfBirth,
+                    gender: this.user.gender,
+                    photo: this.user.photo,
+                    phoneNumber: this.user.phoneNumber
+                  }
                 }
               }
             })
@@ -485,9 +505,7 @@ export default {
 }
 
 .custom-img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
+  width: unset;
 }
 
 .custom-card {
