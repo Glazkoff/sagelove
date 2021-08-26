@@ -85,8 +85,8 @@ class UserOptionAnswerAdmin(admin.ModelAdmin):
 
 class ChatAdmin(admin.ModelAdmin):
     """Чаты пользователей"""
-    exclude = ('createdAt', 'updatedAt')
-    list_display = ('id', 'user_1', 'user_2',)
+    exclude = ('created_at', 'updated_at')
+    list_display = ('id', 'user_1', 'user_2','created_at',)
     list_filter = ('user_1', 'user_2',)
     search_fields = ('user_1__first_name', 'user_2__first_name',)
     fieldsets = (
@@ -97,7 +97,7 @@ class ChatAdmin(admin.ModelAdmin):
 
 class MessageAdmin(admin.ModelAdmin):
     """Сообщения пользователей"""
-    exclude = ('createdAt', 'updatedAt')
+    exclude = ('created_at', 'updated_at')
     list_display = ('chat', 'message_author', 'message_text', 'message_check',)
     search_fields = ('chat', 'message_author__first_name',)
     fieldsets = (
