@@ -40,6 +40,7 @@
             @update="form.date_of_birth = $event"
             :disabled="formLoading"
             :max="getMaxDate"
+            :errors="dateOfBirthErrors"
           ></DatePicker>
           <v-text-field
             light="light"
@@ -101,6 +102,16 @@
             truncate-length="15"
             label="Ваша фотография"
             color="colorOfSea"
+            class="mb-2"
+            v-model="$v.form.photo.$model"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="Прикрепите ваше фото"
+            @input="$v.form.photo.$touch()"
+            @blur="$v.form.photo.$touch()"
+            :error-messages="photoErrors"
+            :messages="[
+              'Загрузите в формате png, jpeg, jpg, pjp, pjpeg, jfif, bmp'
+            ]"
           ></v-file-input>
           <v-textarea
             :disabled="formLoading"
@@ -109,7 +120,7 @@
             counter
             maxlength="200"
             required
-            :error-messages="about_meErrors"
+            :error-messages="aboutMeErrors"
             v-model.trim="$v.form.about_me.$model"
             @input="$v.form.about_me.$touch()"
             @blur="$v.form.about_me.$touch()"
@@ -120,7 +131,7 @@
             @click.prevent="signUp"
             block="block"
             type="submit"
-            :disabled="$v.form.$invalid || formLoading"
+            :disabled="$v.form.$anyError || formLoading"
             :loading="formLoading"
             >Зарегистрироваться</v-btn
           >
@@ -142,6 +153,7 @@ import {
   maxLength,
   email
 } from "vuelidate/lib/validators";
+import { UPLOAD_USER_PHOTO } from "@/graphql/user_mutations";
 
 export default {
   name: "SignUp",
@@ -169,7 +181,9 @@ export default {
       date_of_birth: {
         required
       },
-
+      photo: {
+        required
+      },
       about_me: {
         required
       }
@@ -192,6 +206,7 @@ export default {
         name: null,
         date_of_birth: null,
         phone: null,
+        photo: null,
         about_me: null
       }
     };
@@ -215,6 +230,13 @@ export default {
       const errors = [];
       if (!this.$v.form.gender.$dirty) return errors;
       !this.$v.form.gender.required && errors.push("Укажите пол!");
+      return errors;
+    },
+    dateOfBirthErrors() {
+      const errors = [];
+      if (!this.$v.form.date_of_birth.$dirty) return errors;
+      !this.$v.form.date_of_birth.required &&
+        errors.push("Укажите дату рождения!");
       return errors;
     },
     phoneErrors() {
@@ -248,7 +270,13 @@ export default {
         });
       return errors;
     },
-    about_meErrors() {
+    photoErrors() {
+      const errors = [];
+      if (!this.$v.form.photo.$dirty) return errors;
+      !this.$v.form.photo.required && errors.push("Прикрепите фото!");
+      return errors;
+    },
+    aboutMeErrors() {
       const errors = [];
       if (!this.$v.form.about_me.$dirty) return errors;
       !this.$v.form.about_me.required &&
@@ -258,45 +286,59 @@ export default {
   },
   methods: {
     signUp() {
-      let sendObj = { ...this.form };
-      sendObj.password1 = this.form.password;
-      sendObj.password2 = this.form.password;
-      sendObj.first_name = this.form.name;
-      sendObj.name = undefined;
-      sendObj.phone_number = this.form.phone;
-      sendObj.phone = undefined;
-      this.formLoading = true;
-      this.$store.dispatch("SIGN_UP", sendObj).then(
-        () => {
-          this.formLoading = false;
-          this.$router.push("/");
-        },
-        errors => {
-          this.formLoading = false;
-          if (errors.email != null && errors.email.length != 0) {
-            for (let index = 0; index < errors.email.length; index++) {
-              this.formEmailErrors.push(errors.email[index]);
+      this.$v.form.$touch();
+      if (!this.$v.form.$anyError) {
+        let sendObj = { ...this.form };
+        sendObj.password1 = this.form.password;
+        sendObj.password2 = this.form.password;
+        sendObj.first_name = this.form.name;
+        sendObj.name = undefined;
+        sendObj.phone_number = this.form.phone;
+        sendObj.phone = undefined;
+        this.formLoading = true;
+        this.$store.dispatch("SIGN_UP", sendObj).then(
+          res => {
+            console.log("res: ", res);
+            this.$apollo
+              .mutate({
+                mutation: UPLOAD_USER_PHOTO,
+                variables: {
+                  userId: res.user.pk,
+                  photo: this.form.photo
+                }
+              })
+              .then(() => {
+                this.$router.push("/");
+              })
+              .finally(() => (this.formLoading = false));
+          },
+          errors => {
+            this.formLoading = false;
+            if (errors.email != null && errors.email.length != 0) {
+              for (let index = 0; index < errors.email.length; index++) {
+                this.formEmailErrors.push(errors.email[index]);
+              }
             }
-          }
-          if (errors.password1 != null && errors.password1.length != 0) {
-            for (let index = 0; index < errors.password1.length; index++) {
-              this.formPasswordErrors.push(errors.password1[index]);
+            if (errors.password1 != null && errors.password1.length != 0) {
+              for (let index = 0; index < errors.password1.length; index++) {
+                this.formPasswordErrors.push(errors.password1[index]);
+              }
             }
-          }
-          if (
-            errors.non_field_errors != null &&
-            errors.non_field_errors.length != 0
-          ) {
-            for (
-              let index = 0;
-              index < errors.non_field_errors.length;
-              index++
+            if (
+              errors.non_field_errors != null &&
+              errors.non_field_errors.length != 0
             ) {
-              this.formPasswordErrors.push(errors.non_field_errors[index]);
+              for (
+                let index = 0;
+                index < errors.non_field_errors.length;
+                index++
+              ) {
+                this.formPasswordErrors.push(errors.non_field_errors[index]);
+              }
             }
           }
-        }
-      );
+        );
+      }
     }
   }
 };

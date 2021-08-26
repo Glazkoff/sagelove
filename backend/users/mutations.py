@@ -96,6 +96,32 @@ class UpdateUserInformation(graphene.Mutation):
             return UpdateUserInformation(user=None)
 
 
+class UploadUserPhoto(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        photo = Upload()
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, photo=None):
+        try:
+            now = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
+            user = CustomUser.objects.get(pk=user_id)
+            if photo is not None:
+                filename, extension = os.path.splitext(
+                    photo.name)
+                first_name = translit(
+                    user.first_name, language_code='ru', reversed=True)
+                new_filename = f"{first_name}_photo_{now}{extension}"
+                user.photo.save(
+                    new_filename, File(photo))
+            user.save()
+            return UploadUserPhoto(user=user)
+        except:
+            return UploadUserPhoto(user=None)
+
+
 class AimsInput(graphene.InputObjectType):
     partner_type = graphene.String(required=True)
     purpose_meet = graphene.String(required=True)

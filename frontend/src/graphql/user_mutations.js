@@ -64,3 +64,14 @@ export const UPDATE_USER_TEST_STATUS = gql`
     }
   }
 `;
+
+// Загрузка фото при регистрации
+export const UPLOAD_USER_PHOTO = gql`
+  mutation ($userId: ID!, $photo: Upload) {
+    uploadUserPhoto(userId: $userId, photo: $photo) {
+      user {
+        id
+      }
+    }
+  }
+`;
