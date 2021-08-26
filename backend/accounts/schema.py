@@ -1,5 +1,6 @@
-from .types import UserScaleAnswerType, UserOptionAnswerType, AnswersCountingType, MatchType,ChatType,MessageType
-from .mutations import CreateMessage, CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, DeleteChat, FinishUserTesting, BlockUserMatchMutation, CreateDatingsFirstMutation, CreateDatingsSecondMutation, CreateDatingsFourthMutation, CreateDatingsThirdMutation,CreateChat
+from .types import UserScaleAnswerType, UserOptionAnswerType, AnswersCountingType, MatchType, ChatType, MessageType
+from .mutations import CreateMessage, CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, DeleteChat, FinishUserTesting, BlockUserMatchMutation, CreateDatingsFirstMutation, CreateDatingsSecondMutation, CreateDatingsFourthMutation, CreateDatingsThirdMutation, CreateChat
+
 from django.db.models import Q
 import graphene
 
@@ -9,7 +10,6 @@ from questions.types import GroupQuestionType
 from users.models import CustomUser
 from django.db.models import Max
 from graphene_subscriptions.events import CREATED
-
 
 
 class Query(graphene.ObjectType):
@@ -106,19 +106,16 @@ class Query(graphene.ObjectType):
 
     def resolve_messages_for_chat(self, info, chat_id):
         try:
-            return Message.objects.all().filter(Q(chat=chat_id) )
+            return Message.objects.all().filter(Q(chat=chat_id))
         except (Chat.DoesNotExist, Message.DoesNotExist):
             return None
+
 
 class Mutation(graphene.ObjectType):
     create_user_scale_answer = CreateUserScaleAnswerMutation.Field()
     create_user_option_answer = CreateUserOptionAnswerMutation.Field()
     finish_user_testing = FinishUserTesting.Field()
     block_user_match = BlockUserMatchMutation.Field()
-    create_datings_algorithm_first = CreateDatingsFirstMutation.Field()
-    create_datings_algorithm_second = CreateDatingsSecondMutation.Field()
-    create_datings_algorithm_third = CreateDatingsThirdMutation.Field()
-    create_datings_algorithm_fourth = CreateDatingsFourthMutation.Field()
     create_chat = CreateChat.Field()
     delete_chat = DeleteChat.Field()
     create_message = CreateMessage.Field()
@@ -134,5 +131,6 @@ class Subscription(graphene.ObjectType):
                 isinstance(event.instance, Message)
         ).map(lambda event: event.instance)
 
+
 schema = graphene.Schema(query=Query,
-                         mutation=Mutation,subscription=Subscription)
+                         mutation=Mutation, subscription=Subscription)
