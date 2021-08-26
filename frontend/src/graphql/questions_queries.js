@@ -8,10 +8,10 @@ export const QUESTION_GROUP = gql`
       prevGroupOrder
       nextGroupOrder
       nameGroupQuestion
-      questionwithscaleSet {
+      questionsWithScale {
         id
         questionText
-        answerscaleSet {
+        answerWithScale {
           id
           leftAnswerText
           rightAnswerText

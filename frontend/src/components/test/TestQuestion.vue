@@ -43,7 +43,7 @@
           <div>
             <v-row
               v-for="(answer, answ_index) in questionElem.question
-                .answerscaleSet"
+                .answerWithScale"
               :key="answer.id"
             >
               <v-col
@@ -257,10 +257,10 @@ export default {
             if (element.type == this.WITH_SCALE_TYPE) {
               for (
                 let row_index = 0;
-                row_index < element.question.answerscaleSet.length;
+                row_index < element.question.answerWithScale.length;
                 row_index++
               ) {
-                const scale_row = element.question.answerscaleSet[row_index];
+                const scale_row = element.question.answerWithScale[row_index];
                 // console.log(
                 //   `Type: with_scale, question_row_id: ${
                 //     scale_row.id
@@ -441,10 +441,10 @@ export default {
             this.userAnswers[index] = [];
             for (
               let scaleIndex = 0;
-              scaleIndex < question.question.answerscaleSet.length;
+              scaleIndex < question.question.answerWithScale.length;
               scaleIndex++
             ) {
-              const scaleLine = question.question.answerscaleSet[scaleIndex];
+              const scaleLine = question.question.answerWithScale[scaleIndex];
 
               if (val != undefined) {
                 let answerIndex = val.findIndex(el => {
@@ -490,10 +490,10 @@ export default {
           this.userAnswers[index] = [];
           for (
             let scaleIndex = 0;
-            scaleIndex < question.question.answerscaleSet.length;
+            scaleIndex < question.question.answerWithScale.length;
             scaleIndex++
           ) {
-            const scaleLine = question.question.answerscaleSet[scaleIndex];
+            const scaleLine = question.question.answerWithScale[scaleIndex];
 
             if (this.userGroupScaleAnswers != undefined) {
               let answerIndex = this.userGroupScaleAnswers.findIndex(el => {
@@ -551,7 +551,7 @@ export default {
     questionsSet() {
       let questionsSet = [];
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
-        this.questionGroup.questionwithscaleSet.forEach(question => {
+        this.questionGroup.questionsWithScale.forEach(question => {
           questionsSet.push({
             type: this.WITH_SCALE_TYPE,
             question

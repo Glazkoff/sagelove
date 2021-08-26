@@ -14,11 +14,17 @@ class QuestionWithScaleType(DjangoObjectType):
         model = QuestionWithScale
         fields = "__all__"
 
+    def resolve_answer_with_scale(self, info):
+        question_with_scale = QuestionWithScale.objects.get(pk=self.id)
+        return AnswerScale.objects.filter(question=question_with_scale).order_by(
+            'id'
+        )
+
 class GroupQuestionType(DjangoObjectType):
     # order_number = graphene.Int()
     next_group_order = graphene.ID()
     prev_group_order = graphene.ID()
-    question_with_scale = graphene.List(QuestionWithScaleType)
+    questions_with_scale = graphene.List(QuestionWithScaleType)
     # question_with_option = graphene.List()
 
     class Meta:
@@ -55,18 +61,11 @@ class GroupQuestionType(DjangoObjectType):
                 prev_group_order = None if prev_group_order == 0 else group.order-1
         return prev_group_order
 
-    def resolve_question_with_scale(self, info):
+    def resolve_questions_with_scale(self, info):
         group = GroupQuestion.objects.get(order=self.order)
         return QuestionWithScale.objects.filter(
                 question_group=group).order_by('created_at')
 
-    def resolve_answer_with_scale(self, info):
-        question_with_scale = QuestionWithScale.objects.filter(pk=self.id).order_by('created_at')
-        list_answers = []
-        for question in question_with_scale:
-            answer_with_scale = AnswerScale.objects.filter(question=question)
-            list_answers.append(answer_with_scale)
-        return answer_with_scale
 
 
 
