@@ -1,12 +1,16 @@
 <template>
   <v-flex class="auth-form text-center">
     <h1 class="mt-13 title mb-12">Регистрация</h1>
+
     <v-card flat light="light">
       <v-card-text>
+        <div class="text-left">
+          <small>Все поля отмеченные * обязательны к заполнению</small>
+        </div>
         <v-form>
           <v-text-field
             light="light"
-            label="Имя"
+            label="Имя*"
             type="text"
             color="colorOfSea"
             autocomplete="name"
@@ -25,7 +29,7 @@
             autocomplete="gender"
             item-text="text"
             item-value="val"
-            label="Пол"
+            label="Пол*"
             color="colorOfSea"
             required
             :error-messages="genderErrors"
@@ -35,7 +39,7 @@
             :disabled="formLoading"
           ></v-select>
           <DatePicker
-            label="Дата рождения"
+            label="Дата рождения*"
             autocomplete="date_of_birth"
             @update="form.date_of_birth = $event"
             :disabled="formLoading"
@@ -43,7 +47,7 @@
           ></DatePicker>
           <v-text-field
             light="light"
-            label="Телефон"
+            label="Телефон*"
             type="text"
             color="colorOfSea"
             autocomplete="phone"
@@ -57,7 +61,7 @@
           ></v-text-field>
           <v-text-field
             light="light"
-            label="Email"
+            label="Email*"
             type="email"
             color="colorOfSea"
             autocomplete="email"
@@ -76,7 +80,7 @@
           ></v-text-field>
           <v-text-field
             light="light"
-            label="Пароль"
+            label="Пароль*"
             :type="passShow ? 'text' : 'password'"
             color="colorOfSea"
             :append-icon="passShow ? 'mdi-eye' : 'mdi-eye-off'"
@@ -104,7 +108,7 @@
           ></v-file-input>
           <v-textarea
             :disabled="formLoading"
-            label="О себе"
+            label="О себе*"
             color="colorOfSea"
             counter
             maxlength="200"

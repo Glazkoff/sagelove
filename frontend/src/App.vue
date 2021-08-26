@@ -208,7 +208,7 @@ div.v-carousel div.v-carousel__controls {
   background: rgba(0, 0, 0, 0) !important;
 }
 button.v-carousel__controls__item {
-  color: white !important;
+  color: #c8f5fa !important;
 }
 button.v-carousel__controls__item .v-icon {
   opacity: 1 !important;
@@ -232,7 +232,9 @@ div.v-window__container div.v-window__prev {
 div.v-responsive__content.my-carousel {
   position: relative !important;
 }
-
+div.v-window-item div.v-carousel__item {
+  background-color: #e2f9fc !important;
+}
 .pointer {
   cursor: pointer;
 }
@@ -241,8 +243,6 @@ div.v-dialog__content div.v-dialog {
   max-height: 35rem !important;
   max-width: 35rem !important;
   width: auto !important;
-}
-.v-sheet.v-card {
 }
 @media (max-width: 600px) {
   h1.title,

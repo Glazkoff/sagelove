@@ -43,7 +43,7 @@
           <div>
             <v-row
               v-for="(answer, answ_index) in questionElem.question
-                .answerscaleSet"
+                .answerWithScale"
               :key="answer.id"
             >
               <v-col
@@ -121,7 +121,7 @@
               dark
               color="colorOfSea"
               class="my-button"
-              v-if="prevGroupId !== null"
+              v-if="prevGroupOrder !== null"
               @click="goToPrevGroup"
               >Назад</v-btn
             >
@@ -130,7 +130,7 @@
         <v-col>
           <div class="text-right">
             <v-btn
-              v-if="nextGroupId !== null"
+              v-if="nextGroupOrder !== null"
               dark
               color="colorOfSea"
               class="my-button"
@@ -174,7 +174,7 @@ export default {
       query: QUESTION_GROUP,
       variables() {
         return {
-          questionGroupId: this.groupId
+          questionGroupOrder: this.questionGroupOrder
         };
       }
     },
@@ -185,7 +185,7 @@ export default {
       query: USER_GROUP_SCALE_ANSWERS,
       variables() {
         return {
-          groupId: this.groupId,
+          questionGroupOrder: this.questionGroupOrder,
           userId: this.$store.getters.user_id
         };
       }
@@ -194,7 +194,7 @@ export default {
       query: USER_GROUP_OPTION_ANSWERS,
       variables() {
         return {
-          groupId: this.groupId,
+          questionGroupOrder: this.questionGroupOrder,
           userId: this.$store.getters.user_id
         };
       }
@@ -246,7 +246,7 @@ export default {
         });
     },
     sendUserAnswers() {
-      let group = this.groupId;
+      let group = this.questionGroupOrder;
       return new Promise((resolve, reject) => {
         try {
           let userAnswersString = JSON.stringify(this.userAnswers);
@@ -257,10 +257,10 @@ export default {
             if (element.type == this.WITH_SCALE_TYPE) {
               for (
                 let row_index = 0;
-                row_index < element.question.answerscaleSet.length;
+                row_index < element.question.answerWithScale.length;
                 row_index++
               ) {
-                const scale_row = element.question.answerscaleSet[row_index];
+                const scale_row = element.question.answerWithScale[row_index];
                 // console.log(
                 //   `Type: with_scale, question_row_id: ${
                 //     scale_row.id
@@ -285,7 +285,7 @@ export default {
                         const data = cache.readQuery({
                           query: USER_GROUP_SCALE_ANSWERS,
                           variables: {
-                            groupId: group,
+                            questionGroupOrder: group,
                             userId: this.$store.getters.user_id
                           }
                         });
@@ -305,7 +305,7 @@ export default {
                         cache.writeQuery({
                           query: USER_GROUP_SCALE_ANSWERS,
                           variables: {
-                            groupId: this.groupId,
+                            questionGroupOrder: this.questionGroupOrder,
                             userId: this.$store.getters.user_id
                           },
                           data
@@ -334,7 +334,7 @@ export default {
                     const data = cache.readQuery({
                       query: USER_GROUP_OPTION_ANSWERS,
                       variables: {
-                        groupId: group,
+                        questionGroupOrder: group,
                         userId: this.$store.getters.user_id
                       }
                     });
@@ -354,7 +354,7 @@ export default {
                     cache.writeQuery({
                       query: USER_GROUP_OPTION_ANSWERS,
                       variables: {
-                        groupId: this.groupId,
+                        questionGroupOrder: this.questionGroupOrder,
                         userId: this.$store.getters.user_id
                       },
                       data
@@ -402,18 +402,18 @@ export default {
     goToNextGroup() {
       this.sendUserAnswers().then(() => {
         this.userAnswers = [];
-        this.$router.push(`/question/${this.nextGroupId}`);
+        this.$router.push(`/question/${this.nextGroupOrder}`);
       });
     },
     goToPrevGroup() {
       this.sendUserAnswers().then(() => {
         this.userAnswers = [];
-        this.$router.push(`/question/${this.prevGroupId}`);
+        this.$router.push(`/question/${this.prevGroupOrder}`);
       });
     }
   },
   watch: {
-    groupId() {
+    questionGroupOrder() {
       this.$apollo.queries.userGroupOptionAnswers.refetch();
       this.$apollo.queries.userGroupOptionAnswers.refresh();
       this.$apollo.queries.userGroupScaleAnswers.refetch();
@@ -441,10 +441,10 @@ export default {
             this.userAnswers[index] = [];
             for (
               let scaleIndex = 0;
-              scaleIndex < question.question.answerscaleSet.length;
+              scaleIndex < question.question.answerWithScale.length;
               scaleIndex++
             ) {
-              const scaleLine = question.question.answerscaleSet[scaleIndex];
+              const scaleLine = question.question.answerWithScale[scaleIndex];
 
               if (val != undefined) {
                 let answerIndex = val.findIndex(el => {
@@ -490,10 +490,10 @@ export default {
           this.userAnswers[index] = [];
           for (
             let scaleIndex = 0;
-            scaleIndex < question.question.answerscaleSet.length;
+            scaleIndex < question.question.answerWithScale.length;
             scaleIndex++
           ) {
-            const scaleLine = question.question.answerscaleSet[scaleIndex];
+            const scaleLine = question.question.answerWithScale[scaleIndex];
 
             if (this.userGroupScaleAnswers != undefined) {
               let answerIndex = this.userGroupScaleAnswers.findIndex(el => {
@@ -528,7 +528,7 @@ export default {
     }
   },
   computed: {
-    groupId() {
+    questionGroupOrder() {
       return this.$route.params.id;
     },
     progress() {
@@ -551,7 +551,7 @@ export default {
     questionsSet() {
       let questionsSet = [];
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
-        this.questionGroup.questionwithscaleSet.forEach(question => {
+        this.questionGroup.questionsWithScale.forEach(question => {
           questionsSet.push({
             type: this.WITH_SCALE_TYPE,
             question
@@ -566,16 +566,16 @@ export default {
       }
       return questionsSet;
     },
-    nextGroupId() {
+    nextGroupOrder() {
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
-        return this.questionGroup.nextGroupId;
+        return this.questionGroup.nextGroupOrder;
       } else {
         return null;
       }
     },
-    prevGroupId() {
+    prevGroupOrder() {
       if (this.questionGroup !== null && this.questionGroup !== undefined) {
-        return this.questionGroup.prevGroupId;
+        return this.questionGroup.prevGroupOrder;
       } else {
         return null;
       }

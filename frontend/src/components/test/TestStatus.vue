@@ -125,7 +125,7 @@ export default {
     },
     onTestContinue() {
       // TODO: найти последний вопрос
-      this.$router.push(`/question/${this.userLastGroup.id}`);
+      this.$router.push(`/question/${this.userLastGroup.order}`);
     },
     onTestReset() {
       this.$apollo
