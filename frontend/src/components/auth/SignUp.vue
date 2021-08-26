@@ -4,7 +4,9 @@
 
     <v-card flat light="light">
       <v-card-text>
-        <div><small>Все поля отмеченные * обязательны к заполнению</small></div>
+        <div class="text-left">
+          <small>Все поля отмеченные * обязательны к заполнению</small>
+        </div>
         <v-form>
           <v-text-field
             light="light"

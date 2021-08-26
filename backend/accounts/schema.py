@@ -65,11 +65,11 @@ class Query(graphene.ObjectType):
             user = CustomUser.objects.get(pk=user_id)
             option_answers_max_pk = UserOptionAnswer.objects.filter(
                 user=user).aggregate(
-                Max("question_with_option__question_group__id"))['question_with_option__question_group__id__max']
+                Max("question_with_option__question_group__order"))['question_with_option__question_group__order__max']
             scale_answers_max_pk = UserScaleAnswer.objects.filter(
                 user=user).aggregate(
-                Max("answer_scale_line__question__question_group__id"))['answer_scale_line__question__question_group__id__max']
-            pk = GroupQuestion.objects.first().id
+                Max("answer_scale_line__question__question_group__order"))['answer_scale_line__question__question_group__order__max']
+            pk = GroupQuestion.objects.first().order
             if option_answers_max_pk and scale_answers_max_pk:
                 if option_answers_max_pk > scale_answers_max_pk:
                     pk = option_answers_max_pk
@@ -79,7 +79,7 @@ class Query(graphene.ObjectType):
                 pk = option_answers_max_pk
             elif scale_answers_max_pk:
                 pk = scale_answers_max_pk
-            return GroupQuestion.objects.get(pk=pk)
+            return GroupQuestion.objects.get(order=pk)
         except (CustomUser.DoesNotExist):
             return None
         except:
