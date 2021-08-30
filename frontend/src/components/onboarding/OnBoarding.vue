@@ -187,6 +187,13 @@ export default {
             break;
         }
         if (
+          !val.partnerType ||
+          !val.purposeMeet ||
+          !val.numberFotoHistoryByFelling
+        )
+          route = "/aims";
+
+        if (
           this.$route.path != route &&
           this.$route.path.substring(0, this.$route.path.length - 1) != route
         ) {
