@@ -130,15 +130,15 @@ class Mutation(graphene.ObjectType):
     create_message = CreateMessage.Field()
 
 
-class Subscription(graphene.ObjectType):
-    message_created = graphene.Field(MessageType)
+# class Subscription(graphene.ObjectType):
+#     message_created = graphene.Field(MessageType)
 
-    def resolve_message_created(root, info):
-        return root.filter(
-            lambda event:
-                event.operation == CREATED and
-                isinstance(event.instance, Message)
-        ).map(lambda event: event.instance)
+#     def resolve_message_created(root, info):
+#         return root.filter(
+#             lambda event:
+#                 event.operation == CREATED and
+#                 isinstance(event.instance, Message)
+#         ).map(lambda event: event.instance)
 
 schema = graphene.Schema(query=Query,
-                         mutation=Mutation,subscription=Subscription)
+                         mutation=Mutation)
