@@ -20,7 +20,14 @@
         <v-spacer class="d-none d-md-flex"></v-spacer>
         <div id="nav" class="d-none d-md-flex flex-row align-center">
           <router-link
-            v-if="user != undefined && user.watchOnBoarding"
+            v-if="
+              user != undefined &&
+              user.watchOnBoarding &&
+              user.partnerType &&
+              user.purposeMeet &&
+              user.numberFotoHistoryByFelling &&
+              user.testStatus.toUpperCase() != 'FINISH'
+            "
             :exact="true"
             to="/test"
             tag="p"
@@ -51,13 +58,26 @@
           <v-menu offset-y offset-overflow :close-on-content-click="true">
             <template v-slot:activator="{ on, attrs }">
               <div class="user-group d-flex flex-row align-center ml-16">
-                <img
-                  class="custom-img mr-2"
-                  src="https://picsum.photos/200"
-                  alt="Аватар"
-                  v-bind="attrs"
-                  v-on="on"
-                />
+                <v-avatar
+                  size="40"
+                  class="mr-md-4 mr-2"
+                  v-if="user.photo && user.photo != ''"
+                >
+                  <img
+                    style="width: unset"
+                    class="custom-img"
+                    :src="`/media/${user.photo}`"
+                    alt="Аватар"
+                  />
+                </v-avatar>
+                <v-avatar size="40" class="mr-md-4" v-else>
+                  <img
+                    style="width: unset"
+                    class="custom-img mr-2"
+                    :src="`/media/photo_placeholder.svg`"
+                    alt="Аватар"
+                  />
+                </v-avatar>
                 <p class="mb-0 mr-2 pointer" v-bind="attrs" v-on="on">
                   {{ user !== undefined ? user.firstName : "-" }}
                 </p>
@@ -82,7 +102,15 @@
                   ></v-list-item-title
                 >
               </v-list-item>
-              <v-list-item v-if="user != undefined && user.watchOnBoarding">
+              <v-list-item
+                v-if="
+                  user != undefined &&
+                  user.watchOnBoarding &&
+                  user.partnerType &&
+                  user.purposeMeet &&
+                  user.numberFotoHistoryByFelling
+                "
+              >
                 <v-list-item-title>
                   <router-link
                     :exact="true"
@@ -125,6 +153,9 @@
             v-if="
               user != undefined &&
               user.watchOnBoarding &&
+              user.partnerType &&
+              user.purposeMeet &&
+              user.numberFotoHistoryByFelling &&
               user.testStatus.toUpperCase() != 'FINISH'
             "
           >
@@ -196,7 +227,15 @@
             >
           </v-list-item>
 
-          <v-list-item v-if="user != undefined && user.watchOnBoarding">
+          <v-list-item
+            v-if="
+              user != undefined &&
+              user.watchOnBoarding &&
+              user.partnerType &&
+              user.purposeMeet &&
+              user.numberFotoHistoryByFelling
+            "
+          >
             <v-list-item-title
               ><router-link
                 :exact="true"
@@ -303,9 +342,7 @@ div.v-menu__content {
   top: 53px !important;
 }
 .custom-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: unset;
 }
 p.custom-menu-link {
   width: auto;

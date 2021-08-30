@@ -37,11 +37,16 @@
         :key="question_index"
       >
         <div v-if="questionElem.type == WITH_SCALE_TYPE">
-          <p>
-            {{ question_index + 1 }}. {{ questionElem.question.questionText }}
+          <v-divider class="mt-5"></v-divider>
+          <p class="mt-4 mb-1">
+            <b
+              >{{ question_index + 1 }}.
+              {{ questionElem.question.questionText }}</b
+            >
           </p>
           <div>
             <v-row
+              style="min-height: 120px"
               v-for="(answer, answ_index) in questionElem.question
                 .answerWithScale"
               :key="answer.id"
@@ -161,6 +166,7 @@ import {
   USER_GROUP_SCALE_ANSWERS,
   USER_GROUP_OPTION_ANSWERS
 } from "@/graphql/questions_queries";
+import { USER_INFO_FOR_HEADER } from "@/graphql/user_queries.js";
 import {
   CREATE_USER_OPTION_ANSWER,
   CREATE_USER_SCALE_ANSWER,
@@ -231,8 +237,29 @@ export default {
           mutation: FINISH_USER_TESTING,
           variables: {
             userId: this.$store.getters.user_id
+          },
+          update: (cache, { data: { finishUserTesting } }) => {
+            const data = cache.readQuery({
+              query: USER_INFO_FOR_HEADER,
+              variables: {
+                userId: this.$store.getters.user_id
+              }
+            });
+
+            if (finishUserTesting.statusOk) {
+              data.user.testStatus = "FINISH";
+            }
+
+            cache.writeQuery({
+              query: USER_INFO_FOR_HEADER,
+              variables: {
+                userId: this.$store.getters.user_id
+              },
+              data
+            });
           }
         })
+        // TODO: cache
         .then(res => {
           // this.$apollo.mutate({
           //   mutation: CREATE_DATINGS_ALGORITHMS,

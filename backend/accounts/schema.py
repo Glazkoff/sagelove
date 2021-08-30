@@ -1,5 +1,5 @@
 from .types import UserScaleAnswerType, UserOptionAnswerType, AnswersCountingType, MatchType, ChatType, MessageType
-from .mutations import CreateMessage, CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, DeleteChat, FinishUserTesting, BlockUserMatchMutation, CreateDatingsFirstMutation, CreateDatingsSecondMutation, CreateDatingsFourthMutation, CreateDatingsThirdMutation, CreateChat
+from .mutations import CreateMessage, CreateUserScaleAnswerMutation, CreateUserOptionAnswerMutation, DeleteChat, FinishUserTesting, BlockUserMatchMutation, CreateChat
 
 from django.db.models import Q
 import graphene

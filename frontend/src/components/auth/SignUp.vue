@@ -104,7 +104,7 @@
           <v-file-input
             :disabled="formLoading"
             truncate-length="15"
-            label="Ваша фотография"
+            label="Ваша фотография*"
             color="colorOfSea"
             class="mb-2"
             v-model="$v.form.photo.$model"
@@ -302,7 +302,6 @@ export default {
         this.formLoading = true;
         this.$store.dispatch("SIGN_UP", sendObj).then(
           res => {
-            console.log("res: ", res);
             this.$apollo
               .mutate({
                 mutation: UPLOAD_USER_PHOTO,

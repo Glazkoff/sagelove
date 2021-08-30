@@ -169,6 +169,7 @@
                 <v-dialog v-model="dialog">
                   <v-card :style="sizeFunc(isNumberFoto)">
                     <img
+                      v-if="isNumberFoto != null"
                       :src="
                         require('../../assets/img/history/' +
                           isNumberFoto +
