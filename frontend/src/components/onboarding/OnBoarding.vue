@@ -187,9 +187,10 @@ export default {
             break;
         }
         if (
-          !val.partnerType ||
-          !val.purposeMeet ||
-          !val.numberFotoHistoryByFelling
+          (!val.partnerType ||
+            !val.purposeMeet ||
+            !val.numberFotoHistoryByFelling) &&
+          val.watchOnBoarding
         )
           route = "/aims";
 
