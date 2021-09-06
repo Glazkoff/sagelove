@@ -1,7 +1,12 @@
+from transliterate import translit
+from django.core.files.base import ContentFile, File
+import os
+import datetime
 import graphene
 from .models import CustomUser
 from .types import CustomUserType
 from accounts.models import UserScaleAnswer, UserOptionAnswer
+from graphene_file_upload.scalars import Upload
 
 
 class UpdateUserTestStatusMutation(graphene.Mutation):
@@ -25,6 +30,8 @@ class UpdateUserTestStatusMutation(graphene.Mutation):
             return UpdateUserTestStatusMutation(user=None)
 
 # Обновление результатов по тесту и сведений об оплате
+
+
 class UpdateUserTestResultDemoMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -41,6 +48,8 @@ class UpdateUserTestResultDemoMutation(graphene.Mutation):
         return UpdateUserTestResultDemoMutation(user=user)
 
 #  Обновление статуса просмотра поздравления о прохождении тестировании пользователем
+
+
 class UpdateUserCongratulationStatusMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -62,16 +71,55 @@ class UpdateUserInformation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
         about_me = graphene.String(required=True)
+        photo = Upload()
 
-    ok = graphene.Boolean()
+    user = graphene.Field(CustomUserType)
 
     @classmethod
-    def mutate(cls, root, info, user_id, about_me):
-        user = CustomUser.objects.get(pk=user_id)
-        user.about_me = about_me
-        user.save()
+    def mutate(cls, root, info, user_id, about_me, photo=None):
+        try:
+            now = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
+            user = CustomUser.objects.get(pk=user_id)
+            if photo is not None:
+                filename, extension = os.path.splitext(
+                    photo.name)
+                first_name = translit(
+                    user.first_name, language_code='ru', reversed=True)
+                new_filename = f"{first_name}_photo_{now}{extension}"
+                user.photo.save(
+                    new_filename, File(photo))
+            user.about_me = about_me
+            user.save()
 
-        return cls(ok=True)
+            return UpdateUserInformation(user=user)
+        except:
+            return UpdateUserInformation(user=None)
+
+
+class UploadUserPhoto(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        photo = Upload()
+
+    user = graphene.Field(CustomUserType)
+
+    @classmethod
+    def mutate(cls, root, info, user_id, photo=None):
+        try:
+            now = datetime.datetime.now().strftime("%d.%m.%Y_%H-%M-%S")
+            user = CustomUser.objects.get(pk=user_id)
+            if photo is not None:
+                filename, extension = os.path.splitext(
+                    photo.name)
+                first_name = translit(
+                    user.first_name, language_code='ru', reversed=True)
+                new_filename = f"{first_name}_photo_{now}{extension}"
+                user.photo.save(
+                    new_filename, File(photo))
+            user.save()
+            return UploadUserPhoto(user=user)
+        except:
+            return UploadUserPhoto(user=None)
 
 
 class AimsInput(graphene.InputObjectType):
@@ -81,6 +129,7 @@ class AimsInput(graphene.InputObjectType):
     user_id = graphene.ID(required=True)
 
 # Мутация создания или изменения целей пользователя
+
 
 class UpdateAimsForUserMutation(graphene.Mutation):
     class Arguments:
@@ -96,7 +145,9 @@ class UpdateAimsForUserMutation(graphene.Mutation):
         user.save()
         return UpdateAimsForUserMutation(user=user)
 
-# Мутация изменения статуса просмотра on-boarding 
+# Мутация изменения статуса просмотра on-boarding
+
+
 class UpdateWatchOnBoardingMutation(graphene.Mutation):
     class Arguments:
         user_id = graphene.ID(required=True)
@@ -111,4 +162,3 @@ class UpdateWatchOnBoardingMutation(graphene.Mutation):
         user.save()
 
         return UpdateWatchOnBoardingMutation(user=user)
-

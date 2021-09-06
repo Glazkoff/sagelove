@@ -41,7 +41,7 @@ export const USER_INFORMATION = gql`
       aboutMe
       dateOfBirth
       gender
-      photoURL
+      photo
       phoneNumber
     }
   }
@@ -67,6 +67,10 @@ export const USER_INFO_FOR_HEADER = gql`
       firstName
       watchOnBoarding
       testStatus
+      photo
+      partnerType
+      purposeMeet
+      numberFotoHistoryByFelling
     }
   }
 `;
@@ -78,6 +82,8 @@ export const WATCH_ON_BOARDING = gql`
       id
       watchOnBoarding
       partnerType
+      purposeMeet
+      numberFotoHistoryByFelling
     }
   }
 `;

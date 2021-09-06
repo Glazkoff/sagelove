@@ -1,7 +1,12 @@
 <template>
   <v-list subheader>
     <v-subheader>Ваши чаты</v-subheader>
-    <v-list-item avatar v-for="index in 10" v-bind:key="index">
+    <v-list-item
+      avatar
+      v-for="index in 10"
+      v-bind:key="index"
+      class="chat-list-item"
+    >
       <v-list-item-content>
         <v-row justify="space-between">
           <v-col cols="10" style="flex-grow: unset">
@@ -62,4 +67,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.chat-list-item {
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+</style>

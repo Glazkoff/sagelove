@@ -5,13 +5,13 @@ from .models import GroupQuestion, QuestionWithScale, AnswerScale, QuestionWithO
 
 class Query(graphene.ObjectType):
     question_group = graphene.Field(
-        GroupQuestionType, question_group_id=graphene.ID())
+        GroupQuestionType, question_group_order=graphene.ID())
     question_groups = graphene.List(GroupQuestionType)
     question_groups_count = graphene.Int()
 
-    def resolve_question_group(self, info, question_group_id):
+    def resolve_question_group(self, info, question_group_order):
         try:
-            return GroupQuestion.objects.get(pk=question_group_id,published_or_not = True)
+            return GroupQuestion.objects.get(order=question_group_order,published_or_not = True)
         except GroupQuestion.DoesNotExist:
             return None
 

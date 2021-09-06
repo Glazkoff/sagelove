@@ -24,7 +24,7 @@
         color="colorOfSea"
         v-mask="'##.##.####'"
         required
-        :error-messages="dateErrors"
+        :error-messages="dateErrors.concat(errors)"
         v-model.trim="$v.dateFormatted.$model"
         @input="$v.dateFormatted.$touch()"
       ></v-text-field>
@@ -44,7 +44,7 @@
 import { required } from "vuelidate/lib/validators";
 export default {
   name: "DatePicker",
-  props: ["label", "value", "autocomplete", "max", "min"],
+  props: ["label", "value", "autocomplete", "max", "min", "errors"],
   validations: {
     dateFormatted: {
       required

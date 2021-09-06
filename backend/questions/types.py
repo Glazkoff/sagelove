@@ -3,10 +3,29 @@ from graphene_django.types import DjangoObjectType, ObjectType
 from .models import GroupQuestion, QuestionWithScale, AnswerScale, QuestionWithOption, AnswerOption
 
 
+class AnswerScaleType(DjangoObjectType):
+    class Meta:
+        model = AnswerScale
+        fields = "__all__"
+
+class QuestionWithScaleType(DjangoObjectType):
+    answer_with_scale = graphene.List(AnswerScaleType)
+    class Meta:
+        model = QuestionWithScale
+        fields = "__all__"
+
+    def resolve_answer_with_scale(self, info):
+        question_with_scale = QuestionWithScale.objects.get(pk=self.id)
+        return AnswerScale.objects.filter(question=question_with_scale).order_by(
+            'id'
+        )
+
 class GroupQuestionType(DjangoObjectType):
     # order_number = graphene.Int()
-    next_group_id = graphene.ID()
-    prev_group_id = graphene.ID()
+    next_group_order = graphene.ID()
+    prev_group_order = graphene.ID()
+    questions_with_scale = graphene.List(QuestionWithScaleType)
+    # question_with_option = graphene.List()
 
     class Meta:
         model = GroupQuestion
@@ -21,37 +40,33 @@ class GroupQuestionType(DjangoObjectType):
     #             break
     #     return count
 
-    def resolve_next_group_id(self, info):
+    def resolve_next_group_order(self, info):
         groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
-        next_group_id = None
+        next_group_order = None
         for group in groups:
             if group.order == self.order:
-                next_group_id = group.order+1
-                if next_group_id == groups.count()+1:
-                    next_group_id = None
+                next_group_order = group.order+1
+                if next_group_order == groups.count()+1:
+                    next_group_order = None
                 else:
-                    next_group_id = group.id+1
-        return next_group_id
+                    next_group_order = group.order+1
+        return next_group_order
 
-    def resolve_prev_group_id(self, info):
+    def resolve_prev_group_order(self, info):
         groups = GroupQuestion.objects.all().filter(published_or_not = True).order_by('pk')
-        is_first = True
-        prev_group_id = None
-        prev_buffer = 0
+        prev_group_order = None
         for group in groups:
-            if not is_first and self.id == group.id:
-                prev_group_id = prev_buffer
-                break
-            if prev_buffer == 0:
-                is_first = False
-            prev_buffer = group.id
-        return prev_group_id
+            if group.order == self.order:
+                prev_group_order = group.order-1
+                prev_group_order = None if prev_group_order == 0 else group.order-1
+        return prev_group_order
+
+    def resolve_questions_with_scale(self, info):
+        group = GroupQuestion.objects.get(order=self.order)
+        return QuestionWithScale.objects.filter(
+                question_group=group).order_by('created_at')
 
 
-class QuestionWithScaleType(DjangoObjectType):
-    class Meta:
-        model = QuestionWithScale
-        fields = "__all__"
 
 
 class QuestionWithOptionType(DjangoObjectType):
@@ -60,10 +75,7 @@ class QuestionWithOptionType(DjangoObjectType):
         fields = "__all__"
 
 
-class AnswerScaleType(DjangoObjectType):
-    class Meta:
-        model = AnswerScale
-        fields = "__all__"
+
 
 
 class AnswerOptionType(DjangoObjectType):

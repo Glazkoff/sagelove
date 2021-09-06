@@ -2,9 +2,13 @@ import gql from "graphql-tag";
 
 // Запрос на редактирование поля "Обо мне" пользователя в личном кабинете
 export const EDIT_ABOUT_ME = gql`
-  mutation ($userId: ID!, $aboutMe: String!) {
-    updateUserInformation(userId: $userId, aboutMe: $aboutMe) {
-      ok
+  mutation ($userId: ID!, $aboutMe: String!, $photo: Upload) {
+    updateUserInformation(userId: $userId, aboutMe: $aboutMe, photo: $photo) {
+      user {
+        id
+        aboutMe
+        photo
+      }
     }
   }
 `;
@@ -40,6 +44,7 @@ export const UPDATE_USER_AIMS = gql`
       }
     ) {
       user {
+        id
         partnerType
         purposeMeet
         numberFotoHistoryByFelling
@@ -55,6 +60,17 @@ export const UPDATE_USER_TEST_STATUS = gql`
       user {
         id
         testStatus
+      }
+    }
+  }
+`;
+
+// Загрузка фото при регистрации
+export const UPLOAD_USER_PHOTO = gql`
+  mutation ($userId: ID!, $photo: Upload) {
+    uploadUserPhoto(userId: $userId, photo: $photo) {
+      user {
+        id
       }
     }
   }
