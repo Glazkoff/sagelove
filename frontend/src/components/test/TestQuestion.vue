@@ -106,7 +106,6 @@
           <p>
             {{ question_index + 1 }}. {{ questionElem.question.questionText }}
           </p>
-          <!-- <v-radio-group v-model="radioGroup"> -->
           <v-radio-group v-model="userAnswers[question_index]">
             <v-radio
               v-for="answer in questionElem.question.answeroptionSet"
@@ -140,6 +139,7 @@
               color="colorOfSea"
               class="my-button"
               @click="goToNextGroup"
+              :disabled="!canGoNext"
             >
               Далее
             </v-btn>
@@ -605,6 +605,26 @@ export default {
         return this.questionGroup.prevGroupOrder;
       } else {
         return null;
+      }
+    },
+    canGoNext() {
+      var isCanGoNext;
+      if (Array.isArray(this.userAnswers)) {
+        for (let index = 0; index < this.userAnswers.length; index++) {
+          if (
+            this.userAnswers[index] == null ||
+            this.userAnswers[index] == undefined ||
+            this.userAnswers[index] == " "
+          ) {
+            isCanGoNext = false;
+          } else {
+            isCanGoNext = true;
+          }
+        }
+        return isCanGoNext;
+      } else {
+        isCanGoNext = false;
+        return isCanGoNext;
       }
     }
   }

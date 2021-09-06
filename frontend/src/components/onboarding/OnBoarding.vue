@@ -9,6 +9,7 @@
           v-on="on"
           width="35"
           class="rotate-arrow mx-5"
+          style="cursor: pointer"
         />
       </template>
       <template v-slot:next="{ on, attrs }">
@@ -22,6 +23,7 @@
           v-on="on"
           width="35"
           class="mx-5"
+          style="cursor: pointer"
         /> </template
       ><v-carousel-item>
         <div class="position-cross mr-3">
@@ -29,6 +31,7 @@
             src="../../assets/img/cross.svg"
             alt="Cross"
             class="mt-5 pr-5"
+            style="cursor: pointer"
             @click="onWatchOnBoarding()"
           />
         </div>
@@ -59,6 +62,7 @@
             src="../../assets/img/cross.svg"
             alt="Cross"
             class="mt-5 pr-5"
+            style="cursor: pointer"
             @click="onWatchOnBoarding()"
           />
         </div>
@@ -103,6 +107,7 @@
             alt="Cross"
             class="mt-5 pr-5"
             @click="onWatchOnBoarding()"
+            style="cursor: pointer"
           />
         </div>
         <div class="position-text">
@@ -129,6 +134,7 @@
             alt="Cross"
             class="mt-5 pr-5"
             @click="onWatchOnBoarding()"
+            style="cursor: pointer"
           />
         </div>
         <div class="position-text">
@@ -181,9 +187,10 @@ export default {
             break;
         }
         if (
-          !val.partnerType ||
-          !val.purposeMeet ||
-          !val.numberFotoHistoryByFelling
+          (!val.partnerType ||
+            !val.purposeMeet ||
+            !val.numberFotoHistoryByFelling) &&
+          val.watchOnBoarding
         )
           route = "/aims";
 
