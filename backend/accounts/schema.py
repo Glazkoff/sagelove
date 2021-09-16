@@ -23,7 +23,8 @@ class Query(graphene.ObjectType):
     match_for_user = graphene.List(MatchType, user_id=graphene.ID())
     # algorithm_opposite = graphene.List(user_id=graphene.ID())
     chats_for_user = graphene.List(ChatType, user_id=graphene.ID())
-    messages_for_chat = graphene.List(MessageType, chat_id=graphene.ID())
+    messages_for_chat = graphene.List(MessageType, chat_id=graphene.ID(), first=graphene.Int(),
+                                      skip=graphene.Int())
 
     def resolve_user_group_scale_answers(self, info, user_id, question_group_order):
         try:
@@ -104,9 +105,14 @@ class Query(graphene.ObjectType):
         except (Chat.DoesNotExist, CustomUser.DoesNotExist):
             return None
 
-    def resolve_messages_for_chat(self, info, chat_id):
+    def resolve_messages_for_chat(self, info, chat_id, skip, first):
         try:
-            return Message.objects.all().filter(Q(chat=chat_id))
+            qs = Message.objects.all().filter(Q(chat=chat_id))
+            if skip:
+                qs = qs[skip:]
+            if first:
+                qs = qs[:first]
+            return qs
         except (Chat.DoesNotExist, Message.DoesNotExist):
             return None
 
@@ -121,16 +127,16 @@ class Mutation(graphene.ObjectType):
     create_message = CreateMessage.Field()
 
 
-class Subscription(graphene.ObjectType):
-    message_created = graphene.Field(MessageType)
+# class Subscription(graphene.ObjectType):
+#     message_created = graphene.Field(MessageType)
 
-    def resolve_message_created(root, info):
-        return root.filter(
-            lambda event:
-                event.operation == CREATED and
-                isinstance(event.instance, Message)
-        ).map(lambda event: event.instance)
+#     def resolve_message_created(root, info):
+#         return root.filter(
+#             lambda event:
+#                 event.operation == CREATED and
+#                 isinstance(event.instance, Message)
+#         ).map(lambda event: event.instance)
 
 
 schema = graphene.Schema(query=Query,
-                         mutation=Mutation, subscription=Subscription)
+                         mutation=Mutation)
