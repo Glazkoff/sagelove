@@ -300,7 +300,8 @@ export default {
   filters: {
     truncate: function (data, num) {
       const reqdString = data.split("").slice(0, num).join("");
-      if (data != "Изменить фото") {
+      const reqdString_array = data.split("");
+      if (data != "Изменить фото" && reqdString_array.length >= 20) {
         const reqdStringAll = reqdString + "...";
         return reqdStringAll;
       } else {
