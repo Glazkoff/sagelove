@@ -21,10 +21,10 @@ class Query(graphene.ObjectType):
     matches = graphene.List(MatchType)
     match = graphene.Field(MatchType, match_id=graphene.ID())
     match_for_user = graphene.List(MatchType, user_id=graphene.ID())
-    # algorithm_opposite = graphene.List(user_id=graphene.ID())
     chats_for_user = graphene.List(ChatType, user_id=graphene.ID())
-    messages_for_chat = graphene.List(MessageType, chat_id=graphene.ID(), first=graphene.Int(),
-                                      skip=graphene.Int())
+    messages_for_chat = graphene.List(
+        MessageType, chat_id=graphene.ID(), first=graphene.Int(), skip=graphene.Int())
+    chat = graphene.Field(ChatType, chat_id=graphene.ID())
 
     def resolve_user_group_scale_answers(self, info, user_id, question_group_order):
         try:
@@ -33,29 +33,6 @@ class Query(graphene.ObjectType):
             return UserScaleAnswer.objects.filter(user=user, answer_scale_line__question__question_group=group)
         except (GroupQuestion.DoesNotExist, CustomUser.DoesNotExist):
             return None
-
-    # # Алгоритм для противопололжностей
-    # def resolve_algorithm_opposite(self, info, user_id):
-    #     try:
-    #         user = CustomUser.objects.get(pk=user_id)
-    #         user_answers_counting = AnswersCounting.objects.get(user=user)
-    #         search_gender = "NS"
-    #         if user.gender == "M":
-    #             search_gender = "F"
-    #         elif user.gender == "F":
-    #             search_gender = "M"
-    #         print(search_gender)
-    #         num_1 = user_answers_counting.answers_count1
-    #         num_2 = user_answers_counting.answers_count2
-    #         num_4 = user_answers_counting.answers_count4
-    #         num_5 = user_answers_counting.answers_count5
-    #         print(num_1)
-    #         print(num_2)
-    #         print(num_4)
-    #         print(num_5)
-    #         return AnswersCounting.objects.all().filter(user.gender == search_gender)
-    #     except (AnswersCounting.DoesNotExist, CustomUser.DoesNotExist):
-    #         return None
 
     def resolve_user_group_option_answers(self, info, user_id, question_group_order):
         try:
@@ -114,6 +91,13 @@ class Query(graphene.ObjectType):
                 qs = qs[:first]
             return qs
         except (Chat.DoesNotExist, Message.DoesNotExist):
+            return None
+
+    def resolve_chat(self, info, chat_id):
+        try:
+            chat = Chat.objects.get(pk=chat_id)
+            return chat
+        except:
             return None
 
 

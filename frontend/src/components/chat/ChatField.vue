@@ -5,14 +5,25 @@
   >
     <v-app-bar class="w-100 chat-bar">
       <v-avatar class="mr-4">
-        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="Avatar" />
+        <img
+          v-if="chat != undefined"
+          :src="
+            chat.user2.photo != null && chat.user2.photo != ''
+              ? `/media/${chat.user2.photo}`
+              : `/media/photo_placeholder.svg`
+          "
+          alt="Avatar"
+        />
+        <img v-else src="/media/photo_placeholder.svg" alt="Avatar" />
       </v-avatar>
-      <v-toolbar-title><b>Алина</b></v-toolbar-title>
+      <v-toolbar-title v-if="chat != undefined">
+        <b>{{ chat.user2 != undefined ? chat.user2.firstName : "" }}</b>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn color="pink" text>Заблокировать</v-btn>
     </v-app-bar>
     <div class="chat-messages">
-      <v-container>
+      <v-container class="h-100 d-flex flex-column">
         <div class="message-box w-100 companion-message">
           <div class="message-box-row">
             <div class="message-box-text">
@@ -26,28 +37,23 @@
             </div>
           </div>
         </div>
-        <div class="message-box w-100 my-message">
+        <div
+          v-for="message in messagesForChat"
+          :key="message.id"
+          class="message-box w-100"
+          :class="{
+            'my-message': +message.messageAuthor.id == +userId,
+            'companion-message': +message.messageAuthor.id != +userId
+          }"
+        >
           <div class="message-box-row">
             <div class="message-box-text">
               <v-container>
                 <v-row class="mb-1">
                   <v-spacer></v-spacer>
-                  <small>22:18</small>
+                  <small>{{ message.createdAt }}</small>
                 </v-row>
-                <v-row> Привет 😍 </v-row>
-              </v-container>
-            </div>
-          </div>
-        </div>
-        <div class="message-box w-100 my-message">
-          <div class="message-box-row">
-            <div class="message-box-text">
-              <v-container>
-                <v-row class="mb-1">
-                  <v-spacer></v-spacer>
-                  <small>22:18</small>
-                </v-row>
-                <v-row> Как дела? </v-row>
+                <v-row>{{ message.messageText }}</v-row>
               </v-container>
             </div>
           </div>
@@ -62,11 +68,98 @@
 
 <script>
 import ChatMessageInput from "./ChatMessageInput.vue";
+import { MESSAGES_FOR_CHAT, CHAT } from "@/graphql/chat_queries.js";
+import { MESSAGE_CREATED } from "@/graphql/chat_subscriptions.js";
 
 export default {
   name: "ChatField",
   components: {
     ChatMessageInput
+  },
+  apollo: {
+    chat: {
+      query: CHAT,
+      variables() {
+        return {
+          chatId: this.pickedChatId
+        };
+      }
+    },
+    messagesForChat: {
+      query: MESSAGES_FOR_CHAT,
+      variables() {
+        return {
+          chatId: this.pickedChatId,
+          first: 100,
+          skip: 0
+        };
+      },
+      subscribeToMore: {
+        document: MESSAGE_CREATED,
+        variables() {
+          return {
+            chatId: this.pickedChatId
+          };
+        },
+        updateQuery: function (previousResult, { subscriptionData }) {
+          // Here, return the new result from the previous with the new data
+          console.log("previousResult: ", previousResult);
+          console.log("subscriptionData: ", subscriptionData);
+          if (subscriptionData.errors === null) {
+            let findIndex = previousResult.messagesForChat.findIndex(el => {
+              return +el.id === +subscriptionData.data.messageCreated;
+            });
+            console.log("findIndex: ", findIndex);
+            console.log(
+              "subscriptionData.data.messageCreated.messageAuthor.id: ",
+              subscriptionData.data.messageCreated.messageAuthor.id
+            );
+            console.log("this.userId: ", this.userId);
+
+            if (
+              findIndex == -1 &&
+              +subscriptionData.data.messageCreated.messageAuthor.id !==
+                +this.userId
+            ) {
+              // TODO: добавить проверку на сообщение самого пользователя и исправить дубли
+              // if (findIndex == -1) {
+              previousResult.messagesForChat.push(
+                subscriptionData.data.messageCreated
+              );
+            }
+          }
+          return previousResult;
+        }
+      }
+    }
+  },
+  computed: {
+    pickedChatId() {
+      return this.$store.state.pickedChatId;
+    },
+    userId() {
+      return this.$store.getters.user_id;
+    }
+  },
+  watch: {
+    messagesForChat() {
+      setTimeout(() => {
+        let chatMessages = document.querySelector(".chat-messages");
+        chatMessages.visibility = "hidden";
+        this.scrollToLastMessage();
+        chatMessages.visibility = "visible";
+      }, 100);
+    }
+  },
+  methods: {
+    scrollToLastMessage() {
+      let chatMessages = document.querySelector(".chat-messages");
+      chatMessages.scrollTo({
+        top: chatMessages.scrollHeight,
+        left: 0,
+        behavior: "smooth"
+      });
+    }
   }
 };
 </script>
@@ -76,7 +169,8 @@ export default {
   max-height: 64px;
 }
 .chat-messages {
-  height: 100%;
+  height: calc(100vh - 140px - 128px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

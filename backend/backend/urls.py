@@ -18,8 +18,17 @@ from django.urls import include, path
 from rest_framework import routers
 # from graphene_django.views import GraphQLView
 from graphene_file_upload.django import FileUploadGraphQLView
+from graphql.backend.core import GraphQLCoreBackend
 
 router = routers.DefaultRouter()
+
+
+class GraphQLCustomCoreBackend(GraphQLCoreBackend):
+    def __init__(self, executor=None):
+        # type: (Optional[Any]) -> None
+        super().__init__(executor)
+        self.execute_params['allow_subscriptions'] = True
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +36,6 @@ urlpatterns = [
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     # path("api/graphql/", GraphQLView.as_view(graphiql=True)),
-    path("api/graphql/", FileUploadGraphQLView.as_view(graphiql=True)),
+    path("api/graphql/", FileUploadGraphQLView.as_view(graphiql=True,
+         backend=GraphQLCustomCoreBackend())),
 ]

@@ -15,6 +15,9 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { setContext } from "apollo-link-context";
 import Cookies from "js-cookie";
 import { createUploadLink } from "apollo-upload-client";
+import { split } from "apollo-link";
+import { WebSocketLink } from "apollo-link-ws";
+import { getMainDefinition } from "apollo-utilities";
 
 Vue.directive("mask", VueMaskDirective);
 
@@ -35,13 +38,13 @@ const httpLink = new createUploadLink({
 });
 
 // Создание websocket ссылки для Subscription
-// TODO: включить
-// const wsLink = new WebSocketLink({
-//   uri: "ws://localhost:8001/api/graphql",
-//   options: {
-//     reconnect: true
-//   }
-// });
+const wsLink = new WebSocketLink({
+  uri:
+    process.env.VUE_APP_GRAPHQL_WS || "ws://localhost:8001/ws/subscriptions/",
+  options: {
+    reconnect: true
+  }
+});
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -55,9 +58,22 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  authLink.concat(httpLink)
+);
+
 // Клиент Apollo
 const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link,
   cache,
   connectToDevTools: true
 });
