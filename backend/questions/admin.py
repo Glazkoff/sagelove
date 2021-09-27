@@ -26,7 +26,7 @@ class GroupQuestionAdmin(admin.ModelAdmin):
     search_fields = ('name_group_question',)
     fieldsets = (
         (None, {
-            'fields': ('order','name_group_question',)
+            'fields': ('order','name_group_question','published_or_not',)
         }),
     )
     list_editable = ('published_or_not',)
