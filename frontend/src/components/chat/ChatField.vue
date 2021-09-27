@@ -112,13 +112,6 @@ export default {
               +subscriptionData.data.messageCreated.messageAuthor.id !==
                 +this.userId
             ) {
-              // TODO: добавить проверку на сообщение самого пользователя и исправить дубли
-              // if (findIndex == -1) {
-              console.log(
-                "subscriptionData.data.messageCreated.messageText: ",
-                subscriptionData.data.messageCreated.messageText
-              );
-              subscriptionData.data.messageCreated.messageText += "(кэш)";
               previousResult.messagesForChat.push(
                 subscriptionData.data.messageCreated
               );
