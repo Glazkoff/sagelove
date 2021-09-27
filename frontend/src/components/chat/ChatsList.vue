@@ -1,7 +1,6 @@
 <template>
   <v-list subheader>
-    <v-subheader>Ваши чаты</v-subheader>
-    {{ userId }}
+    <v-subheader>Ваши чаты (user #{{ userId }})</v-subheader>
     <div v-if="chatsForUser == null || chatsForUser.length == 0">
       <v-list-item>
         <v-list-item-content>
@@ -14,6 +13,10 @@
         v-for="userChat in chatsForUser"
         v-bind:key="userChat.id"
         class="chat-list-item"
+        :style="{
+          'background-color':
+            userChat.id === pickedChatId ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,0)'
+        }"
         @click="$store.commit('SET_PICKED_CHAT_ID', userChat.id)"
       >
         <v-list-item-content>
@@ -91,6 +94,9 @@ export default {
   computed: {
     userId() {
       return this.$store.getters.user_id;
+    },
+    pickedChatId() {
+      return this.$store.state.pickedChatId;
     }
   }
 };

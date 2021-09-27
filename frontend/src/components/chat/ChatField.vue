@@ -102,19 +102,10 @@ export default {
           };
         },
         updateQuery: function (previousResult, { subscriptionData }) {
-          // Here, return the new result from the previous with the new data
-          console.log("previousResult: ", previousResult);
-          console.log("subscriptionData: ", subscriptionData);
           if (subscriptionData.errors === null) {
             let findIndex = previousResult.messagesForChat.findIndex(el => {
-              return +el.id === +subscriptionData.data.messageCreated;
+              return +el.id === +subscriptionData.data.messageCreated.id;
             });
-            console.log("findIndex: ", findIndex);
-            console.log(
-              "subscriptionData.data.messageCreated.messageAuthor.id: ",
-              subscriptionData.data.messageCreated.messageAuthor.id
-            );
-            console.log("this.userId: ", this.userId);
 
             if (
               findIndex == -1 &&
@@ -123,6 +114,11 @@ export default {
             ) {
               // TODO: добавить проверку на сообщение самого пользователя и исправить дубли
               // if (findIndex == -1) {
+              console.log(
+                "subscriptionData.data.messageCreated.messageText: ",
+                subscriptionData.data.messageCreated.messageText
+              );
+              subscriptionData.data.messageCreated.messageText += "(кэш)";
               previousResult.messagesForChat.push(
                 subscriptionData.data.messageCreated
               );
