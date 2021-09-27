@@ -22,7 +22,8 @@ export default new Vuex.Store({
       username: null
     },
     loading: false,
-    firstPath: null
+    firstPath: null,
+    pickedChatId: null
   },
   getters: {
     isAuthenticated: state => {
@@ -77,6 +78,9 @@ export default new Vuex.Store({
     },
     SET_FIRST_PATH(state, firstPath) {
       state.firstPath = firstPath;
+    },
+    SET_PICKED_CHAT_ID(state, pickedChatId) {
+      state.pickedChatId = pickedChatId;
     }
   },
   actions: {

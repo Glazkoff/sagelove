@@ -29,11 +29,12 @@
         no-resize
         v-model="newMessage"
         ref="messageField"
+        @keypress.enter="sendMessage"
       ></v-textarea>
     </form>
     <div class="d-flex">
       <v-spacer></v-spacer>
-      <v-btn dark color="colorOfSea">Отправить</v-btn>
+      <v-btn dark color="colorOfSea" @click="sendMessage">Отправить</v-btn>
     </div>
   </v-container>
 </template>
@@ -42,6 +43,8 @@
 import { VEmojiPicker } from "v-emoji-picker";
 import { mixin as clickaway } from "vue-clickaway";
 import { SlideYDownTransition } from "vue2-transitions";
+import { MESSAGES_FOR_CHAT } from "@/graphql/chat_queries.js";
+import { CREATE_MESSAGE } from "@/graphql/chat_mutations.js";
 
 const i18n = {
   search: "Поиск...",
@@ -72,6 +75,11 @@ export default {
       i18n
     };
   },
+  computed: {
+    pickedChatId() {
+      return this.$store.state.pickedChatId;
+    }
+  },
   methods: {
     selectEmoji(emoji) {
       let input = this.$refs.messageField.$refs.input;
@@ -84,7 +92,6 @@ export default {
       let selectionEnd;
       selectionStart = selectionEnd = curPos + emoji.data.length;
       if (input.setSelectionRange) {
-        console.log(input.setSelectionRange(selectionStart, selectionEnd + 2));
         input.focus();
         input.setSelectionRange(selectionStart, selectionEnd + 2);
       } else if (input.createTextRange) {
@@ -98,6 +105,62 @@ export default {
     },
     closeEmojiPicker() {
       this.emojiPickerShow = false;
+    },
+    // TODO: получать данные с сервера
+    sendMessage() {
+      if (this.newMessage != "" && this.newMessage != null) {
+        this.$apollo
+          .mutate({
+            mutation: CREATE_MESSAGE,
+            variables: {
+              chatId: this.pickedChatId,
+              authorId: this.$store.getters.user_id,
+              messageText: this.newMessage
+            },
+            update: (cache, { data: { createMessage } }) => {
+              let data = cache.readQuery({
+                query: MESSAGES_FOR_CHAT,
+                variables: {
+                  chatId: this.pickedChatId,
+                  first: 100,
+                  skip: 0
+                }
+              });
+              if (Array.isArray(data.messagesForChat)) {
+                data.messagesForChat.push();
+              }
+              data.messagesForChat.push(createMessage.message);
+              //   data.user.partnerType = this.partner;
+              //   data.user.purposeMeet = this.wish;
+              //   data.user.numberFotoHistoryByFelling = this.isBlueBorder;
+              cache.writeQuery({
+                query: MESSAGES_FOR_CHAT,
+                variables: {
+                  chatId: this.pickedChatId,
+                  first: 100,
+                  skip: 0
+                },
+                data
+              });
+            }
+            // optimisticResponse: {
+            //   __typename: "Mutation",
+            //   updateAimsForUser: {
+            //     __typename: "UpdateAimsForUserMutation",
+            //     partnerType: this.partner,
+            //     purposeMeet: this.wish,
+            //     numberFotoHistoryByFelling: this.isBlueBorder
+            //   }
+            // }
+          })
+          .then(() => {
+            this.newMessage = "";
+            this.$emit("send");
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
   }
 };
