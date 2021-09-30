@@ -119,11 +119,14 @@ class CreateChat(graphene.Mutation):
         try:
             user_1 = CustomUser.objects.get(pk=user1_id)
             user_2 = CustomUser.objects.get(pk=user2_id)
-            if Chat.objects.all().filter((Q(user_1=user_1) & Q(user_2=user_2)) | (Q(user_1=user_2) & Q(user_2=user_1))).count() == 0:
-                Chat.objects.create(user_1=user_1, user_2=user_2)
-                return CreateChat(ok=True)
+            if user_1 is not user_2:
+                if Chat.objects.all().filter((Q(user_1=user_1) & Q(user_2=user_2)) | (Q(user_1=user_2) & Q(user_2=user_1))).count() == 0:
+                    Chat.objects.create(user_1=user_1, user_2=user_2)
+                    return CreateChat(ok=True)
+                else:
+                    return CreateChat(ok=False)
             else:
-                return CreateChat(ok=False)
+                    return CreateChat(ok=False)
         except:
             return CreateChat(ok=False)
 

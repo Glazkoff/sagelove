@@ -16,3 +16,12 @@ export const MESSAGE_CREATED = gql`
     }
   }
 `;
+
+//Удаление чата
+export const CHAT_DELETED = gql`
+  subscription ($chatId: ID!) {
+    chatDeleted(id: $chatId) {
+      id
+    }
+  }
+`;
