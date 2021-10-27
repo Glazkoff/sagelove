@@ -161,6 +161,10 @@ a.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
   background-color: #c8f5fa !important;
   color: #fff !important;
 }
+.theme--dark.v-btn.v-btn--disabled.v-btn--has-bg {
+  background-color: #c8f5fa !important;
+  color: #fff !important;
+}
 
 a.link {
   text-decoration: none;
