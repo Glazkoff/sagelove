@@ -244,23 +244,6 @@ export default {
           this.two(date.getUTCMinutes())
         );
       }
-
-      // const now = new Date();
-      // const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      // const [date, time_bad] = date_time.split("T");
-      // const [year, month, day] = date.split("-");
-      // const [time] = time_bad.split(".");
-      // const date_format = new Date(year, month, day);
-      // if (date_format == today) {
-      //   return time;
-      // } else {
-      //   // return `${day}.${month}.${year}` + " " + time;
-      //   return time_zone;
-      //   //1632949200000
-      //   // return today;
-      //   //1635454800000
-      //   // return date_format;
-      // }
     }
   }
 };

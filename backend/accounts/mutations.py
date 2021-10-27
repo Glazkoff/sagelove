@@ -167,3 +167,19 @@ class DeleteChat(graphene.Mutation):
             return DeleteChat(ok=True)
         except:
             return DeleteChat(ok=False)
+
+# Прочитать все сообщения пользователя в чате
+class CheckUserMessagesMutation(graphene.Mutation):
+    class Arguments:
+        chat_id = graphene.ID()
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, chat_id):
+        messages =  Message.objects.all().filter(Q(chat=chat_id)&Q(message_check=False)).exclude(message_author = CustomUser.objects.get(pk=info.variable_values['userId']))
+        for element in messages:
+            element.message_check = True
+            element.save()
+
+        return cls(ok=True)
