@@ -44,7 +44,7 @@
             class="mb-0 ml-16 pointer custom-menu-link"
             >Знакомства</router-link
           >
-          <router-link
+          <!-- <router-link
             v-if="
               user != undefined && user.testStatus.toUpperCase() == 'FINISH'
             "
@@ -53,7 +53,7 @@
             tag="p"
             class="mb-0 ml-16 pointer custom-menu-link"
             >Чаты</router-link
-          >
+          > -->
 
           <v-menu offset-y offset-overflow :close-on-content-click="true">
             <template v-slot:activator="{ on, attrs }">
@@ -199,7 +199,7 @@
             >
           </v-list-item>
 
-          <v-list-item
+          <!-- <v-list-item
             v-if="
               user != undefined && user.testStatus.toUpperCase() == 'FINISH'
             "
@@ -213,7 +213,7 @@
                 >Чаты</router-link
               ></v-list-item-title
             >
-          </v-list-item>
+          </v-list-item> -->
 
           <v-list-item v-if="user != undefined && user.watchOnBoarding">
             <v-list-item-title
