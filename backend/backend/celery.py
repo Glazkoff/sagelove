@@ -42,7 +42,20 @@ app.conf.beat_schedule = {
     'fourth_algorithm': {
         'task': 'accounts.tasks.fourth_algorithm',
         'schedule': timedelta(hours=1)
+    },
+    'fifth_algorithm': {
+        'task': 'accounts.tasks.fifth_algorithm',
+        'schedule': timedelta(hours=1)
+    },
+    'sixth_algorithm': {
+        'task': 'accounts.tasks.sixth_algorithm',
+        'schedule': timedelta(hours=1)
+    },
+    'seventh_algorithm': {
+        'task': 'accounts.tasks.seventh_algorithm',
+        'schedule': timedelta(hours=1)
     }
+
 }
 app.conf.task_routes = {
     'first_algorithm': {
@@ -58,6 +71,18 @@ app.conf.task_routes = {
         'routing_key': 'normal',
     },
     'fourth_algorithm': {
+        'queue': 'normal',
+        'routing_key': 'normal',
+    },
+    'fifth_algorithm': {
+        'queue': 'normal',
+        'routing_key': 'normal',
+    },
+    'sixth_algorithm': {
+        'queue': 'normal',
+        'routing_key': 'normal',
+    },
+    'seventh_algorithm': {
         'queue': 'normal',
         'routing_key': 'normal',
     },
