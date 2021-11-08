@@ -33,7 +33,6 @@ import math
 #     return True
 
 # Первый алгоритм поиска партнеров
-
 @app.task
 def first_algorithm():
     try:
@@ -99,8 +98,6 @@ def first_algorithm():
         return ok, count_match
 
 # Второй алгоритм поиска партнеров
-
-
 @app.task
 def second_algorithm():
     try:
@@ -157,8 +154,6 @@ def second_algorithm():
         return ok, count_match
 
 # Третий алгоритм поиска партнеров
-
-
 @app.task
 def third_algorithm():
     try:
@@ -206,9 +201,7 @@ def third_algorithm():
         count_match = -1
         return ok, count_match
 
-# Четвертый алгоритм поиска партнеров
-
-
+# Алгоритм поиска партнеров 'История по ощущениям'
 @app.task
 def fourth_algorithm():
     try:
@@ -251,10 +244,187 @@ def fourth_algorithm():
                     first_user_data.test_result_demo = "FNP"
                     first_user_data.save()
                     count_match += 1
-            print(f"Алгоритм 4 работает!")
+            print(f"Алгоритм 'История по ощущениям' работает!")
             ok = True
             return ok, count_match
     except (CustomUser.DoesNotExist, ):
+        print(f"Алгоритм 'История по ощущениям' не работает(")
+        ok = False
+        count_match = -1
+        return ok, count_match
+
+#Алгоритм поиска тождеств партнеров
+@app.task
+def fifth_algorithm():
+    try:
+        users_all = CustomUser.objects.all().filter(test_status='finish')
+        for user in users_all:
+            user_first = user.id
+            ok = graphene.Boolean()
+            count_match = graphene.Int()
+            first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(
+                pk=user_first).filter(test_status='finish')
+            count_answers = 0
+            questions_with_option = QuestionWithOption.objects.all()
+            questions_with_scale = QuestionWithScale.objects.all()
+            count_match = 0
+            if(first_user_data.purpose_meet == 'SAME'):
+                for user_second in users:
+                    count_answers = 0
+                    for question_with_scale in questions_with_scale:
+                        answer_scale_line_qu = AnswerScale.objects.filter(
+                            question=question_with_scale)
+                        for scale_line in answer_scale_line_qu:
+                            first_user_answer_scale = UserScaleAnswer.objects.filter(
+                                user=user_first, answer_scale_line=scale_line).first()
+                            second_user_answer_scale = UserScaleAnswer.objects.filter(
+                                user=user_second, answer_scale_line=scale_line).first()
+                            if first_user_answer_scale is not None and second_user_answer_scale is not None and ((first_user_answer_scale.answer == 1 and second_user_answer_scale.answer == 1) or (first_user_answer_scale.answer == 2 and second_user_answer_scale.answer == 1) or (first_user_answer_scale.answer == 1 and second_user_answer_scale.answer == 2) or (first_user_answer_scale.answer == 2 and second_user_answer_scale.answer == 2) or (first_user_answer_scale.answer == 4 and second_user_answer_scale.answer == 4) or (first_user_answer_scale.answer == 4 and second_user_answer_scale.answer == 5) or (first_user_answer_scale.answer == 5 and second_user_answer_scale.answer == 4) or (first_user_answer_scale.answer == 5 and second_user_answer_scale.answer == 5)):
+                                count_answers += 1
+                                if Datings.objects.all().filter(
+                                    (
+                                        Q(user_1=first_user_data)
+                                        & Q(user_2=user_second)
+                                        & Q(algorithm='SSA')
+                                    )
+                                | (
+                                        Q(user_1=user_second)
+                                        & Q(user_2=first_user_data)
+                                        & Q(algorithm='SSA')
+                                    )
+                                    ).count() == 0 and user_second.gender != first_user_data.gender and count_answers/len(questions_with_option) >= math.floor(0.6):
+                                    Datings.objects.create(
+                                    user_1=first_user_data, user_2=user_second, algorithm='SSA')
+                                    first_user_data.test_result_demo = "FNP"
+                                    first_user_data.save()
+                                    count_match += 1
+            print(f"Алгоритм поиска тождеств работает!")
+            ok = True
+            return ok, count_match
+                
+    except (CustomUser.DoesNotExist, QuestionWithOption.DoesNotExist, QuestionWithScale.DoesNotExist, ):
+        print(f"Алгоритм поиска тождеств не работает(")
+        ok = False
+        count_match = -1
+        return ok, count_match
+
+#Алгоритм поиска противоположных партнеров
+@app.task
+def sixth_algorithm():
+    try:
+        users_all = CustomUser.objects.all().filter(test_status='finish')
+        for user in users_all:
+            user_first = user.id
+            ok = graphene.Boolean()
+            count_match = graphene.Int()
+            first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(
+                pk=user_first).filter(test_status='finish')
+            count_answers = 0
+            questions_with_option = QuestionWithOption.objects.all()
+            questions_with_scale = QuestionWithScale.objects.all()
+            count_match = 0
+            if(first_user_data.purpose_meet == 'ANTI'):
+                for user_second in users:
+                    count_answers = 0
+                    for question_with_scale in questions_with_scale:
+                        answer_scale_line_qu = AnswerScale.objects.filter(
+                            question=question_with_scale)
+                        for scale_line in answer_scale_line_qu:
+                            first_user_answer_scale = UserScaleAnswer.objects.filter(
+                                user=user_first, answer_scale_line=scale_line).first()
+                            second_user_answer_scale = UserScaleAnswer.objects.filter(
+                                user=user_second, answer_scale_line=scale_line).first()
+                            if first_user_answer_scale is not None and second_user_answer_scale is not None and ((first_user_answer_scale.answer is not 1 and second_user_answer_scale.answer == 1) or (first_user_answer_scale.answer is not 2 and second_user_answer_scale.answer == 1) or (first_user_answer_scale.answer is not 1 and second_user_answer_scale.answer == 2) or (first_user_answer_scale.answer is not 2 and second_user_answer_scale.answer == 2) or (first_user_answer_scale.answer is not 4 and second_user_answer_scale.answer == 4) or (first_user_answer_scale.answer is not 4 and second_user_answer_scale.answer == 5) or (first_user_answer_scale.answer is not 5 and second_user_answer_scale.answer == 4) or (first_user_answer_scale.answer is not 5 and second_user_answer_scale.answer == 5)):
+                                count_answers += 1
+                                if Datings.objects.all().filter(
+                                    (
+                                        Q(user_1=first_user_data)
+                                        & Q(user_2=user_second)
+                                        & Q(algorithm='ASA')
+                                    )
+                                | (
+                                        Q(user_1=user_second)
+                                        & Q(user_2=first_user_data)
+                                        & Q(algorithm='ASA')
+                                    )
+                                    ).count() == 0 and user_second.gender != first_user_data.gender and count_answers/len(questions_with_option) >= math.floor(0.6):
+                                    Datings.objects.create(
+                                    user_1=first_user_data, user_2=user_second, algorithm='ASA')
+                                    first_user_data.test_result_demo = "FNP"
+                                    first_user_data.save()
+                                    count_match += 1
+            print(f"Алгоритм поиска противоположностей работает!")
+            ok = True
+            return ok, count_match
+                
+    except (CustomUser.DoesNotExist, QuestionWithOption.DoesNotExist, QuestionWithScale.DoesNotExist, ):
+        print(f"Алгоритм поиска противоположностей не работает(")
+        ok = False
+        count_match = -1
+        return ok, count_match
+
+#Четвертый алгоритм поиска партнеров
+@app.task
+def seventh_algorithm():
+    try:
+        users_all = CustomUser.objects.all().filter(test_status='finish')
+        for user in users_all:
+            user_first = user.id
+            ok = graphene.Boolean()
+            count_match = graphene.Int()
+            first_user_data = CustomUser.objects.get(pk=user_first)
+            users = CustomUser.objects.all().exclude(
+                pk=user_first).filter(test_status='finish')
+            count_answers = 0
+            questions_with_option = QuestionWithOption.objects.all()
+            questions_with_scale = QuestionWithScale.objects.all()
+            count_match = 0
+            if(first_user_data.purpose_meet == 'MATH'):
+                for user_second in users:
+                    count_answers = 0
+                    for question_with_scale in questions_with_scale:
+                        answer_scale_line_qu = AnswerScale.objects.filter(
+                            question=question_with_scale)
+                        for scale_line in answer_scale_line_qu:
+                            first_user_answer_scale = UserScaleAnswer.objects.filter(
+                                user=user_first, answer_scale_line=scale_line).first()
+                            second_user_answer_scale = UserScaleAnswer.objects.filter(
+                                user=user_second, answer_scale_line=scale_line).first()
+                            if (
+                                first_user_answer_scale is not None
+                                and second_user_answer_scale is not None
+                                and (
+                                    first_user_answer_scale.answer == 3
+                                    and second_user_answer_scale.answer in [1, 2]
+                                    or first_user_answer_scale.answer in [1, 2]
+                                    and second_user_answer_scale.answer == 3
+                                )
+                            ):
+                                count_answers += 1
+                                if Datings.objects.all().filter(
+                                    (
+                                        Q(user_1=first_user_data)
+                                        & Q(user_2=user_second)
+                                        & Q(algorithm='A4')
+                                    )
+                                | (
+                                        Q(user_1=user_second)
+                                        & Q(user_2=first_user_data)
+                                        & Q(algorithm='A4')
+                                    )
+                                    ).count() == 0 and user_second.gender != first_user_data.gender and count_answers/len(questions_with_option) >= math.floor(0.45):
+                                    Datings.objects.create(
+                                    user_1=first_user_data, user_2=user_second, algorithm='A4')
+                                    first_user_data.test_result_demo = "FNP"
+                                    first_user_data.save()
+                                    count_match += 1
+            print(f"Алгоритм 4 работает!")
+            ok = True
+            return ok, count_match
+
+    except (CustomUser.DoesNotExist, QuestionWithOption.DoesNotExist, QuestionWithScale.DoesNotExist, ):
         print(f"Алгоритм 4 не работает(")
         ok = False
         count_match = -1

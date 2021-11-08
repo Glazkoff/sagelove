@@ -45,7 +45,7 @@
                 </p>
               </v-col>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col>
                 <v-btn
                   color="colorOfSea"
@@ -54,7 +54,7 @@
                   >Написать</v-btn
                 >
               </v-col>
-            </v-row>
+            </v-row> -->
           </div>
         </v-col>
       </v-row>

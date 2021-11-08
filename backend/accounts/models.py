@@ -93,6 +93,9 @@ ALGORITHM_SELECTION = [
     ('A2', 'Алгоритм 2'),
     ('A3', 'Алгоритм 3'),
     ('HBF', 'История по ощущениям'),
+    ('SSA', 'Алгоритм поиска тождеств'),
+    ('ASA', 'Алгоритм поиска противоположности'),
+    ('A4', 'Алгоритм 4'),
 ]
 
 
@@ -125,7 +128,7 @@ class Chat(models.Model):
     user_2 = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='seconduser', verbose_name="Пользователь 2")
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Создание чата")
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

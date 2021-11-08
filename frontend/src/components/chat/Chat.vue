@@ -5,7 +5,15 @@
         <ChatsList></ChatsList>
       </v-col>
       <v-col cols="9" class="h-100">
-        <ChatField></ChatField>
+        <v-layout
+          v-if="pickedChatId == null"
+          class="d-flex justify-center align-center h-100"
+        >
+          <v-flex style="text-align: center"> Выберите чат </v-flex>
+        </v-layout>
+        <div class="h-100" v-else>
+          <ChatField></ChatField>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -20,6 +28,11 @@ export default {
   components: {
     ChatsList,
     ChatField
+  },
+  computed: {
+    pickedChatId() {
+      return this.$store.state.pickedChatId;
+    }
   }
 };
 </script>
