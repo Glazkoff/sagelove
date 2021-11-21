@@ -129,7 +129,7 @@
               >
             </p>
             <p class="mb-1">{{ countAge(person.dateOfBirth) }}</p>
-            <v-btn color="colorOfSea my-button" dark large>Написать</v-btn>
+            <!-- <v-btn color="colorOfSea my-button" dark large>Написать</v-btn> -->
           </div>
         </v-col>
       </v-row>

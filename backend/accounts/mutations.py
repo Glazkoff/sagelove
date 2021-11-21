@@ -2,7 +2,7 @@ import graphene
 from .models import AnswersCounting, Chat, Datings, Message, UserScaleAnswer, UserOptionAnswer
 from questions.models import QuestionWithScale, QuestionWithOption, AnswerScale, AnswerOption
 from users.models import CustomUser
-from .types import AnswersCountingType, MatchType, UserScaleAnswerType, UserOptionAnswerType
+from .types import AnswersCountingType, MatchType, MessageType, UserScaleAnswerType, UserOptionAnswerType
 from django.db.models import Q
 
 
@@ -136,18 +136,18 @@ class CreateMessage(graphene.Mutation):
         chat_id = graphene.ID(required=True)
         message_text = graphene.String(required=True)
 
-    ok = graphene.Boolean()
+    message = graphene.Field(MessageType)
 
     @classmethod
     def mutate(cls, root, info, author_id, chat_id, message_text):
         try:
             author = CustomUser.objects.get(pk=author_id)
             chat = Chat.objects.get(pk=chat_id)
-            Message.objects.create(
+            message = Message.objects.create(
                 message_author=author, chat=chat, message_text=message_text, message_check=False)
-            return CreateMessage(ok=True)
+            return CreateMessage(message=message)
         except:
-            return CreateMessage(ok=False)
+            return CreateMessage(message=None)
 
 
 class DeleteChat(graphene.Mutation):
