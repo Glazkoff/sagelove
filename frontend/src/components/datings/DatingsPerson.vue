@@ -11,7 +11,7 @@
               >Знакомства</router-link
             >
             <span class="grey--text mr-3 ml-3">/</span>
-            <span class="grey--text">Иван</span>
+            <span class="grey--text">{{ user.firstName }}</span>
           </p>
         </v-col>
       </v-row>

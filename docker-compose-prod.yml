@@ -2,6 +2,7 @@ version: "3.3"
 
 volumes:
   postgres_data: {}
+  redis-data: {}
 
 services:
   backend:
@@ -34,3 +35,58 @@ services:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+
+  # Брокер сообщений Redis
+  redis:
+    container_name: sagelove_redis
+    restart: always
+    image: redis:5-alpine
+    env_file: .env
+    volumes:
+      - redis-data:/var/lib/redis
+
+  # Бэкенд Django ASGI
+  backend_asgi:
+    container_name: sagelove_backend_asgi
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.asgi
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+    command: /start_asgi.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env
+    links:
+      - redis     
+
+  # Celery Worker
+  celery-worker:
+    container_name: sagelove_celery-worker
+    restart: on-failure
+    build:
+      context: ./backend
+    command: celery -A backend worker --loglevel=info --pool=solo
+    volumes:
+      - ./backend:/app
+    env_file: .env
+    depends_on:
+      - backend
+      - redis
+
+  # Celery Beat
+  celery-beat:
+    container_name: sagelove_celery-beat
+    restart: on-failure
+    build:
+      context: ./backend
+    command: celery -A backend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./backend:/app
+    env_file: .env
+    depends_on:
+      - backend
+      - redis

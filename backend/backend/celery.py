@@ -29,11 +29,11 @@ app.conf.beat_schedule = {
     # },
     'first_algorithm': {
         'task': 'accounts.tasks.first_algorithm',
-        'schedule': timedelta(hours=1)
+        'schedule': timedelta(seconds=60)
     },
     'second_algorithm': {
         'task': 'accounts.tasks.second_algorithm',
-        'schedule': timedelta(hours=1)
+        'schedule': timedelta(seconds=60)
     },
     'third_algorithm': {
         'task': 'accounts.tasks.third_algorithm',
