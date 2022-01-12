@@ -122,8 +122,8 @@ export default {
                 query: MESSAGES_FOR_CHAT,
                 variables: {
                   chatId: this.pickedChatId,
-                  first: 100,
-                  skip: 0
+                  last: 100
+                  // skip: 0
                 }
               });
               if (Array.isArray(data.messagesForChat)) {
@@ -137,8 +137,9 @@ export default {
                 query: MESSAGES_FOR_CHAT,
                 variables: {
                   chatId: this.pickedChatId,
-                  first: 100,
-                  skip: 0
+                  last: 100
+                  // first: 100,
+                  // skip: 0
                 },
                 data
               });

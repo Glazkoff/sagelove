@@ -122,8 +122,9 @@ export default {
       variables() {
         return {
           chatId: this.pickedChatId,
-          first: 100,
-          skip: 0
+          last: 100
+          // first: 100,
+          // skip: 0
         };
       },
       subscribeToMore: {

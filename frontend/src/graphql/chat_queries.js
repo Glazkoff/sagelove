@@ -22,8 +22,8 @@ export const CHATS_FOR_USER = gql`
 
 // Список сообщений в конкретном чате
 export const MESSAGES_FOR_CHAT = gql`
-  query ($chatId: ID!, $first: Int!, $skip: Int!) {
-    messagesForChat(chatId: $chatId, first: $first, skip: $skip) {
+  query ($chatId: ID!, $first: Int, $skip: Int, $last: Int) {
+    messagesForChat(chatId: $chatId, first: $first, skip: $skip, last: $last) {
       id
       messageText
       messageCheck
