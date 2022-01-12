@@ -20,7 +20,7 @@
         <b>{{ chat.user2 != undefined ? chat.user2.firstName : "" }}</b>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn color="pink" text>Заблокировать</v-btn>
+      <v-btn color="pink" text @click="dialog = true">Заблокировать</v-btn>
     </v-app-bar>
     <div class="chat-messages">
       <v-container class="h-100 d-flex flex-column">
@@ -51,7 +51,7 @@
               <v-container>
                 <v-row class="mb-1">
                   <v-spacer></v-spacer>
-                  <small>{{ message.createdAt }}</small>
+                  <small>{{ formatDate(message.createdAt) }}</small>
                 </v-row>
                 <v-row>{{ message.messageText }}</v-row>
               </v-container>
@@ -63,6 +63,38 @@
     <div>
       <ChatMessageInput></ChatMessageInput>
     </div>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title class="lightBlue pa-4 pr-12 custom-relative">
+          <h4>Заблокировать пользователя</h4>
+          <v-icon
+            @click="dialog = false"
+            color="#013351"
+            class="custom-absolute d-flex justify-end cross"
+            >mdi-close</v-icon
+          >
+        </v-card-title>
+
+        <v-card-text class="pa-4">
+          <p class="mb-0">
+            Вы уверены, что хотите заблокировать пользователя? После блокировки
+            вы не сможете отправлять сообщения пользователю "{{
+              chat.user2 != undefined ? chat.user2.firstName : ""
+            }}"
+          </p>
+        </v-card-text>
+
+        <v-card-actions class="pb-4">
+          <v-btn
+            color="colorOfSea"
+            class="my-button wide-padding white--text"
+            large
+            @click="onBlock()"
+            >Заблокировать</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -70,7 +102,7 @@
 import ChatMessageInput from "./ChatMessageInput.vue";
 import { MESSAGES_FOR_CHAT, CHAT } from "@/graphql/chat_queries.js";
 import { MESSAGE_CREATED } from "@/graphql/chat_subscriptions.js";
-
+import { BLOCK_USER_MATCH } from "@/graphql/accounts_mutations.js";
 export default {
   name: "ChatField",
   components: {
@@ -122,6 +154,11 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      dialog: false
+    };
+  },
   computed: {
     pickedChatId() {
       return this.$store.state.pickedChatId;
@@ -148,6 +185,65 @@ export default {
         left: 0,
         behavior: "smooth"
       });
+    },
+    onBlock() {
+      this.$apollo
+        .mutate({
+          mutation: BLOCK_USER_MATCH,
+          variables: {
+            user2: this.chat.user2.id,
+            user1: this.userId
+          }
+        })
+        .then(() => {
+          this.dialog = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    two(num) {
+      return ("0" + num).slice(-2);
+    },
+    formatDate(date_time) {
+      if (!date_time) return null;
+      //now_day_time - дата и время сегодня в конкретный момент (29.09.21 23:16:58)
+      const now_day_time = new Date();
+      //today - дата сегодня в полночь (29.09.21 00:00:00)
+      const today = now_day_time.setHours(0, 0, 0, 0);
+      //time_zone - зона пользователя
+      const time_zone = Number(new Date().getTimezoneOffset());
+      // date_in_milisecond - дата в миллисекундах, посчитанная в time zone пользователя
+      const date_in_milisecond =
+        new Date(date_time).valueOf() - time_zone * 60 * 1000;
+      // date - date_in_milisecond в привычном для даты виде (29.09.21 23:16:58)
+      const date = new Date(date_in_milisecond);
+      // date_zero - date в полночь (29.09.21 00:00:00)
+      const date_zero = new Date(
+        date.setFullYear(
+          date.getUTCFullYear(),
+          date.getUTCMonth(),
+          date.getUTCDate()
+        )
+      ).setHours(0, 0, 0, 0);
+      //если дата сообщения в полночь равна нынешнему дню в полночь, возвращать только время
+      if (date_zero == today) {
+        return (
+          this.two(date.getUTCHours()) + ":" + this.two(date.getUTCMinutes())
+        );
+      } else {
+        return (
+          this.two(date.getUTCDate()) +
+          "." +
+          this.two(date.getUTCMonth() + 1) +
+          "." +
+          date.getUTCFullYear() +
+          " " +
+          this.two(date.getUTCHours()) +
+          ":" +
+          this.two(date.getUTCMinutes())
+        );
+      }
     }
   }
 };
@@ -199,6 +295,18 @@ export default {
     -webkit-border-bottom-right-radius: 0;
     -moz-border-radius-bottomright: 0;
     border-bottom-right-radius: 0;
+  }
+}
+.custom-relative {
+  position: relative;
+}
+.custom-absolute {
+  width: 100%;
+  height: 100%;
+  position: absolute !important;
+  &.cross {
+    width: auto;
+    right: 16px;
   }
 }
 </style>

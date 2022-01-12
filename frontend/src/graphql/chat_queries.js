@@ -5,6 +5,7 @@ export const CHATS_FOR_USER = gql`
   query ($userId: ID!) {
     chatsForUser(userId: $userId) {
       id
+      numberMessagesWhichAreNotRead
       user1 {
         id
         firstName

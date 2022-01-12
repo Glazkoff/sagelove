@@ -61,8 +61,9 @@
                   color="colorOfSea"
                   class="darken-4 white--text"
                   size="20"
+                  v-if="userChat.numberMessagesWhichAreNotRead > 0"
                 >
-                  1
+                  {{ userChat.numberMessagesWhichAreNotRead }}
                 </v-avatar>
               </v-layout>
             </v-col>
