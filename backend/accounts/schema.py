@@ -82,16 +82,18 @@ class Query(graphene.ObjectType):
         except (Chat.DoesNotExist, CustomUser.DoesNotExist):
             return None
 
-    def resolve_messages_for_chat(self, info, chat_id, skip, first, last):
+    def resolve_messages_for_chat(self, info, chat_id,*args, **kwargs):
         try:
             qs = Message.objects.all().filter(Q(chat=chat_id))
+            skip = kwargs.get('skip', None)
+            first = kwargs.get('first', None)
+            last = kwargs.get('last', None)
             if skip:
                 qs = qs[skip:]
             if first:
                 qs = qs[:first]
             if last:
-                qs = Message.objects.sort_by(
-                    '-created_at').filter(Q(chat=chat_id))
+                qs = Message.objects.order_by('-created_at').filter(Q(chat=chat_id))
                 qs = qs[:last][::-1]
             return qs
         except (Chat.DoesNotExist, Message.DoesNotExist):
