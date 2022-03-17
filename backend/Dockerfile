@@ -1,4 +1,4 @@
-FROM python:3.9.5
+FROM python:3.9.10
 
 # python envs
 ENV PYTHONFAULTHANDLER=1 \
