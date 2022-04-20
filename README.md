@@ -20,7 +20,6 @@ $ docker-compose up -d
 - [Registration and Authentication in Django apps with dj-rest-auth](https://www.rootstrap.com/blog/registration-and-authentication-in-django-apps-with-dj-rest-auth/)
 - [JWT Authentication in Vue.js and Django Rest Framework — Part 1](https://hackernoon.com/jwt-authentication-in-vue-js-and-django-rest-framework-part-1-c40c5c0d4f6e)
 - [JWT Authentication in Vue.js and Django Rest Framework — Part 2](https://medium.com/hackernoon/jwt-authentication-in-vue-js-and-django-rest-framework-part-2-788f0ad53ad5)
--
 
 #### Особенности стилей
 
