@@ -25,7 +25,7 @@ $ docker-compose up -d
 
 - Для кнопок в стандартном их понимании используем класс my-button, если у них есть паддинг по бокам около 37px, то добавляем класс wide-padding
 
-Ветка — graphene-subscriptions-package
+
 
 accounts/mutations.py
 
