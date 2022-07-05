@@ -46,15 +46,7 @@
             (isPaid && !wasFound)
           "
           z-index="11"
-          class="
-            title
-            darkBlue--text
-            text-center
-            custom-absolute
-            d-flex
-            justify-center
-            align-center
-          "
+          class="title darkBlue--text text-center custom-absolute d-flex justify-center align-center"
         >
           Совсем скоро мы найдем для вас интересных людей!
         </h2>
@@ -81,14 +73,7 @@
         <v-col
           v-for="i in 8"
           :key="i"
-          class="
-            col-12 col-sm-6
-            custom-sceleton
-            d-flex
-            justify-start
-            align-start
-            flex-row
-          "
+          class="col-12 col-sm-6 custom-sceleton d-flex justify-start align-start flex-row"
         >
           <div class="circle"></div>
           <div class="custom-wrap">
@@ -104,15 +89,7 @@
         <v-col
           v-for="person in personsArr"
           :key="person.id"
-          class="
-            col-12 col-sm-6
-            custom-sceleton
-            d-flex
-            justify-center
-            align-start
-            flex-row
-            text-left
-          "
+          class="col-12 col-sm-6 custom-sceleton d-flex justify-center align-start flex-row text-left"
         >
           <img
             @click="onRouteToPerson(person.id)"

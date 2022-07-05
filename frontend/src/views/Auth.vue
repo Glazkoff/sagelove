@@ -13,14 +13,7 @@
         <v-spacer></v-spacer>
         <v-btn
           color="colorOfSea"
-          class="
-            colorOfSea
-            my-button
-            wide-padding
-            white--text
-            custom-full-width
-            d-none d-sm-flex
-          "
+          class="colorOfSea my-button wide-padding white--text custom-full-width d-none d-sm-flex"
           dark
           large
           to="/login"

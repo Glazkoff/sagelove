@@ -93,12 +93,7 @@
             <v-row v-if="editAboutMeFlag && !editPasswordFlag">
               <v-col class="col-12 pointer">
                 <p
-                  class="
-                    mb-0
-                    font-weight-bold
-                    colorOfSea--text
-                    custom-icon-margin-top
-                  "
+                  class="mb-0 font-weight-bold colorOfSea--text custom-icon-margin-top"
                   @click="editPasswordFlag = true"
                 >
                   <v-icon color="colorOfSea">mdi-pencil</v-icon>
@@ -111,12 +106,7 @@
                 <v-btn
                   v-if="!editAboutMeFlag"
                   color="colorOfSea"
-                  class="
-                    custom-mobile-full-width
-                    my-button
-                    wide-padding
-                    white--text
-                  "
+                  class="custom-mobile-full-width my-button wide-padding white--text"
                   large
                   @click="onEdit()"
                   >Изменить</v-btn
@@ -125,12 +115,7 @@
                   v-if="editAboutMeFlag"
                   large
                   color="colorOfSea"
-                  class="
-                    custom-mobile-full-width
-                    my-button
-                    wide-padding
-                    white--text
-                  "
+                  class="custom-mobile-full-width my-button wide-padding white--text"
                   :disabled="$v.form.$invalid"
                   @click="onEdit()"
                   >Сохранить</v-btn
@@ -193,12 +178,7 @@
               <v-col>
                 <v-btn
                   color="colorOfSea"
-                  class="
-                    custom-mobile-full-width
-                    my-button
-                    wide-padding
-                    white--text
-                  "
+                  class="custom-mobile-full-width my-button wide-padding white--text"
                   large
                   :disabled="$v.formPassword.$invalid"
                   @click="onEditPassword()"
