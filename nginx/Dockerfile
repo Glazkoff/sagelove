@@ -1,5 +1,5 @@
 # Stage 1 - build frontend app
-FROM node:10-alpine as build-deps
+FROM node:16-alpine as build-deps
 
 WORKDIR /app/
 
@@ -8,7 +8,7 @@ RUN npm install
 
 COPY frontend /app/
 COPY .env /app/.env
-RUN npm run build
+RUN npm install -g @vue/cli-service && npm run build
 
 # Stage 2 - nginx & frontend dist
 FROM nginx:1.21-alpine
