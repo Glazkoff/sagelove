@@ -39,6 +39,16 @@
               user != undefined && user.testStatus.toUpperCase() == 'FINISH'
             "
             :exact="true"
+            to="/result"
+            tag="p"
+            class="mb-0 ml-16 pointer custom-menu-link"
+            >Результаты</router-link
+          >
+          <router-link
+            v-if="
+              user != undefined && user.testStatus.toUpperCase() == 'FINISH'
+            "
+            :exact="true"
             to="/datings"
             tag="p"
             class="mb-0 ml-16 pointer custom-menu-link"
