@@ -30,3 +30,4 @@ graphene-file-upload
 Pillow
 transliterate
 django-cleanup
+twisted>=22.10.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability
